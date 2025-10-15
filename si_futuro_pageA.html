@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Futuro — Ruta Escalonada (A)</title>
+<style>
+  :root{
+    --bg:#f7fafc;
+    --card:#ffffff;
+    --ink:#1a202c;
+    --muted:#4a5568;
+    --accent:#0ea5e9;
+    --ok:#16a34a;
+    --warn:#f59e0b;
+    --bad:#dc2626;
+    --chip:#e2e8f0;
+    --green:#d1fae5;
+    --blue:#dbeafe;
+    --orange:#ffedd5;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:18px 16px;background:linear-gradient(90deg,#0ea5e9, #22c55e);color:white}
+  header h1{margin:0;font-size:1.25rem}
+  header p{margin:.25rem 0 0;opacity:.95}
+  .wrap{max-width:980px;margin:20px auto;padding:0 12px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.07);padding:16px;margin:16px 0}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .col{flex:1 1 340px}
+  .muted{color:var(--muted);font-size:.95rem}
+  .stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+  .stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+  .q{margin:10px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  .foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .small{font-size:.85rem}
+  button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+  button.ghost{background:#e2e8f0;color:#111827}
+  button.ok{background:var(--ok)}
+  button.warn{background:#f59e0b}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){ .grid{grid-template-columns:1fr 1fr} }
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+  .bin{min-height:72px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0}
+  .bin.good{background:#d1fae5}
+  .bin.bad{background:#ffedd5}
+  .key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+  .score{font-weight:800}
+  input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+  .inline-blank{display:inline-block;margin:0 .25rem}
+  details summary{cursor:pointer;font-weight:700}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;margin-left:.4rem;font-size:.8rem}
+</style></head><body>
+<header>
+  <h1>Futuro — Ruta Escalonada (A)</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <div class="col"><p class="muted">Completa las secciones. Auto-corrección incluida. Usa <span class="kbd">?teacher=1</span> para ver modelos.</p></div>
+      <div class="col">
+        <div class="foot small">
+          <button id="checkAll" class="ok">Calificar todo</button>
+          <button id="resetAll" class="ghost">Reiniciar</button>
+          <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+          <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card stage" id="stage1">
+    <h2>Etapa 1 — Identifica el futuro</h2>
+    <p class="muted">Arrastra cada oración al contenedor correcto.</p>
+    <div class="grid">
+      <div class="q" id="s1q">
+        <div class="chips" id="s1Bank"></div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <div class="col">
+            <strong>Futuro</strong>
+            <div class="bin good" id="s1Good"></div>
+          </div>
+          <div class="col">
+            <strong>No futuro</strong>
+            <div class="bin bad" id="s1Bad"></div>
+          </div>
+        </div>
+        <div class="key" id="s1Key"></div>
+      </div>
+    </div>
+    <div class="foot small">
+      <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+      <span>Puntaje: <span id="s1Score" class="score">0</span> / <span id="s1Max">0</span></span>
+    </div>
+  </div>
+
+  <div class="card stage" id="stage1b">
+    <h2>Etapa 1B — Detective de acentos</h2>
+    <p class="muted">Arrastra la forma <strong>correctamente acentuada</strong> a “Correcto” y la forma incorrecta a “Incorrecto”.</p>
+    <div class="q" id="s1bq">
+      <div class="chips" id="s1bBank"></div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap">
+        <div class="col"><strong>Correcto</strong><div class="bin good" id="s1bGood"></div></div>
+        <div class="col"><strong>Incorrecto</strong><div class="bin bad" id="s1bBad"></div></div>
+      </div>
+      <div class="key" id="s1bKey"></div>
+    </div>
+    <div class="foot small">
+      <button class="ok" onclick="gradeS1B()">Calificar Etapa 1B</button>
+      <span>Puntaje: <span id="s1bScore" class="score">0</span> / <span id="s1bMax">0</span></span>
+    </div>
+  </div>
+
+  <div class="card stage" id="stage2">
+    <h2>Etapa 2 — Conjuga en futuro (arrastrar la forma correcta)</h2>
+    <p class="muted">Para cada infinitivo y sujeto, arrastra la <strong>forma futura correcta</strong>.</p>
+    <div id="s2Container"></div>
+    <div class="foot small">
+      <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+      <span>Puntaje: <span id="s2Score" class="score">0</span> / <span id="s2Max">0</span></span>
+    </div>
+  </div>
+
+</div>
+<script>
+
+  const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function el(q){return document.querySelector(q)}
+
+  const S1_GOOD = ["Yo hablaré con mi profesora mañana.","Nosotros reciclaremos más este año.","Ellos protegerán el ecosistema local.","Tú ahorrarás electricidad en casa.","La ciudad construirá zonas verdes nuevas."];
+  const S1_BAD = ["Yo hablo con mi profesora todos los días.","Nosotros reciclamos cada sábado.","Ellos protegen el ecosistema ahora.","Tú ahorras electricidad hoy.","La ciudad construye un parque."];
+
+  function buildS1(){
+    const bank = el('#s1Bank'); bank.innerHTML='';
+    const all = shuffle(S1_GOOD.concat(S1_BAD));
+    all.forEach((txt,i)=>{
+      const sp=document.createElement('span'); sp.className='tile'; sp.textContent=txt; sp.draggable=true;
+      sp.dataset.correct = S1_GOOD.includes(txt) ? 'good' : 'bad';
+      sp.addEventListener('dragstart',e=>{ window.__dragEl = sp; });
+      bank.appendChild(sp);
+    });
+    ['#s1Good','#s1Bad'].forEach(sel=>{
+      const bin = el(sel);
+      bin.addEventListener('dragover',e=>e.preventDefault());
+      bin.addEventListener('drop',e=>{ e.preventDefault(); if(window.__dragEl) bin.appendChild(window.__dragEl); });
+    });
+    el('#s1Key').textContent = 'Modelos futuro: ' + S1_GOOD.join(' | ');
+    el('#s1Max').textContent = S1_GOOD.length + S1_BAD.length;
+  }
+  function gradeS1(){
+    const goodBin = el('#s1Good'), badBin=el('#s1Bad');
+    let score=0,max=0;
+    [goodBin,badBin].forEach(bin=>{
+      bin.querySelectorAll('.tile').forEach(t=>{
+        max++; if((bin===goodBin && t.dataset.correct==='good') || (bin===badBin && t.dataset.correct==='bad')) score++;
+      });
+    });
+    el('#s1Score').textContent=score; updateTotal(); persist();
+  }
+
+  const S1B_CORRECT = ["hablaré","comerás","vivirá","cuidaréis","tendrán","podré","querrás","sabrá","pondréis","harán"];
+  const S1B_INCORRECT = ["hablare","comeras","vivira","cuidareis","tendran","podre","querras","sabra","pondreis","haran"];
+
+  function buildS1B(){
+    const bank = el('#s1bBank'); bank.innerHTML='';
+    const all = shuffle(S1B_CORRECT.concat(S1B_INCORRECT));
+    all.forEach((w,i)=>{
+      const sp=document.createElement('span'); sp.className='tile'; sp.textContent=w; sp.draggable=true;
+      sp.dataset.correct = S1B_CORRECT.includes(w) ? 'good' : 'bad';
+      sp.addEventListener('dragstart',e=>{ window.__dragEl = sp; });
+      bank.appendChild(sp);
+    });
+    ['#s1bGood','#s1bBad'].forEach(sel=>{
+      const bin = el(sel);
+      bin.addEventListener('dragover',e=>e.preventDefault());
+      bin.addEventListener('drop',e=>{ e.preventDefault(); if(window.__dragEl) bin.appendChild(window.__dragEl); });
+    });
+    el('#s1bKey').textContent='Correctos: ' + S1B_CORRECT.join(' | ');
+    el('#s1bMax').textContent = S1B_CORRECT.length + S1B_INCORRECT.length;
+  }
+  function gradeS1B(){
+    const goodBin = el('#s1bGood'), badBin=el('#s1bBad');
+    let score=0,max=0;
+    [goodBin,badBin].forEach(bin=>{
+      bin.querySelectorAll('.tile').forEach(t=>{
+        max++; if((bin===goodBin && t.dataset.correct==='good') || (bin===badBin && t.dataset.correct==='bad')) score++;
+      });
+    });
+    el('#s1bScore').textContent=score; updateTotal(); persist();
+  }
+
+  // Stage 2
+  const S2_ITEMS = [
+    {subj:"yo", inf:"hablar", ans:"hablaré", opts:["hablaré","hablas","hablarás","hablare","hablarán","hablo"]},
+    {subj:"tú", inf:"estudiar", ans:"estudiarás", opts:["estudiarás","estudio","estudiaré","estudiare","estudiarán","estudias"]},
+    {subj:"él", inf:"limpiar", ans:"limpiará", opts:["limpiará","limpias","limpiarás","limpiara","limpiaré","limpiarán"]},
+    {subj:"nosotros", inf:"reciclar", ans:"reciclaremos", opts:["reciclaremos","reciclamos","reciclarán","reciclare","reciclaréis","reciclarás"]},
+    {subj:"vosotros", inf:"cuidar", ans:"cuidaréis", opts:["cuidaréis","cuidais","cuidaremos","cuidarán","cuidareis","cuidáis"]},
+    {subj:"ellos", inf:"proteger", ans:"protegerán", opts:["protegerán","protegen","protegerás","protegera","protegeremos","protegeré"]},
+    {subj:"yo", inf:"caminar", ans:"caminaré", opts:["caminaré","camino","caminarás","caminare","caminarán","caminas"]},
+    {subj:"tú", inf:"usar", ans:"usarás", opts:["usarás","usas","usaré","usare","usarán","usabas"]},
+    {subj:"ella", inf:"ahorrar", ans:"ahorrará", opts:["ahorrará","ahorras","ahorrarás","ahorrare","ahorraremos","ahorraran"]},
+    {subj:"nosotros", inf:"visitar", ans:"visitaremos", opts:["visitaremos","visitamos","visitarán","visitare","visitaréis","visitarás"]},
+    {subj:"vosotros", inf:"escuchar", ans:"escucharéis", opts:["escucharéis","escucháis","escuchareis","escucharemos","escucharán","escucharás"]},
+    {subj:"ellos", inf:"preparar", ans:"prepararán", opts:["prepararán","preparan","prepararás","preparara","prepararemos","prepararé"]},
+    {subj:"yo", inf:"vivir", ans:"viviré", opts:["viviré","vivo","vivirás","vivire","vivirán","vives"]},
+    {subj:"tú", inf:"comer", ans:"comerás", opts:["comerás","comes","comeré","comere","comerán","comías"]},
+    {subj:"ella", inf:"abrir", ans:"abrirá", opts:["abrirá","abre","abrirás","abrira","abriremos","abriré"]},
+    {subj:"nosotros", inf:"escribir", ans:"escribiremos", opts:["escribiremos","escribimos","escribirán","escribire","escribiréis","escribirás"]},
+    {subj:"vosotros", inf:"mirar", ans:"miraréis", opts:["miraréis","miráis","mirareis","miraremos","mirarán","mirarás"]},
+    {subj:"ellos", inf:"trabajar", ans:"trabajarán", opts:["trabajarán","trabajan","trabajarás","trabajara","trabajaremos","trabajaré"]},
+    {subj:"yo", inf:"llegar", ans:"llegaré", opts:["llegaré","llego","llegarás","llegare","llegarán","llegas"]},
+    {subj:"tú", inf:"tomar", ans:"tomarás", opts:["tomarás","tomas","tomaré","tomare","tomarán","tomabas"]},
+    {subj:"ella", inf:"aprender", ans:"aprenderá", opts:["aprenderá","aprende","aprenderás","aprendere","aprenderemos","aprenderán"]},
+    {subj:"nosotros", inf:"asistir", ans:"asistiremos", opts:["asistiremos","asistimos","asistirán","asistire","asistiréis","asistirás"]},
+    {subj:"vosotros", inf:"compartir", ans:"compartiréis", opts:["compartiréis","compartís","compartireis","compartiremos","compartirán","compartirás"]},
+    {subj:"ellos", inf:"necesitar", ans:"necesitarán", opts:["necesitarán","necesitan","necesitarás","necesitara","necesitaremos","necesitaré"]},
+    {subj:"yo", inf:"deber", ans:"deberé", opts:["deberé","debo","deberás","debere","deberán","debes"]}
+  ];
+
+  function buildS2(){
+    const cont = document.querySelector('#s2Container'); cont.innerHTML='';
+    document.querySelector('#s2Max').textContent = S2_ITEMS.length;
+    S2_ITEMS.forEach((it,idx)=>{
+      const q = document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+      q.innerHTML = `<strong>${idx+1}.</strong> (${it.subj}) ${it.inf} → ` +
+                    `<span class="bin" style="min-height:44px;display:inline-block;vertical-align:middle;width:240px" id="s2drop_${idx}"></span>` +
+                    `<div class="chips">${shuffle(it.opts).map(o=>`<span class="tile" draggable="true" data-val="${o}">${o}</span>`).join('')}</div>` +
+                    `<div class="key">Modelo: ${it.ans}</div>`;
+      cont.appendChild(q);
+    });
+    cont.querySelectorAll('.tile').forEach(t=>{
+      t.addEventListener('dragstart', e=>{ window.__dragTile=t; });
+    });
+    cont.querySelectorAll('.bin').forEach(b=>{
+      b.addEventListener('dragover',e=>e.preventDefault());
+      b.addEventListener('drop',e=>{ e.preventDefault(); if(window.__dragTile){ b.innerHTML=''; b.appendChild(window.__dragTile); } });
+    });
+  }
+  function gradeS2(){
+    let score=0;
+    document.querySelectorAll('#s2Container .q').forEach(q=>{
+      const idx = +q.dataset.idx;
+      const ans = S2_ITEMS[idx].ans;
+      const drop = q.querySelector('.bin .tile');
+      if(drop && drop.dataset.val===ans){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    document.querySelector('#s2Score').textContent=score; updateTotal(); persist();
+  }
+
+  function updateTotal(){
+    const s1=+document.querySelector('#s1Score').textContent||0;
+    const s1b=+document.querySelector('#s1bScore').textContent||0;
+    const s2=+document.querySelector('#s2Score').textContent||0;
+    const m1=+document.querySelector('#s1Max').textContent||0;
+    const m1b=+document.querySelector('#s1bMax').textContent||0;
+    const m2=+document.querySelector('#s2Max').textContent||0;
+    document.querySelector('#totalScore').textContent = s1+s1b+s2;
+    document.querySelector('#totalMax').textContent = m1+m1b+m2;
+  }
+  function persist(){
+    const data={
+      name:document.querySelector('#studentName').value,
+      s1:{good:Array.from(document.querySelectorAll('#s1Good .tile')).map(t=>t.textContent),
+          bad:Array.from(document.querySelectorAll('#s1Bad .tile')).map(t=>t.textContent)},
+      s1b:{good:Array.from(document.querySelectorAll('#s1bGood .tile')).map(t=>t.textContent),
+           bad:Array.from(document.querySelectorAll('#s1bBad .tile')).map(t=>t.textContent)},
+      s2:Array.from(document.querySelectorAll('#s2Container .q')).map(q=> (q.querySelector('.bin .tile')||{}).dataset?.val || '')
+    };
+    localStorage.setItem('futurePageA', JSON.stringify(data));
+  }
+  function restore(){
+    const raw=localStorage.getItem('futurePageA'); if(!raw) return;
+    try{
+      const d=JSON.parse(raw);
+      document.querySelector('#studentName').value=d.name||'';
+      Array.from(document.querySelectorAll('#s2Container .q')).forEach((q,i)=>{
+        const val=d.s2?.[i]; if(!val) return;
+        const tile = Array.from(q.querySelectorAll('.tile')).find(t=>t.dataset.val===val);
+        if(tile){ const bin=q.querySelector('.bin'); bin.innerHTML=''; bin.appendChild(tile); }
+      });
+    }catch(e){}
+  }
+  function exportCSV(){
+    const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+    const s1=+document.querySelector('#s1Score').textContent||0;
+    const s1b=+document.querySelector('#s1bScore').textContent||0;
+    const s2=+document.querySelector('#s2Score').textContent||0;
+    const m1=+document.querySelector('#s1Max').textContent||0;
+    const m1b=+document.querySelector('#s1bMax').textContent||0;
+    const m2=+document.querySelector('#s2Max').textContent||0;
+    const total=s1+s1b+s2, max=m1+m1b+m2;
+    const ts=new Date().toISOString();
+    const lines=["timestamp,name,s1,s1_max,s1b,s1b_max,s2,s2_max,total,total_max",
+      [ts,name,s1,m1,s1b,m1b,s2,m2,total,max].join(',')];
+    const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='future_pageA_results.csv';
+    document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+  }
+  function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+
+  buildS1(); buildS1B(); buildS2(); applyTeacher();
+  document.querySelector('#s1Score').textContent='0'; document.querySelector('#s1bScore').textContent='0'; document.querySelector('#s2Score').textContent='0';
+  document.querySelector('#s1Max').textContent = S1_GOOD.length + S1_BAD.length;
+  document.querySelector('#s1bMax').textContent = S1B_CORRECT.length + S1B_INCORRECT.length;
+  document.querySelector('#s2Max').textContent = S2_ITEMS.length;
+  function updateTotalsInit(){const s1m=+document.querySelector('#s1Max').textContent||0; const s1bm=+document.querySelector('#s1bMax').textContent||0; const s2m=+document.querySelector('#s2Max').textContent||0; document.querySelector('#totalMax').textContent=s1m+s1bm+s2m;}
+  updateTotalsInit();
+  restore();
+
+  document.querySelector('#checkAll').addEventListener('click', ()=>{ gradeS1(); gradeS1B(); gradeS2(); });
+  document.querySelector('#resetAll').addEventListener('click', ()=>{ localStorage.removeItem('futurePageA'); location.reload(); });
+  document.querySelector('#exportCSV').addEventListener('click', exportCSV);
+  document.querySelector('#studentName').addEventListener('input', persist);
+
+</script>
+</body></html>

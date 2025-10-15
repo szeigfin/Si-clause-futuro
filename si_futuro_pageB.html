@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Futuro — Ruta Escalonada (B)</title>
+<style>
+  :root{
+    --bg:#f7fafc;
+    --card:#ffffff;
+    --ink:#1a202c;
+    --muted:#4a5568;
+    --accent:#0ea5e9;
+    --ok:#16a34a;
+    --warn:#f59e0b;
+    --bad:#dc2626;
+    --chip:#e2e8f0;
+    --green:#d1fae5;
+    --blue:#dbeafe;
+    --orange:#ffedd5;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:18px 16px;background:linear-gradient(90deg,#0ea5e9, #22c55e);color:white}
+  header h1{margin:0;font-size:1.25rem}
+  header p{margin:.25rem 0 0;opacity:.95}
+  .wrap{max-width:980px;margin:20px auto;padding:0 12px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.07);padding:16px;margin:16px 0}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .col{flex:1 1 340px}
+  .muted{color:var(--muted);font-size:.95rem}
+  .stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+  .stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+  .q{margin:10px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  .foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .small{font-size:.85rem}
+  button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+  button.ghost{background:#e2e8f0;color:#111827}
+  button.ok{background:var(--ok)}
+  button.warn{background:#f59e0b}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){ .grid{grid-template-columns:1fr 1fr} }
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+  .bin{min-height:72px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0}
+  .bin.good{background:#d1fae5}
+  .bin.bad{background:#ffedd5}
+  .key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+  .score{font-weight:800}
+  input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+  .inline-blank{display:inline-block;margin:0 .25rem}
+  details summary{cursor:pointer;font-weight:700}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;margin-left:.4rem;font-size:.8rem}
+</style></head><body>
+<header>
+  <h1>Futuro — Ruta Escalonada (B)</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <div class="col"><p class="muted">Completa las secciones. Auto-corrección incluida. Usa <span class="kbd">?teacher=1</span> para ver modelos.</p></div>
+      <div class="col">
+        <div class="foot small">
+          <button id="checkAll" class="ok">Calificar todo</button>
+          <button id="resetAll" class="ghost">Reiniciar</button>
+          <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+          <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card stage" id="stage3">
+    <h2>Etapa 3 — Completa en contexto (cloze)</h2>
+    <p class="muted">Escribe la forma en <strong>futuro</strong> en el lugar correcto (las casillas están en línea y con tamaño aproximado).</p>
+    <div id="s3Container"></div>
+    <div class="foot small">
+      <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+      <span>Puntaje: <span id="s3Score" class="score">0</span> / <span id="s3Max">0</span></span>
+    </div>
+  </div>
+
+  <div class="card stage" id="stage4">
+    <h2>Etapa 4 — Constructor de oraciones con <em>si</em></h2>
+    <p class="muted">Arrastra las piezas para formar una oración lógica en futuro. Ej.: <span class="kbd">Si cuidamos la Tierra, protegeremos el medioambiente.</span></p>
+    <div id="s4Container"></div>
+    <div class="foot small">
+      <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+      <span>Puntaje: <span id="s4Score" class="score">0</span> / <span id="s4Max">0</span></span>
+    </div>
+  </div>
+
+</div>
+<script>
+
+  const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+  function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
+
+  const S3_ITEMS = [
+    {txt:"Mañana yo ___ (ser) más responsable con el agua.", ans:"seré"},
+    {txt:"Esta noche tú ___ (estar) en la manifestación.", ans:"estarás"},
+    {txt:"El sábado él ___ (ir) al parque en bici.", ans:"irá"},
+    {txt:"Nosotros ___ (ver) un documental sobre el planeta.", ans:"veremos"},
+    {txt:"Vosotros ___ (dar) ideas para reducir residuos.", ans:"daréis"},
+    {txt:"Ellos ___ (tener) acceso a agua potable.", ans:"tendrán"},
+    {txt:"Yo ___ (poner) un panel solar.", ans:"pondré"},
+    {txt:"Tú ___ (poder) ahorrar más energía.", ans:"podrás"},
+    {txt:"Ella ___ (querer) ser voluntaria.", ans:"querrá"},
+    {txt:"Nosotros ___ (saber) más del ecosistema.", ans:"sabremos"},
+    {txt:"Vosotros ___ (hacer) un plan sostenible.", ans:"haréis"},
+    {txt:"Ellos ___ (decir) sus propuestas.", ans:"dirán"},
+    {txt:"Yo ___ (salir) a limpiar la playa.", ans:"saldré"},
+    {txt:"Tú ___ (venir) a la reunión ciudadana.", ans:"vendrás"},
+    {txt:"En la ciudad ___ (haber) menos contaminación.", ans:"habrá"},
+    {txt:"Nosotros ___ (traer) bolsas reutilizables.", ans:"traeremos"},
+    {txt:"Vosotros ___ (oír) al guía con atención.", ans:"oiréis"},
+    {txt:"Ellos ___ (deber) proteger los bosques.", ans:"deberán"},
+    {txt:"Yo ___ (cuidar) la Tierra todos los días.", ans:"cuidaré"},
+    {txt:"Tú ___ (proteger) a los animales marinos.", ans:"protegerás"},
+    {txt:"Ella ___ (reducir) la electricidad que usa.", ans:"reducirá"},
+    {txt:"Nosotros ___ (construir) más zonas verdes.", ans:"construiremos"},
+    {txt:"Vosotros ___ (ahorrar) agua en casa.", ans:"ahorraréis"},
+    {txt:"Ellos ___ (almacenar) energía para el invierno.", ans:"almacenarán"},
+    {txt:"Yo ___ (pagar) menos por la luz si ahorro.", ans:"pagaré"}
+  ];
+
+  function buildS3(){
+    const c=document.querySelector('#s3Container'); c.innerHTML='';
+    document.querySelector('#s3Max').textContent=S3_ITEMS.length;
+    S3_ITEMS.forEach((it,idx)=>{
+      const size = Math.max(it.ans.length+1,5);
+      const div=document.createElement('div'); div.className='q'; div.dataset.idx=idx;
+      div.innerHTML = `<strong>${idx+1}.</strong> ${it.txt.replace('___', '<span class="inline-blank"><input type="text" class="s3in" data-idx="'+idx+'" size="'+size+'" placeholder="..." /></span>')}` +
+                      `<div class="key">Modelo: ${it.ans}</div>`;
+      c.appendChild(div);
+    });
+  }
+  function gradeS3(){
+    let score=0;
+    document.querySelectorAll('.s3in').forEach(inp=>{
+      const idx=+inp.dataset.idx; const val=norm(inp.value); const ans=norm(S3_ITEMS[idx].ans);
+      const q=inp.closest('.q');
+      if(val===ans){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    document.querySelector('#s3Score').textContent=score; updateTotal(); persist();
+  }
+
+  const S4_ITEMS = [
+    { tokens:["Si","cuidamos","la","Tierra,","protegeremos","el","medioambiente."], key:"Si cuidamos la Tierra, protegeremos el medioambiente."},
+    { tokens:["Si","ahorras","agua","potable,","la","contaminación","se","reducirá."], key:"Si ahorras agua potable, la contaminación se reducirá."},
+    { tokens:["Si","la","ciudad","instala","paneles","solares,","la","electricidad","será","sostenible."], key:"Si la ciudad instala paneles solares, la electricidad será sostenible."},
+    { tokens:["Si","separamos","la","basura,","produciremos","menos","residuos."], key:"Si separamos la basura, produciremos menos residuos."},
+    { tokens:["Si","dejamos","de","contaminar","los","ríos,","el","ecosistema","no","se","pondrá","en","peligro."], key:"Si dejamos de contaminar los ríos, el ecosistema no se pondrá en peligro."},
+    { tokens:["Si","limpiamos","la","playa","con","voluntarios,","los","animales","marinos","vivirán","con","menos","peligro."], key:"Si limpiamos la playa con voluntarios, los animales marinos vivirán con menos peligro."},
+    { tokens:["Si","almacenamos","energía,","pagaremos","menos","por","la","electricidad."], key:"Si almacenamos energía, pagaremos menos por la electricidad."},
+    { tokens:["Si","luchamos","contra","la","desigualdad,","el","acceso","al","agua","será","más","justo."], key:"Si luchamos contra la desigualdad, el acceso al agua será más justo."},
+    { tokens:["Si","construimos","zonas","verdes,","bajará","la","contaminación","del","aire."], key:"Si construimos zonas verdes, bajará la contaminación del aire."},
+    { tokens:["Si","seguimos","reciclando","en","casa,","desaparecerá","la","basura","innecesaria."], key:"Si seguimos reciclando en casa, desaparecerá la basura innecesaria."}
+  ];
+
+  function buildS4(){
+    const c=document.querySelector('#s4Container'); c.innerHTML='';
+    document.querySelector('#s4Max').textContent=S4_ITEMS.length;
+    S4_ITEMS.forEach((it,idx)=>{
+      const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+      const chips = shuffle(it.tokens).map(t=>`<span class="tile" draggable="true">${t}</span>`).join('');
+      q.innerHTML = `<strong>${idx+1}.</strong> Ordena:<div class="chips">${chips}</div><div class="bin" style="min-height:48px"></div><div class="key">Modelo: ${it.key}</div>`;
+      c.appendChild(q);
+    });
+    c.querySelectorAll('.tile').forEach(t=>{
+      t.addEventListener('dragstart',e=>{ window.__dragTile=t; });
+    });
+    c.querySelectorAll('.bin').forEach(b=>{
+      b.addEventListener('dragover',e=>e.preventDefault());
+      b.addEventListener('drop',e=>{ e.preventDefault(); if(window.__dragTile){ b.appendChild(window.__dragTile); }});
+    });
+  }
+  function gradeS4(){
+    let score=0;
+    document.querySelectorAll('#s4Container .q').forEach(q=>{
+      const idx=+q.dataset.idx; const expected=S4_ITEMS[idx].tokens;
+      const got=Array.from(q.querySelectorAll('.bin .tile')).map(t=>t.textContent);
+      if(got.length===expected.length && got.every((w,i)=>w===expected[i])){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    document.querySelector('#s4Score').textContent=score; updateTotal(); persist();
+  }
+
+  function updateTotal(){
+    const s3=+document.querySelector('#s3Score').textContent||0;
+    const s4=+document.querySelector('#s4Score').textContent||0;
+    const m3=+document.querySelector('#s3Max').textContent||0;
+    const m4=+document.querySelector('#s4Max').textContent||0;
+    document.querySelector('#totalScore').textContent = s3+s4;
+    document.querySelector('#totalMax').textContent = m3+m4;
+  }
+  function persist(){
+    const data={
+      name:document.querySelector('#studentName').value,
+      s3:Array.from(document.querySelectorAll('.s3in')).map(i=>i.value),
+      s4:Array.from(document.querySelectorAll('#s4Container .q')).map(q=> Array.from(q.querySelectorAll('.bin .tile')).map(t=>t.textContent))
+    };
+    localStorage.setItem('futurePageB', JSON.stringify(data));
+  }
+  function restore(){
+    const raw=localStorage.getItem('futurePageB'); if(!raw) return;
+    try{
+      const d=JSON.parse(raw);
+      document.querySelector('#studentName').value=d.name||'';
+      if(d.s3){ document.querySelectorAll('.s3in').forEach((inp,i)=>{ inp.value=d.s3[i]||''; }); }
+    }catch(e){}
+  }
+  function exportCSV(){
+    const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+    const s3=+document.querySelector('#s3Score').textContent||0;
+    const s4=+document.querySelector('#s4Score').textContent||0;
+    const m3=+document.querySelector('#s3Max').textContent||0;
+    const m4=+document.querySelector('#s4Max').textContent||0;
+    const total=s3+s4, max=m3+m4;
+    const ts=new Date().toISOString();
+    const lines=["timestamp,name,s3,s3_max,s4,s4_max,total,total_max",[ts,name,s3,m3,s4,m4,total,max].join(',')];
+    const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='future_pageB_results.csv';
+    document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+  }
+  function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+
+  buildS3(); buildS4(); applyTeacher();
+  document.querySelector('#s3Score').textContent='0'; document.querySelector('#s4Score').textContent='0';
+  document.querySelector('#s3Max').textContent = S3_ITEMS.length;
+  document.querySelector('#s4Max').textContent = S4_ITEMS.length;
+  document.querySelector('#totalMax').textContent = S3_ITEMS.length + S4_ITEMS.length;
+  restore();
+
+  document.querySelector('#checkAll').addEventListener('click', ()=>{ gradeS3(); gradeS4(); });
+  document.querySelector('#resetAll').addEventListener('click', ()=>{ localStorage.removeItem('futurePageB'); location.reload(); });
+  document.querySelector('#exportCSV').addEventListener('click', exportCSV);
+  document.querySelector('#studentName').addEventListener('input', persist);
+
+</script>
+</body></html>
