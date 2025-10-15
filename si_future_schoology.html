@@ -16,7 +16,7 @@
     --bad:#dc2626;
     --chip:#e2e8f0;
   }
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.4}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
   header{padding:18px 16px;background:linear-gradient(90deg,#0ea5e9, #22c55e);color:white}
   header h1{margin:0;font-size:1.25rem}
   header p{margin:.25rem 0 0;opacity:.95}
@@ -25,7 +25,8 @@
   .row{display:flex;gap:14px;flex-wrap:wrap}
   .col{flex:1 1 340px}
   label{font-weight:600}
-  input[type="text"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1;font-size:16px}
+  input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+  .inline-blank{display:inline-block;margin:0 .25rem}
   button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
   button.ghost{background:#e2e8f0;color:#111827}
   button.ok{background:var(--ok)}
@@ -40,13 +41,15 @@
   .q{margin:10px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px}
   .q.correct{border-color:#86efac;background:#f0fdf4}
   .q.incorrect{border-color:#fecaca;background:#fff7f7}
-  .answer{display:inline-block;min-width:140px}
   .key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
   .score{font-weight:800}
   .foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .small{font-size:.85rem}
   details summary{cursor:pointer;font-weight:700}
   .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;margin-left:.4rem;font-size:.8rem}
+  .grid{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:720px){ .grid{grid-template-columns:1fr 1fr} }
 </style>
 </head>
 <body>
@@ -86,21 +89,21 @@
     </div>
   </div>
 
-  <!-- STAGE 2: Cloze -->
+  <!-- STAGE 2: Cloze (inline blanks sized to answer) -->
   <div class="card stage" id="stage2">
     <h2>Etapa 2 — Completa las oraciones (cloze)</h2>
-    <p class="muted">Escribe la forma correcta (mayoría en <strong>futuro</strong>). Usa tildes cuando corresponda.</p>
-    <div id="s2Container"></div>
+    <p class="muted">Escribe la forma correcta (mayoría en <strong>futuro</strong>). Las casillas son del tamaño aproximado de la palabra.</p>
+    <div id="s2Container" class="grid"></div>
     <div class="foot small">
       <button class="ok" onclick="gradeStage(2)">Calificar Etapa 2</button>
       <span>Puntaje: <span id="s2Score" class="score">0</span> / <span id="s2Max">0</span></span>
     </div>
   </div>
 
-  <!-- STAGE 3: Si-clause + main infinitive -> future -->
+  <!-- STAGE 3: Build logical sentences from elements -->
   <div class="card stage" id="stage3">
-    <h2>Etapa 3 — Conjuga en futuro la segunda parte</h2>
-    <p class="muted">Te damos la cláusula con <strong>si</strong> y el verbo principal en infinitivo. Escribe <em>solo la forma correcta en futuro</em> que completa la idea lógicamente.</p>
+    <h2>Etapa 3 — Escribe oraciones lógicas con <em>si</em> usando estos elementos</h2>
+    <p class="muted">Modelo: <span class="kbd">cuidar la Tierra &gt; proteger el medioambiente</span> → <em>Si cuidamos la Tierra, protegeremos el medioambiente.</em><span class="pill">Usa el futuro</span></p>
     <div id="s3Container"></div>
     <div class="foot small">
       <button class="ok" onclick="gradeStage(3)">Calificar Etapa 3</button>
@@ -114,7 +117,7 @@
       <div class="small">
         <p><strong>Futuro regular:</strong> infinitivo + <code>-é, -ás, -á, -emos, -éis, -án</code></p>
         <p><strong>Irregulares comunes:</strong> tener→tendr-, poner→pondr-, poder→podr-, querer→querr-, saber→sabr-, decir→dir-, hacer→har-, salir→saldr-, venir→vendr-, haber→habr-</p>
-        <p>Ej.: Si reciclas más, <em>el planeta</em> <span class="kbd">estará</span> más limpio.</p>
+        <p>Ej.: Si reciclamos más, <em>el planeta</em> <span class="kbd">estará</span> más limpio.</p>
       </div>
     </details>
   </div>
@@ -144,7 +147,6 @@ function norm(s){
 
 /* ---------- Stage 1 data (ordering) ---------- */
 const S1_ITEMS = [
-  // Each item: correct ordered tiles (array of strings)
   ["Si","reciclamos","más","el","plástico,","el","océano","estará","más","limpio."],
   ["Si","plantas","árboles,","la","ciudad","tendrá","más","sombra","y","oxígeno."],
   ["Si","ahorramos","energía,","bajará","la","contaminación","del","aire."],
@@ -155,38 +157,39 @@ const S1_ITEMS = [
   ["Si","limpiamos","las","playas,","los","animales","marinos","vivirán","con","menos","peligro."]
 ];
 
-/* ---------- Stage 2 data (cloze) ---------- */
-// Each item is an object with text parts and answers. Use ___ for blanks.
+/* ---------- Stage 2 data (cloze) using your vocabulary ---------- */
 const S2_ITEMS = [
-  { text:"Si reutilizas las bolsas, el consumo de plástico ___ (bajar) en la escuela.", answers:["bajará"] },
-  { text:"Si la gente ___ (cuidar) los ríos, habrá más agua limpia.", answers:["cuida","cuidará"] },
-  { text:"Si hoy reciclamos vidrio, mañana ___ (tener) menos basura.", answers:["tendremos"] },
-  { text:"Si el gobierno invierte, las zonas verdes ___ (crecer).", answers:["crecerán"] },
-  { text:"Si ponemos en peligro los bosques, los animales ___ (sufrir).", answers:["sufrirán"] },
-  { text:"Si tú te relajas en el parque, ___ (sentirse) libre.", answers:["te sentirás"] },
-  { text:"Si ellos escuchan la radio escolar, ___ (saber) más sobre el club ecológico.", answers:["sabrán"] },
-  { text:"Si ahorras electricidad, la factura ___ (ser) más baja.", answers:["será"] }
+  { text:"Si cuidamos el ecosistema, el planeta ___ (estar) más sano.", answers:["estará"] },
+  { text:"Si ahorras electricidad, la contaminación ___ (reducirse).", answers:["se reducirá","reducirá"] },
+  { text:"Si la ciudad invierte en una fuente de energía renovable, la electricidad ___ (ser) más limpia.", answers:["será"] },
+  { text:"Si malgastamos agua, los ríos y los lagos ___ (secarse).", answers:["se secarán"] },
+  { text:"Si protegemos los bosques, los animales no ___ (desaparecer).", answers:["desaparecerán"] },
+  { text:"Si el colegio instala paneles solares, la factura de luz ___ (bajar).", answers:["bajará"] },
+  { text:"Si seguimos limpiando la playa, los voluntarios ___ (luchar) contra los residuos con más ánimo.", answers:["lucharán"] },
+  { text:"Si almacenamos energía, la ciudad ___ (tener) acceso a electricidad sostenible.", answers:["tendrá"] },
+  { text:"Si dejamos de contaminar el aire, la gente ___ (respirar) mejor.", answers:["respirará"] },
+  { text:"Si los ciudadanos protestan en una manifestación, el gobierno ___ (construir) más zonas verdes.", answers:["construirá"] }
 ];
 
-/* ---------- Stage 3 data (si-clause + main infinitive to future form) ---------- */
-// Prompt shows a si-clause, plus main clause infinitive and an object; student types only the conjugated future verb.
+/* ---------- Stage 3 prompts (elements) ---------- */
 const S3_ITEMS = [
-  { prompt:"Si dejamos de usar pajitas de plástico, (estar) el océano más limpio.", answer:"estará" },
-  { prompt:"Si camináis a la escuela, (reducir) el tráfico en la mañana.", answer:"reduciréis" },
-  { prompt:"Si la comunidad recicla más, (haber) menos residuos en el vertedero.", answer:"habrá" },
-  { prompt:"Si instalan paneles solares, (pagar) menos por la electricidad.", answer:"pagarán" },
-  { prompt:"Si yo traigo mi botella reutilizable, (beber) más agua durante el día.", answer:"beberé" },
-  { prompt:"Si ellos protegen los humedales, (venir) más aves en primavera.", answer:"vendrán" },
-  { prompt:"Si ahorramos energía en casa, (poder) viajar más este verano.", answer:"podremos" },
-  { prompt:"Si tú separas la basura, (poner) cada material en su contenedor.", answer:"pondrás" }
+  { elements:"cuidar la Tierra > proteger el medioambiente", model:"Si cuidamos la Tierra, protegeremos el medioambiente.", keywords:["cuidar","Tierra","proteger","medioambiente"] },
+  { elements:"ahorrar agua potable > reducir la contaminación", model:"Si ahorramos agua potable, reduciremos la contaminación.", keywords:["ahorrar","agua","reducir","contaminación"] },
+  { elements:"usar paneles solares > ser sostenible la electricidad", model:"Si usamos paneles solares, la electricidad será sostenible.", keywords:["paneles","solares","electricidad","sostenible"] },
+  { elements:"separar la basura > producir menos residuos", model:"Si separamos la basura, produciremos menos residuos.", keywords:["separar","basura","producir","residuos"] },
+  { elements:"dejar de contaminar los ríos > no ponerse en peligro el ecosistema", model:"Si dejamos de contaminar los ríos, el ecosistema no se pondrá en peligro.", keywords:["contaminar","ríos","ecosistema","peligro"] },
+  { elements:"limpiar la playa con voluntarios > vivir animales marinos con menos peligro", model:"Si limpiamos la playa con voluntarios, los animales marinos vivirán con menos peligro.", keywords:["limpiar","playa","voluntarios","animales"] },
+  { elements:"almacenar energía > pagar menos por la electricidad", model:"Si almacenamos energía, pagaremos menos por la electricidad.", keywords:["almacenar","energía","pagar","electricidad"] },
+  { elements:"luchar contra la desigualdad > ser más justo el acceso al agua", model:"Si luchamos contra la desigualdad, el acceso al agua será más justo.", keywords:["desigualdad","justo","acceso","agua"] },
+  { elements:"construir zonas verdes > bajar la contaminación del aire", model:"Si construimos zonas verdes, bajará la contaminación del aire.", keywords:["construir","zonas","verdes","contaminación"] },
+  { elements:"seguir reciclando en el vestidor y la casa > desaparecer la basura innecesaria", model:"Si seguimos reciclando en el vestidor y en la casa, desaparecerá la basura innecesaria.", keywords:["seguir","reciclando","casa","desaparecerá"] }
 ];
 
 /* ---------- Build Stage 1 UI ---------- */
 function buildStage1(){
   const c = document.getElementById('s1Container');
   c.innerHTML='';
-  const max = S1_ITEMS.length;
-  document.getElementById('s1Max').textContent=max;
+  document.getElementById('s1Max').textContent=S1_ITEMS.length;
   S1_ITEMS.forEach((tiles, idx)=>{
     const q = document.createElement('div');
     q.className='q';
@@ -195,32 +198,28 @@ function buildStage1(){
     h.innerHTML = `<strong>${idx+1}.</strong> Arrastra las piezas en orden:`;
     q.appendChild(h);
 
-    // bank
     const bank = document.createElement('div');
     bank.className='chips';
     const shuffled = shuffle(tiles);
-    shuffled.forEach((t,i)=>{
+    shuffled.forEach((t)=>{
       const el = document.createElement('span');
       el.className='tile';
       el.textContent=t;
       el.draggable=true;
-      el.dataset.source='bank';
       el.addEventListener('dragstart', dragStart);
       bank.appendChild(el);
     });
     q.appendChild(bank);
 
-    // drop zone
     const drop = document.createElement('div');
     drop.className='drop';
     drop.addEventListener('dragover', dragOver);
     drop.addEventListener('drop', dropped);
     q.appendChild(drop);
 
-    // answer key
     const key = document.createElement('div');
     key.className='key';
-    key.textContent = 'Solución: ' + tiles.join(' ');
+    key.textContent = 'Modelo: ' + tiles.join(' ');
     q.appendChild(key);
 
     c.appendChild(q);
@@ -234,12 +233,10 @@ function dragOver(e){ e.preventDefault(); }
 function dropped(e){
   e.preventDefault();
   const zone = e.currentTarget;
-  if(dragEl){
-    zone.appendChild(dragEl);
-  }
+  if(dragEl){ zone.appendChild(dragEl); }
 }
 
-/* ---------- Build Stage 2 UI ---------- */
+/* ---------- Build Stage 2 UI (inline inputs sized) ---------- */
 function buildStage2(){
   const c = document.getElementById('s2Container');
   c.innerHTML='';
@@ -248,19 +245,18 @@ function buildStage2(){
     const q = document.createElement('div');
     q.className='q';
     q.dataset.index = idx;
-    // Render text with a single input where ___ would be; default at end if no marker.
-    let parts = item.text.split('___');
-    let html = `<strong>${idx+1}.</strong> ` + parts[0] + ` <input type="text" class="s2in" data-idx="${idx}" placeholder="respuesta" /> ` + (parts[1] || '');
+    const size = Math.max(item.answers[0].length+1, 5);
+    const html = `<strong>${idx+1}.</strong> ${item.text.replace('___','')} <span class="inline-blank"><input type="text" class="s2in" data-idx="${idx}" size="${size}" placeholder="..." /></span>`;
     q.innerHTML = html;
     const key = document.createElement('div');
     key.className='key';
-    key.textContent='Solución: ' + item.answers.join(' / ');
+    key.textContent='Modelo: ' + item.answers.join(' / ');
     q.appendChild(key);
     c.appendChild(q);
   });
 }
 
-/* ---------- Build Stage 3 UI ---------- */
+/* ---------- Build Stage 3 UI (elements -> sentence) ---------- */
 function buildStage3(){
   const c = document.getElementById('s3Container');
   c.innerHTML='';
@@ -269,12 +265,12 @@ function buildStage3(){
     const q = document.createElement('div');
     q.className='q';
     q.dataset.index = idx;
-    q.innerHTML = `<strong>${idx+1}.</strong> ${item.prompt.replace(/\(.*?\)/,'<span class="muted">(verbo)</span>')}<br>
-      Escribe solo la forma en <em>futuro</em> para el verbo indicado: 
-      <input type="text" class="s3in" data-idx="${idx}" placeholder="forma en futuro" />`;
+    q.innerHTML = `<strong>${idx+1}.</strong> ${item.elements}<br>
+      <em>Escribe una oración con “si” y usa el futuro.</em><br>
+      <input type="text" class="s3in" data-idx="${idx}" placeholder="Escribe tu oración completa aquí" style="width:100%;margin-top:6px" />`;
     const key = document.createElement('div');
     key.className='key';
-    key.textContent = 'Solución: ' + item.answer;
+    key.textContent = 'Modelo: ' + item.model;
     q.appendChild(key);
     c.appendChild(q);
   });
@@ -291,7 +287,7 @@ function applyTeacherMode(){
 function gradeStage(n){
   let score=0, max=0;
   if(n===1){
-    document.querySelectorAll('#s1Container .q').forEach((q, i)=>{
+    document.querySelectorAll('#s1Container .q').forEach((q)=>{
       const idx = +q.dataset.index;
       const expected = S1_ITEMS[idx];
       const got = Array.from(q.querySelectorAll('.drop .tile')).map(t=>t.textContent.trim());
@@ -323,19 +319,23 @@ function gradeStage(n){
     document.getElementById('s2Score').textContent=score;
   }
   if(n===3){
+    // heuristic grading: require "si", future morphology, and at least 2 keywords
     const inputs = document.querySelectorAll('.s3in');
     max = S3_ITEMS.length;
+    const futRegex = /\b(?:[a-záéíóúñ]+(?:ré|rás|rá|remos|réis|rán)|habrá|har(?:é|ás|á|emos|éis|án)|dir(?:é|ás|á|emos|éis|án)|tendr(?:é|ás|á|emos|éis|án)|podr(?:é|ás|á|emos|éis|án)|vendr(?:é|ás|á|emos|éis|án)|pondr(?:é|ás|á|emos|éis|án)|sabr(?:é|ás|á|emos|éis|án)|saldr(?:é|ás|á|emos|éis|án)|querr(?:é|ás|á|emos|éis|án))\b/i;
     inputs.forEach(inp=>{
       const idx = +inp.dataset.idx;
-      const expected = norm(S3_ITEMS[idx].answer);
-      const val = norm(inp.value);
+      const val = inp.value || '';
       const q = inp.closest('.q');
-      if(val === expected){
-        score++;
-        q.classList.add('correct'); q.classList.remove('incorrect');
-      }else{
-        q.classList.add('incorrect'); q.classList.remove('correct');
-      }
+      const hasSi = /\bsi\b/i.test(val);
+      const hasFuture = futRegex.test(val.normalize('NFD'));
+      const kws = S3_ITEMS[idx].keywords || [];
+      let kwCount = 0;
+      const normVal = norm(val);
+      kws.forEach(k=>{ if(normVal.includes(norm(k))) kwCount++; });
+      const passed = hasSi && hasFuture && kwCount>=2;
+      if(passed){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else { q.classList.add('incorrect'); q.classList.remove('correct'); }
     });
     document.getElementById('s3Score').textContent=score;
   }
@@ -376,14 +376,12 @@ function restoreState(){
   try{
     const data = JSON.parse(raw);
     document.getElementById('studentName').value = data.name||'';
-    // Stage 1 restore
     const qs = document.querySelectorAll('#s1Container .q');
     if(data.s1 && data.s1.length === qs.length){
       data.s1.forEach((words, i)=>{
         const q = qs[i];
         const bank = q.querySelector('.chips');
         const drop = q.querySelector('.drop');
-        // Move all tiles back to bank, then place in drop following saved order
         const allTiles = Array.from(q.querySelectorAll('.tile'));
         allTiles.forEach(t=>bank.appendChild(t));
         (words||[]).forEach(w=>{
@@ -392,15 +390,12 @@ function restoreState(){
         });
       });
     }
-    // Stage 2 restore
     if(data.s2){
       document.querySelectorAll('.s2in').forEach((inp,i)=> inp.value = data.s2[i] || '');
     }
-    // Stage 3 restore
     if(data.s3){
       document.querySelectorAll('.s3in').forEach((inp,i)=> inp.value = data.s3[i] || '');
     }
-    // Restore scores
     if(data.scores){
       document.getElementById('s1Score').textContent = data.scores.s1||0;
       document.getElementById('s2Score').textContent = data.scores.s2||0;
@@ -444,10 +439,7 @@ function exportCSV(){
   a.download="si_future_results.csv";
   document.body.appendChild(a);
   a.click();
-  setTimeout(()=>{
-    URL.revokeObjectURL(url);
-    a.remove();
-  }, 500);
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
 }
 
 /* ---------- Init ---------- */
