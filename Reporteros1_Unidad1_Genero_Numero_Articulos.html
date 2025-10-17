@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 1 · Unidad 1 — Género, número y artículos definidos (ProfeVT)</title>
+<style>
+:root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--accent2:#22c55e;--ok:#16a34a;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:18px 16px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{font-weight:900;letter-spacing:.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.1rem}
+header p{margin:.25rem 0 0 0;opacity:.95}
+.wrap{max-width:1024px;margin:20px auto;padding:0 12px}
+.card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:16px 0}
+.stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+.stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+.muted{color:var(--muted);font-size:.95rem}
+.q{margin:10px 0;padding:12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff}
+.q.correct{border-color:#86efac;background:#f0fdf4}
+.q.incorrect{border-color:#fecaca;background:#fff7f7}
+.foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:.85rem}
+button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+button.ghost{background:#e2e8f0;color:#111827}
+button.ok{background:var(--ok)}
+button.warn{background:#f59e0b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:200px;overflow-y:auto;padding-right:4px}
+.tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+.tile.selected{outline:3px solid #0ea5e9;background:#e0f2fe}
+.bin{min-height:72px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+.score{font-weight:800}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+.inline-blank{display:inline-block;margin:0 .25rem}
+.rule{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0}
+.table{width:100%;border-collapse:collapse;margin:6px 0}
+.table th,.table td{border:1px solid #e2e8f0;padding:8px;border-radius:4px}
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:820px){ .grid2{grid-template-columns:1fr 1fr} }
+</style></head><body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Reporteros 1 · Unidad 1 — Género, número y artículos definidos (ProfeVT)</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <p class="muted">Progresión: ① personas/masc-fem ② objetos y terminaciones ③ pluralización ④ género+número ⑤ artículos (drag) ⑥ artículos (escritura). <br><em>Los acentos cuentan.</em> Agrega <span class="kbd">?teacher=1</span> al enlace para ver claves.</p>
+  </div>
+
+<div class="card stage" id="stage1">
+  <h2>1) Personas y mascotas — patrones de género por terminación</h2>
+  <div class="rule">
+    <table class="table">
+      <tr><th>Masculino</th><th>Femenino</th><th>Ambos</th></tr>
+      <tr><td>-o, -or</td><td>-a, -ora</td><td>-ista, -ante</td></tr>
+    </table>
+    <p class="small">Ej.: el profesor / la profesora · el/la estudiante · el/la astronauta</p>
+  </div>
+  <div class="q">
+    <div class="chips" id="s1Bank"></div>
+    <div class="grid2">
+      <div><strong>Masculino</strong><div class="bin" id="s1Masc"></div></div>
+      <div><strong>Femenino</strong><div class="bin" id="s1Fem"></div></div>
+      <div><strong>Ambos</strong><div class="bin" id="s1Both"></div></div>
+    </div>
+    <div class="key" id="s1Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+    <span>Puntaje: <span id="s1Score" class="score">0</span> / <span id="s1Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage2">
+  <h2>2) Objetos/ideas — patrones de terminación</h2>
+  <div class="rule">
+    <table class="table">
+      <tr><th>Masculino</th><th>Femenino</th><th>Excepciones</th></tr>
+      <tr><td><strong>O-SAJEMAS</strong>: -o, -aje, -ema, -s</td><td><strong>TAD's DAD</strong> + at<strong>TUD</strong>e + acc<strong>IÓN</strong></td><td>el día, la mano, el mapa, la foto</td></tr>
+    </table>
+  </div>
+  <div class="q">
+    <div class="chips" id="s2Bank"></div>
+    <div class="grid2">
+      <div><strong>Masculino</strong><div class="bin" id="s2Masc"></div></div>
+      <div><strong>Femenino</strong><div class="bin" id="s2Fem"></div></div>
+    </div>
+    <div class="key" id="s2Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+    <span>Puntaje: <span id="s2Score" class="score">0</span> / <span id="s2Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage3">
+  <h2>3) Formación del plural</h2>
+  <div class="rule">
+    1) vocal → -s · 2) consonante → -es · 3) z → c + -es
+  </div>
+  <div id="s3Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+    <span>Puntaje: <span id="s3Score" class="score">0</span> / <span id="s3Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage4">
+  <h2>4) Clasifica por género y número</h2>
+  <div class="q">
+    <div class="chips" id="s4Bank"></div>
+    <div class="grid2">
+      <div><strong>Masculino singular</strong><div class="bin" id="s4MS"></div></div>
+      <div><strong>Femenino singular</strong><div class="bin" id="s4FS"></div></div>
+      <div><strong>Masculino plural</strong><div class="bin" id="s4MP"></div></div>
+      <div><strong>Femenino plural</strong><div class="bin" id="s4FP"></div></div>
+    </div>
+    <div class="key" id="s4Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+    <span>Puntaje: <span id="s4Score" class="score">0</span> / <span id="s4Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage5">
+  <h2>5) Arrastra el artículo definido correcto</h2>
+  <div id="s5Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS5()">Calificar Etapa 5</button>
+    <span>Puntaje: <span id="s5Score" class="score">0</span> / <span id="s5Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage6">
+  <h2>6) Escribe el artículo</h2>
+  <div id="s6Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS6()">Calificar Etapa 6</button>
+    <span>Puntaje: <span id="s6Score" class="score">0</span> / <span id="s6Max">0</span></span>
+  </div>
+</div>
+
+  <div class="card foot small">
+    <button id="checkAll" class="ok">Calificar todo</button>
+    <button id="resetAll" class="ghost">Reiniciar</button>
+    <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+    <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+  </div>
+</div>
+<script>
+
+const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cmpExact(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+let selectedTile = null;
+function makeTileInteractive(tile){
+  tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+  tile.addEventListener('click', ()=>{
+    if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+    if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+    else { tile.classList.add('selected'); selectedTile = tile; }
+  });
+}
+function makeBinInteractive(bin){
+  bin.addEventListener('dragover', e=>e.preventDefault());
+  bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+}
+function exportCSVGeneric(filename, headers, row){
+  const ts=new Date().toISOString();
+  const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+  const blob=new Blob([headers+"\n"+[ts,name].concat(row).join(',')],{type:"text/csv"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+}
+
+
+const S1_BANK = ["profesor", "profesora", "estudiante", "astronauta", "señor", "artista", "directora", "cocinero", "muchacho", "juez"];
+const S2_MASC = ["libro", "nombre", "programa", "salón", "bolígrafo", "marcador", "póster", "cuaderno", "lápiz", "proyector", "reloj", "pizarrón"];
+const S2_FEM  = ["canción", "película", "flor", "goma", "hoja de papel", "mochila", "silla", "grapadora", "estantería", "papelera", "pizarra"];
+const S2_EXC  = ["el día", "la mano", "el mapa", "la foto"];
+const S3_ITEMS = [["profesor", "profesores"], ["estudiante", "estudiantes"], ["canción", "canciones"], ["flor", "flores"], ["juez", "jueces"], ["lápiz", "lápices"], ["bolígrafo", "bolígrafos"], ["marcador", "marcadores"], ["silla", "sillas"], ["película", "películas"]];
+const S4_BANK = ["el profesor", "la profesora", "los profesores", "las películas", "el bolígrafo", "los bolígrafos", "la flor", "las flores", "el lápiz", "los lápices", "la silla", "las sillas", "el mapa", "los mapas", "la mano", "las manos"];
+const S5_NOUNS = ["libro", "profesor", "profesoras", "película", "bolígrafos", "mapa", "manos", "pizarrón", "flores", "reloj"];
+const S5_ANS = {"libro": "el", "profesor": "el", "profesoras": "las", "película": "la", "bolígrafos": "los", "mapa": "el", "manos": "las", "pizarrón": "el", "flores": "las", "reloj": "el"};
+const S6_ITEMS = [["___ flor", "la"], ["___ día", "el"], ["___ libros", "los"], ["___ hojas de papel", "las"], ["___ lápices", "los"], ["___ programa", "el"], ["___ canción", "la"], ["___ profesores", "los"]];
+
+// Stage 1
+function buildS1(){
+  const bank=document.querySelector('#s1Bank'); bank.innerHTML='';
+  shuffle(S1_BANK).forEach(w=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=w; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  ['s1Masc','s1Fem','s1Both'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  document.getElementById('s1Max').textContent = S1_BANK.length;
+  document.getElementById('s1Key').textContent = "Pistas: -o/-or → masc; -a/-ora → fem; -ista/-ante → ambos.";
+}
+function s1Cat(word){
+  const masc = ["profesor","señor","cocinero","muchacho","juez"];
+  const fem  = ["profesora","directora"];
+  const both = ["estudiante","astronauta","artista"];
+  if(masc.includes(word)) return 'M';
+  if(fem.includes(word)) return 'F';
+  if(both.includes(word)) return 'B';
+  return null;
+}
+function gradeS1(){
+  let score=0;
+  [['s1Masc','M'],['s1Fem','F'],['s1Both','B']].forEach(([id,cat])=>{
+    document.querySelectorAll('#'+id+' .tile').forEach(t=>{ if(s1Cat(t.textContent)===cat) score++; });
+  });
+  document.getElementById('s1Score').textContent=score; updateTotal();
+}
+
+// Stage 2
+function buildS2(){
+  const bank=document.querySelector('#s2Bank'); bank.innerHTML='';
+  const all = shuffle(S2_MASC.concat(S2_FEM).concat(S2_EXC));
+  all.forEach(w=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=w; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  makeBinInteractive(document.getElementById('s2Masc'));
+  makeBinInteractive(document.getElementById('s2Fem'));
+  document.getElementById('s2Max').textContent = all.length;
+  document.getElementById('s2Key').textContent = "Excepciones: " + S2_EXC.join(" · ");
+}
+function s2Cat(word){
+  let hasArt = word.startsWith('el ') || word.startsWith('la ');
+  if(hasArt){
+    if(word.startsWith('el ')) return 'M';
+    if(word.startsWith('la ')) return 'F';
+  }
+  if(S2_MASC.includes(word)) return 'M';
+  if(S2_FEM.includes(word)) return 'F';
+  return null;
+}
+function gradeS2(){
+  let score=0;
+  document.querySelectorAll('#s2Masc .tile').forEach(t=>{ if(s2Cat(t.textContent)==='M') score++; });
+  document.querySelectorAll('#s2Fem .tile').forEach(t=>{ if(s2Cat(t.textContent)==='F') score++; });
+  document.getElementById('s2Score').textContent=score; updateTotal();
+}
+
+// Stage 3
+function buildS3(){
+  const c=document.querySelector('#s3Container'); c.innerHTML='';
+  document.getElementById('s3Max').textContent = S3_ITEMS.length;
+  S3_ITEMS.forEach(([sing,plu],idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    const select=document.createElement('select'); select.className='s3sel';
+    const distractors = [sing+'s', sing+'es', sing.replace(/z$/,'c')+'es'];
+    const opts = shuffle([plu].concat(distractors));
+    opts.forEach(o=>{ const opt=document.createElement('option'); opt.value=o; opt.textContent=o; select.appendChild(opt); });
+    q.innerHTML = '<strong>'+(idx+1)+'.</strong> Singular: <em>'+sing+'</em> → Plural:';
+    q.appendChild(select);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+plu; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS3(){
+  let score=0;
+  document.querySelectorAll('#s3Container .q').forEach((q,i)=>{
+    const correct = S3_ITEMS[i][1];
+    const chosen = q.querySelector('select').value;
+    if(cmpExact(chosen, correct)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('s3Score').textContent=score; updateTotal();
+}
+
+// Stage 4
+function buildS4(){
+  const bank=document.querySelector('#s4Bank'); bank.innerHTML='';
+  const all=shuffle(S4_BANK);
+  all.forEach(w=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=w; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  ['s4MS','s4FS','s4MP','s4FP'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  document.getElementById('s4Max').textContent = all.length;
+  document.getElementById('s4Key').textContent = 'Clasifica según artículo + número.';
+}
+function s4Cat(token){
+  const a=token.split(/\s+/)[0].toLowerCase();
+  const mp = (a==='los'); const fp=(a==='las'); const ms=(a==='el'); const fs=(a==='la');
+  if(ms) return 'MS'; if(fs) return 'FS'; if(mp) return 'MP'; if(fp) return 'FP'; return null;
+}
+function gradeS4(){
+  let score=0;
+  [['s4MS','MS'],['s4FS','FS'],['s4MP','MP'],['s4FP','FP']].forEach(([id,cat])=>{
+    document.querySelectorAll('#'+id+' .tile').forEach(t=>{ if(s4Cat(t.textContent)===cat) score++; });
+  });
+  document.getElementById('s4Score').textContent=score; updateTotal();
+}
+
+// Stage 5
+function buildS5(){
+  const c=document.querySelector('#s5Container'); c.innerHTML='';
+  document.getElementById('s5Max').textContent = S5_NOUNS.length;
+  S5_NOUNS.forEach((noun,idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    const drop=document.createElement('div'); drop.className='bin'; drop.style.minHeight='44px'; makeBinInteractive(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    ["el","la","los","las"].forEach(a=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=a; t.setAttribute('data-val',a); t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    q.innerHTML = '<strong>'+(idx+1)+'.</strong> Arrastra el artículo para: <em>'+noun+'</em>';
+    q.appendChild(drop); q.appendChild(chips);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+S5_ANS[noun]; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS5(){
+  let score=0;
+  document.querySelectorAll('#s5Container .q').forEach(q=>{
+    const idx=+q.dataset.idx; const noun=S5_NOUNS[idx]; const ans=S5_ANS[noun];
+    const chosen = q.querySelector('.bin .tile');
+    if(chosen && cmpExact(chosen.getAttribute('data-val'), ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('s5Score').textContent=score; updateTotal();
+}
+
+// Stage 6
+function buildS6(){
+  const c=document.querySelector('#s6Container'); c.innerHTML='';
+  document.getElementById('s6Max').textContent = S6_ITEMS.length;
+  S6_ITEMS.forEach(([prompt,ans],idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    const size=Math.max(ans.length+1,3);
+    const input = '<span class="inline-blank"><input type="text" class="s6in" data-idx="'+idx+'" size="'+size+'" placeholder="el/la/los/las" /></span>';
+    q.innerHTML = '<strong>'+(idx+1)+'.</strong> ' + prompt.replace('___', input);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS6(){
+  let score=0;
+  document.querySelectorAll('.s6in').forEach(inp=>{
+    const idx=+inp.dataset.idx; const ans=S6_ITEMS[idx][1];
+    const q=inp.closest('.q');
+    if(cmpExact(inp.value, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('s6Score').textContent=score; updateTotal();
+}
+
+// Totals & wiring
+function updateTotal(){
+  const ids=['s1','s2','s3','s4','s5','s6'];
+  const scores=ids.map(x=>+document.getElementById(x+'Score').textContent||0);
+  const maxes =ids.map(x=>+document.getElementById(x+'Max').textContent||0);
+  const total = scores.reduce((a,b)=>a+b,0);
+  const totalMax = maxes.reduce((a,b)=>a+b,0);
+  document.getElementById('totalScore').textContent=total;
+  document.getElementById('totalMax').textContent=totalMax;
+}
+function exportCSV(){
+  const ids=['s1','s2','s3','s4','s5','s6'];
+  const row=[]; ids.forEach(x=>{ row.push(+document.getElementById(x+'Score').textContent||0); row.push(+document.getElementById(x+'Max').textContent||0); });
+  const total=row.filter((_,i)=>i%2===0).reduce((a,b)=>a+b,0);
+  const totalMax=row.filter((_,i)=>i%2===1).reduce((a,b)=>a+b,0);
+  exportCSVGeneric('R1_U1_genero_numero_articulos_results.csv','timestamp,name,s1,s1_max,s2,s2_max,s3,s3_max,s4,s4_max,s5,s5_max,s6,s6_max,total,total_max',[...row,total,totalMax]);
+}
+
+function init(){
+  ['s1Max','s2Max','s3Max','s4Max','s5Max','s6Max'].forEach(id=>document.getElementById(id)?.textContent);
+  buildS1(); buildS2(); buildS3(); buildS4(); buildS5(); buildS6(); applyTeacher();
+  document.getElementById('checkAll').addEventListener('click', ()=>{ gradeS1(); gradeS2(); gradeS3(); gradeS4(); gradeS5(); gradeS6(); });
+  document.getElementById('resetAll').addEventListener('click', ()=>{ location.reload(); });
+  document.getElementById('exportCSV').addEventListener('click', exportCSV);
+}
+init();
+
+</script>
+</body></html>
