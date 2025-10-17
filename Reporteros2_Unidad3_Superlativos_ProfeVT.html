@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 2 · Unidad 3 — Superlativos (relativos y absolutos) · ProfeVT</title>
+<style>:root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--accent2:#22c55e;--ok:#16a34a;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:18px 16px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{font-weight:900;letter-spacing:.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.1rem}
+header p{margin:.25rem 0 0 0;opacity:.95}
+.wrap{max-width:1080px;margin:20px auto;padding:0 12px}
+.card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:16px 0}
+.stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+.stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+.muted{color:var(--muted);font-size:.95rem}
+.q{margin:10px 0;padding:12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;position:relative}
+.q.correct{border-color:#86efac;background:#f0fdf4}
+.q.incorrect{border-color:#fecaca;background:#fff7f7}
+.foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:.85rem}
+button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+button.ghost{background:#e2e8f0;color:#111827}
+button.ok{background:var(--ok)}
+button.warn{background:#f59e0b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:220px;overflow-y:auto;padding-right:4px}
+.tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+.tile.selected{outline:3px solid #0ea5e9;background:#e0f2fe}
+.bin{min-height:52px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+.score{font-weight:800}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+.inline-blank{display:inline-block;margin:0 .25rem}
+.rule{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0}
+.table{width:100%;border-collapse:collapse;margin:6px 0}
+.table th,.table td{border:1px solid #e2e8f0;padding:8px;border-radius:4px}
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:820px){ .grid2{grid-template-columns:1fr 1fr} }
+.gloss{cursor:pointer;border-bottom:2px dotted #60a5fa}
+.gloss-tip{position:absolute;z-index:10;background:#111827;color:#fff;padding:6px 10px;border-radius:8px;font-size:.9rem;box-shadow:0 6px 16px rgba(2,6,23,.25);max-width:280px;display:none}
+.gloss.show .gloss-tip{display:block}
+.sound{border:none;background:#e0f2fe;border:1px solid #bae6fd;color:#0369a1;border-radius:999px;padding:4px 8px;font-size:.8rem;cursor:pointer;margin-left:6px}
+hr{border:0;border-top:1px solid #e2e8f0;margin:10px 0}
+</style></head><body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Reporteros 2 · Unidad 3 — Superlativos (relativos y absolutos) · ProfeVT</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <p class="muted">Objetivos: ① usar superlativos relativos ② formar superlativos absolutos (‑ísimo/a/os/as) con cambios ortográficos ③ practicar irregulares (mejor/peor). <br><em>Los acentos cuentan.</em> Añade <span class="kbd">?teacher=1</span> al enlace para ver claves.</p>
+  </div>
+
+<!-- Stage 0 -->
+<div class="card stage" id="s0">
+  <h2>0) Repaso — Empareja vocabulario (español → inglés + icono)</h2>
+  <div class="q">
+    <div class="chips" id="s0Bank"></div>
+    <div id="s0Pairs"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS0()">Calificar Etapa 0</button>
+    <span>Puntaje: <span id="sc0" class="score">0</span> / <span id="mx0">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 1 -->
+<div class="card stage" id="s1">
+  <h2>1) Superlativo relativo — ¿Correcto o incorrecto?</h2>
+  <div class="rule small">
+    Fórmula: <strong>el/la/los/las + <span data-gloss="sustantivo">sustantivo</span> + más/menos + <span data-gloss="adjetivo">adjetivo</span> + de</strong>.
+    <button class="sound" onclick="speak('El actor más alto del grupo.')">🔊 Ejemplo</button>
+  </div>
+  <div class="q">
+    <div class="grid2">
+      <div><strong>Correcto</strong><div class="bin" id="s1Ok"></div></div>
+      <div><strong>Incorrecto</strong><div class="bin" id="s1Bad"></div></div>
+    </div>
+    <hr>
+    <div class="chips" id="s1Bank"></div>
+    <div class="key" id="s1Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+    <span>Puntaje: <span id="sc1" class="score">0</span> / <span id="mx1">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 2 -->
+<div class="card stage" id="s2">
+  <h2>2) Construye el superlativo relativo</h2>
+  <div class="q" id="s2Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+    <span>Puntaje: <span id="sc2" class="score">0</span> / <span id="mx2">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 3 -->
+<div class="card stage" id="s3">
+  <h2>3) Identifica el sustantivo y el adjetivo</h2>
+  <div class="q" id="s3Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+    <span>Puntaje: <span id="sc3" class="score">0</span> / <span id="mx3">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 4 -->
+<div class="card stage" id="s4">
+  <h2>4) Superlativo absoluto — escribe la forma (-ísimo/a/os/as)</h2>
+  <div class="rule small">
+    Muy/mucho/extremadamente + adj. → <strong>-ísimo/a/os/as</strong>. Cambios: <em>c→qu</em> (simpático→simpatiquísimo), <em>g→gu</em> (largo→larguísimo), <em>z→c</em> (feliz→felicísimo).
+  </div>
+  <div id="s4Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+    <span>Puntaje: <span id="sc4" class="score">0</span> / <span id="mx4">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 5 -->
+<div class="card stage" id="s5">
+  <h2>5) ¿Relativo o absoluto?</h2>
+  <div class="q" id="s5Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS5()">Calificar Etapa 5</button>
+    <span>Puntaje: <span id="sc5" class="score">0</span> / <span id="mx5">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 6 -->
+<div class="card stage" id="s6">
+  <h2>6) Irregulares — <em>mejor/es</em> y <em>peor/es</em></h2>
+  <div class="q" id="s6Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS6()">Calificar Etapa 6</button>
+    <span>Puntaje: <span id="sc6" class="score">0</span> / <span id="mx6">0</span></span>
+  </div>
+</div>
+
+  <div class="card foot small">
+    <button id="checkAll" class="ok">Calificar todo</button>
+    <button id="resetAll" class="ghost">Reiniciar</button>
+    <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+    <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+  </div>
+</div>
+<script>
+
+const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cmpExact(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+let selectedTile = null;
+function makeTileInteractive(tile){
+  tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+  tile.addEventListener('click', ()=>{
+    if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+    if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+    else { tile.classList.add('selected'); selectedTile = tile; }
+  });
+}
+function makeBinInteractive(bin){
+  bin.addEventListener('dragover', e=>e.preventDefault());
+  bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+}
+function exportCSVGeneric(filename, headers, row){
+  const ts=new Date().toISOString();
+  const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+  const blob=new Blob([headers+"\n"+[ts,name].concat(row).join(',')],{type:"text/csv"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+}
+function enableGloss(){ 
+  document.querySelectorAll('[data-gloss]').forEach(el=>{
+    el.classList.add('gloss');
+    el.addEventListener('click', ()=>{
+      const tipText = el.getAttribute('data-gloss');
+      let tip = el.querySelector('.gloss-tip');
+      if(!tip){ tip = document.createElement('span'); tip.className='gloss-tip'; tip.textContent=tipText; el.appendChild(tip); }
+      el.classList.toggle('show');
+      tip.style.left = '0px';
+      tip.style.top = (el.offsetHeight + 6) + 'px';
+    });
+  });
+}
+function speak(text, lang='es-ES'){
+  try{ const u=new SpeechSynthesisUtterance(text); u.lang=lang; speechSynthesis.speak(u); }
+  catch(e){ console.warn('Speech not available', e); }
+}
+
+
+const S0_ITEMS = [["rápido", "fast 🏃"], ["lento", "slow 🐢"], ["simpático", "nice 😊"], ["feo", "ugly 🙈"], ["bonito", "pretty 🌸"], ["caro", "expensive 💸"], ["barato", "cheap 🪙"], ["grande", "big 🏔️"], ["pequeño", "small 🧩"], ["trabajador", "hardworking 💼"], ["animal", "animal 🐾"], ["coche", "car 🚗"], ["estudiante", "student 🎓"], ["canción", "song 🎵"], ["actor", "actor 🎭"], ["persona", "person 👤"]];
+const S1_CORRECT = ["La canción más bonita de la lista.", "El actor más alto del grupo.", "Los coches menos caros del concesionario.", "Las ranas más rápidas del estanque."];
+const S1_INCORRECT = ["La más bonita canción de la lista.", "El más alto actor del grupo.", "Los coches más baratos de el concesionario.", "Las rana más rápida del estanque."];
+const S2_BUILD = [[["El", "actor", "más", "alto", "del", "grupo"], "El actor más alto del grupo"], [["La", "canción", "más", "bonita", "de", "la", "lista"], "La canción más bonita de la lista"], [["Los", "perros", "menos", "ruidosos", "del", "barrio"], "Los perros menos ruidosos del barrio"], [["Las", "montañas", "más", "grandes", "de", "la", "región"], "Las montañas más grandes de la región"]];
+const S3_SENTENCES = [["La tortuga menos rápida del acuario.", "tortuga", "rápida"], ["El coche más barato del mercado.", "coche", "barato"], ["Las flores más bonitas del jardín.", "flores", "bonitas"], ["Los estudiantes más trabajadores de la clase.", "estudiantes", "trabajadores"]];
+const S4_ITEMS = [["simpático", "simpatiquísimo"], ["largo", "larguísimo"], ["feliz", "felicísimo"], ["rico", "riquísimo"], ["fuerte", "fuertísimo"], ["rápido", "rapidísimo"], ["blanco", "blanquísimo"], ["amable", "amabilísima"]];
+const S5_SENTENCES = [["Esta playa es ___.", ["la más bonita de la costa", "bonitísima"], "la más bonita de la costa"], ["Ayer corrí ___.", ["rapidísimo", "la más rápida del grupo"], "rapidísimo"], ["Es ___ de todos los coches.", ["el menos caro", "baratísimo"], "el menos caro"], ["La sopa está ___.", ["calentísima", "la más caliente del menú"], "calentísima"]];
+const S6_PHRASES = [["Este restaurante es ___ de la ciudad.", ["el mejor", "el peor"], "el mejor"], ["Para mí, esta idea es ___ del proyecto.", ["la peor", "la mejor"], "la peor"], ["Son ___ jugadores del equipo.", ["los mejores", "los peores"], "los mejores"], ["Estas notas son ___ de la clase.", ["las peores", "las mejores"], "las peores"]];
+const GLOSS = {"rápido": "fast", "lento": "slow", "simpático": "nice", "feo": "ugly", "bonito": "pretty", "caro": "expensive", "barato": "cheap", "grande": "big", "pequeño": "small", "trabajador": "hardworking", "actor": "actor", "canción": "song", "persona": "person", "coche": "car", "animal": "animal", "flores": "flowers", "estudiantes": "students", "tortuga": "tortoise/turtle"};
+
+// Stage 0
+function buildS0(){
+  const bank=document.getElementById('s0Bank'); bank.innerHTML='';
+  const pairs=document.getElementById('s0Pairs'); pairs.innerHTML='';
+  const EN = shuffle(S0_ITEMS.map(([,en])=>en));
+  EN.forEach(en=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=en; t.setAttribute('data-val',en); t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  S0_ITEMS.forEach(([es,en],i)=>{
+    const row=document.createElement('div'); row.className='q';
+    const prompt=document.createElement('div'); prompt.innerHTML='<strong>'+(i+1)+'.</strong> <span data-gloss="'+(GLOSS[es]||en)+'">'+es+'</span>';
+    const bin=document.createElement('div'); bin.className='bin'; makeBinInteractive(bin);
+    row.appendChild(prompt); row.appendChild(bin); pairs.appendChild(row);
+  });
+  document.getElementById('mx0').textContent = S0_ITEMS.length;
+}
+function gradeS0(){
+  let score=0;
+  document.querySelectorAll('#s0Pairs .q').forEach((row,i)=>{
+    const correct = S0_ITEMS[i][1];
+    const chosen = row.querySelector('.bin .tile');
+    if(chosen && cmpExact(chosen.getAttribute('data-val'), correct)){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); }
+    else { row.classList.add('incorrect'); row.classList.remove('correct'); }
+  });
+  document.getElementById('sc0').textContent = score; updateTotal();
+}
+
+// Stage 1
+function buildS1(){
+  ['s1Ok','s1Bad'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  const bank=document.getElementById('s1Bank'); bank.innerHTML='';
+  const all=shuffle(S1_CORRECT.concat(S1_INCORRECT));
+  all.forEach(s=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=s; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  document.getElementById('mx1').textContent = all.length;
+  document.getElementById('s1Key').textContent = "Correctos: " + S1_CORRECT.join(" · ");
+}
+function isCorrectSentence(s){
+  return S1_CORRECT.includes(s);
+}
+function gradeS1(){
+  let score=0;
+  document.querySelectorAll('#s1Ok .tile').forEach(t=>{ if(isCorrectSentence(t.textContent)) score++; });
+  document.querySelectorAll('#s1Bad .tile').forEach(t=>{ if(!isCorrectSentence(t.textContent)) score++; });
+  document.getElementById('sc1').textContent = score; updateTotal();
+}
+
+// Stage 2
+function buildS2(){
+  const c=document.getElementById('s2Container'); c.innerHTML='';
+  document.getElementById('mx2').textContent = S2_BUILD.length;
+  S2_BUILD.forEach(([tokens,solution],i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const bin=document.createElement('div'); bin.className='bin'; bin.style.minHeight='44px'; makeBinInteractive(bin);
+    const chips=document.createElement('div'); chips.className='chips';
+    shuffle(tokens).forEach(tok=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=tok; t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    const speakBtn = document.createElement('button'); speakBtn.className='sound'; speakBtn.textContent='🔊 Leer modelo'; speakBtn.onclick=()=>speak(solution);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+solution;
+    q.appendChild(document.createTextNode((i+1)+'. '));
+    q.appendChild(bin); q.appendChild(chips); q.appendChild(speakBtn); q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS2(){
+  let score=0;
+  document.querySelectorAll('#s2Container .q').forEach((q,idx)=>{
+    const sol=S2_BUILD[idx][1];
+    const built=Array.from(q.querySelectorAll('.bin .tile')).map(t=>t.textContent).join(' ');
+    if(cmpExact(built, sol)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc2').textContent = score; updateTotal();
+}
+
+// Stage 3
+function buildS3(){
+  const c=document.getElementById('s3Container'); c.innerHTML='';
+  document.getElementById('mx3').textContent = S3_SENTENCES.length*2;
+  S3_SENTENCES.forEach(([sent,noun,adj],i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const bins=document.createElement('div'); bins.className='grid2';
+    const b1=document.createElement('div'); b1.innerHTML='<strong>Sustantivo</strong>'; const binN=document.createElement('div'); binN.className='bin'; makeBinInteractive(binN); b1.appendChild(binN);
+    const b2=document.createElement('div'); b2.innerHTML='<strong>Adjetivo</strong>'; const binA=document.createElement('div'); binA.className='bin'; makeBinInteractive(binA); b2.appendChild(binA);
+    bins.appendChild(b1); bins.appendChild(b2);
+    const chips=document.createElement('div'); chips.className='chips';
+    [noun, adj, "más", "menos"].forEach(tok=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=tok; t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    const prompt=document.createElement('div'); prompt.textContent=(i+1)+'. '+sent;
+    const key=document.createElement('div'); key.className='key'; key.textContent='N: '+noun+' · Adj: '+adj;
+    q.appendChild(prompt); q.appendChild(bins); q.appendChild(chips); q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS3(){
+  let score=0;
+  document.querySelectorAll('#s3Container .q').forEach((q,idx)=>{
+    const noun=S3_SENTENCES[idx][1], adj=S3_SENTENCES[idx][2];
+    const [binN,binA]=q.querySelectorAll('.bin');
+    const n=binN.querySelector('.tile')?.textContent||'';
+    const a=binA.querySelector('.tile')?.textContent||'';
+    if(cmpExact(n,noun)) score++;
+    if(cmpExact(a,adj)) score++;
+    if(cmpExact(n,noun)) q.classList.add('correct'); else q.classList.add('incorrect');
+  });
+  document.getElementById('sc3').textContent = score; updateTotal();
+}
+
+// Stage 4
+function buildS4(){
+  const c=document.getElementById('s4Container'); c.innerHTML='';
+  document.getElementById('mx4').textContent = S4_ITEMS.length;
+  S4_ITEMS.forEach(([base,ans],i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const size=Math.max(ans.length+1,6);
+    q.innerHTML='<strong>'+(i+1)+'.</strong> '+base+' → ';
+    const inp=document.createElement('input'); inp.type='text'; inp.size=size; inp.className='s4in'; inp.setAttribute('data-ans',ans);
+    q.appendChild(inp);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS4(){
+  let score=0;
+  document.querySelectorAll('#s4Container .q').forEach(q=>{
+    const ans=q.querySelector('.s4in').getAttribute('data-ans');
+    const val=q.querySelector('.s4in').value;
+    if(cmpExact(val, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc4').textContent = score; updateTotal();
+}
+
+// Stage 5
+function buildS5(){
+  const c=document.getElementById('s5Container'); c.innerHTML='';
+  document.getElementById('mx5').textContent = S5_SENTENCES.length;
+  S5_SENTENCES.forEach(([stem,options,ans],i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const drop=document.createElement('div'); drop.className='bin'; makeBinInteractive(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    shuffle(options).forEach(o=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=o; t.setAttribute('data-val',o); t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans;
+    q.appendChild(document.createTextNode((i+1)+'. '+stem)); q.appendChild(drop); q.appendChild(chips); q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS5(){
+  let score=0;
+  document.querySelectorAll('#s5Container .q').forEach((q,i)=>{
+    const ans=S5_SENTENCES[i][2];
+    const chosen=q.querySelector('.bin .tile')?.getAttribute('data-val')||'';
+    if(cmpExact(chosen, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc5').textContent = score; updateTotal();
+}
+
+// Stage 6
+function buildS6(){
+  const c=document.getElementById('s6Container'); c.innerHTML='';
+  document.getElementById('mx6').textContent = S6_PHRASES.length;
+  S6_PHRASES.forEach(([stem,options,ans],i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const drop=document.createElement('div'); drop.className='bin'; makeBinInteractive(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    shuffle(options).forEach(o=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=o; t.setAttribute('data-val',o); t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans;
+    q.appendChild(document.createTextNode((i+1)+'. '+stem)); q.appendChild(drop); q.appendChild(chips); q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS6(){
+  let score=0;
+  document.querySelectorAll('#s6Container .q').forEach((q,i)=>{
+    const ans=S6_PHRASES[i][2];
+    const chosen=q.querySelector('.bin .tile')?.getAttribute('data-val')||'';
+    if(cmpExact(chosen, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc6').textContent = score; updateTotal();
+}
+
+// Totals
+function updateTotal(){
+  const ids=[0,1,2,3,4,5,6];
+  const scores=ids.map(i=>+document.getElementById('sc'+i).textContent||0);
+  const maxes =ids.map(i=>+document.getElementById('mx'+i).textContent||0);
+  document.getElementById('totalScore').textContent=scores.reduce((a,b)=>a+b,0);
+  document.getElementById('totalMax').textContent=maxes.reduce((a,b)=>a+b,0);
+}
+function exportCSV(){
+  const ids=[0,1,2,3,4,5,6];
+  const row=[]; ids.forEach(i=>{ row.push(+document.getElementById('sc'+i).textContent||0); row.push(+document.getElementById('mx'+i).textContent||0); });
+  const total=row.filter((_,i)=>i%2===0).reduce((a,b)=>a+b,0);
+  const totalMax=row.filter((_,i)=>i%2===1).reduce((a,b)=>a+b,0);
+  exportCSVGeneric('R2_U3_superlativos_results.csv','timestamp,name,s0,s0_max,s1,s1_max,s2,s2_max,s3,s3_max,s4,s4_max,s5,s5_max,s6,s6_max,total,total_max',[...row,total,totalMax]);
+}
+
+function init(){
+  buildS0(); buildS1(); buildS2(); buildS3(); buildS4(); buildS5(); buildS6(); applyTeacher(); enableGloss();
+  document.getElementById('checkAll').addEventListener('click', ()=>{ gradeS0(); gradeS1(); gradeS2(); gradeS3(); gradeS4(); gradeS5(); gradeS6(); });
+  document.getElementById('resetAll').addEventListener('click', ()=>{ location.reload(); });
+  document.getElementById('exportCSV').addEventListener('click', exportCSV);
+}
+init();
+
+</script>
+</body></html>
