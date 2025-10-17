@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 1 · Unidad 1 — Datos personales y profesiones · ProfeVT</title>
+<style>:root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--accent2:#22c55e;--ok:#16a34a;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:18px 16px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{font-weight:900;letter-spacing:.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.1rem}
+header p{margin:.25rem 0 0 0;opacity:.95}
+.wrap{max-width:1080px;margin:20px auto;padding:0 12px}
+.card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:16px 0}
+.stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+.stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+.muted{color:var(--muted);font-size:.95rem}
+.q{margin:10px 0;padding:12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;position:relative}
+.q.correct{border-color:#86efac;background:#f0fdf4}
+.q.incorrect{border-color:#fecaca;background:#fff7f7}
+.foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:.85rem}
+button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+button.ghost{background:#e2e8f0;color:#111827}
+button.ok{background:var(--ok)}
+button.warn{background:#f59e0b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:220px;overflow-y:auto;padding-right:4px}
+.tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+.tile.selected{outline:3px solid #0ea5e9;background:#e0f2fe}
+.bin{min-height:52px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+.score{font-weight:800}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+.inline-blank{display:inline-block;margin:0 .25rem}
+.rule{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0}
+.table{width:100%;border-collapse:collapse;margin:6px 0}
+.table th,.table td{border:1px solid #e2e8f0;padding:8px;border-radius:4px}
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:820px){ .grid2{grid-template-columns:1fr 1fr} }
+.grid4{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:980px){ .grid4{grid-template-columns:repeat(4,1fr)} }
+.gloss{cursor:pointer;border-bottom:2px dotted #60a5fa}
+.gloss-tip{position:absolute;z-index:10;background:#111827;color:#fff;padding:6px 10px;border-radius:8px;font-size:.9rem;box-shadow:0 6px 16px rgba(2,6,23,.25);max-width:280px;display:none}
+.gloss.show .gloss-tip{display:block}
+hr{border:0;border-top:1px solid #e2e8f0;margin:10px 0}
+.sa{display:grid;grid-template-columns:1fr repeat(4,90px);gap:8px;align-items:center}
+.sa label{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:.9rem}
+.sa input{transform:scale(1.2)}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#e0f2fe;border:1px solid #bae6fd;color:#0369a1;font-size:.8rem;margin-left:6px}
+</style></head><body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Reporteros 1 · Unidad 1 — Datos personales y profesiones · ProfeVT</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <h2>Objetivos de la lección</h2>
+    <ul><li>Identificar ocupaciones comunes por imágenes.</li><li>Reconocer y usar vocabulario de datos personales.</li><li>Emparejar preguntas básicas con respuestas correctas.</li><li>Leer una biografía corta y completar una credencial estudiantil.</li></ul>
+    <p class="muted"><em>Los acentos cuentan.</em> Añade <span class="kbd">?teacher=1</span> al enlace para ver claves.</p>
+  </div>
+
+<!-- Stage 0 -->
+<div class="card stage" id="s0">
+  <h2>0) Ocupaciones — empareja con la imagen</h2>
+  <div class="q">
+    <div class="grid4" id="s0Pics"></div>
+    <hr>
+    <div class="chips" id="s0Bank"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS0()">Calificar Etapa 0</button>
+    <span>Puntaje: <span id="sc0" class="score">0</span> / <span id="mx0">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 1 -->
+<div class="card stage" id="s1">
+  <h2>1) Datos personales — empareja palabra con ejemplo</h2>
+  <div class="q">
+    <div id="s1Pairs"></div>
+    <hr>
+    <div class="chips" id="s1Bank"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+    <span>Puntaje: <span id="sc1" class="score">0</span> / <span id="mx1">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 2 -->
+<div class="card stage" id="s2">
+  <h2>2) Preguntas — empareja la pregunta con su respuesta</h2>
+  <div class="q">
+    <div id="s2Pairs"></div>
+    <hr>
+    <div class="chips" id="s2Bank"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+    <span>Puntaje: <span id="sc2" class="score">0</span> / <span id="mx2">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 3 -->
+<div class="card stage" id="s3">
+  <h2>3) Clasifica — ¿Pregunta o respuesta?</h2>
+  <div class="q">
+    <div class="grid2">
+      <div><strong>Preguntas</strong><div class="bin" id="s3Q"></div></div>
+      <div><strong>Respuestas</strong><div class="bin" id="s3A"></div></div>
+    </div>
+    <hr>
+    <div class="chips" id="s3Bank"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+    <span>Puntaje: <span id="sc3" class="score">0</span> / <span id="mx3">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 4 -->
+<div class="card stage" id="s4">
+  <h2>4) Lee la biografía y completa la credencial</h2>
+  <div id="s4Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+    <span>Puntaje: <span id="sc4" class="score">0</span> / <span id="mx4">0</span></span>
+  </div>
+</div>
+
+<!-- Self Assessment -->
+<div class="card stage" id="selfAssess">
+  <h2>Autoevaluación — ¿Cómo te sientes con los objetivos?</h2>
+  <div class="rule small">Marca 1–4: 1 <em>Beginning</em>, 2 <em>Approaching</em>, 3 <em>Meeting</em>, 4 <em>Exceeding</em>.</div>
+  <div class="q">
+    <div class="sa">
+      <div>1) Identificar ocupaciones comunes por imágenes.</div>
+      <label>1<br><input type="radio" name="sa1" value="1"></label>
+      <label>2<br><input type="radio" name="sa1" value="2"></label>
+      <label>3<br><input type="radio" name="sa1" value="3"></label>
+      <label>4<br><input type="radio" name="sa1" value="4"></label>
+    </div>
+    <div class="sa">
+      <div>2) Reconocer y usar vocabulario de datos personales.</div>
+      <label>1<br><input type="radio" name="sa2" value="1"></label>
+      <label>2<br><input type="radio" name="sa2" value="2"></label>
+      <label>3<br><input type="radio" name="sa2" value="3"></label>
+      <label>4<br><input type="radio" name="sa2" value="4"></label>
+    </div>
+    <div class="sa">
+      <div>3) Emparejar preguntas básicas con respuestas correctas.</div>
+      <label>1<br><input type="radio" name="sa3" value="1"></label>
+      <label>2<br><input type="radio" name="sa3" value="2"></label>
+      <label>3<br><input type="radio" name="sa3" value="3"></label>
+      <label>4<br><input type="radio" name="sa3" value="4"></label>
+    </div>
+    <div class="sa">
+      <div>4) Leer una biografía corta y completar una credencial.</div>
+      <label>1<br><input type="radio" name="sa4" value="1"></label>
+      <label>2<br><input type="radio" name="sa4" value="2"></label>
+      <label>3<br><input type="radio" name="sa4" value="3"></label>
+      <label>4<br><input type="radio" name="sa4" value="4"></label>
+    </div>
+  </div>
+</div>
+
+  <div class="card foot small">
+    <button id="checkAll" class="ok">Calificar todo</button>
+    <button id="resetAll" class="ghost">Reiniciar</button>
+    <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+    <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+  </div>
+</div>
+<script>
+
+const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cmpExact(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+let selectedTile = null;
+function makeTileInteractive(tile){
+  tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+  tile.addEventListener('click', ()=>{
+    if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+    if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+    else { tile.classList.add('selected'); selectedTile = tile; }
+  });
+}
+function makeBinInteractive(bin){
+  bin.addEventListener('dragover', e=>e.preventDefault());
+  bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+}
+function exportCSVGeneric(filename, headers, row){
+  const ts=new Date().toISOString();
+  const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+  const blob=new Blob([headers+"\n"+[ts,name].concat(row).join(',')],{type:"text/csv"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+}
+
+
+const OCCUPATIONS = [["profesor/profesora", "👩‍🏫"], ["juez/jueza", "⚖️"], ["astronauta", "🧑‍🚀"], ["cocinero/cocinera", "👨‍🍳"], ["fotógrafo/fotógrafa", "📸"], ["doctor/doctora", "🩺"], ["escritor/escritora", "✍️"], ["deportista", "🏅"]];
+const DATOS_MATCH = [["nombre", "Lucía García"], ["edad", "15 años"], ["país", "México"], ["ocupación", "estudiante"], ["correo electrónico", "lucia@gmail.com"], ["número de teléfono", "555-123-4567"], ["cumpleaños", "14 de febrero"]];
+const QA_PAIRS = [["¿Cómo te llamas?", "Me llamo Ana."], ["¿Cuántos años tienes?", "Tengo 14 años."], ["¿Cuándo es tu cumpleaños?", "Es el 14 de febrero."], ["¿De dónde eres?", "Soy de Guatemala."], ["¿Cuál es tu correo electrónico?", "ana@gmail.com"], ["¿Cuál es tu número de teléfono?", "555-789-3210"]];
+const SORT_ITEMS = ["¿Cómo te llamas?", "Me llamo Diego.", "¿De dónde eres?", "Soy de Perú.", "¿Cuál es tu número de teléfono?", "Es 555-333-1111.", "Tengo 13 años.", "¿Cuántos años tienes?"];
+const BIOS = [{"text": "Hola, me llamo Sofía. Tengo 13 años. Soy de Argentina. Mi cumpleaños es el 12 de junio. Soy estudiante y me gusta el arte.", "sol": {"nombre": "Sofía", "edad": "13", "país": "Argentina", "cumpleaños": "12 de junio", "ocupación": "estudiante"}}, {"text": "Me llamo Mateo. Tengo 15 años y soy de México. Mi cumpleaños es el 3 de abril. Soy estudiante y me gusta el béisbol.", "sol": {"nombre": "Mateo", "edad": "15", "país": "México", "cumpleaños": "3 de abril", "ocupación": "estudiante"}}];
+
+function isQuestion(s){ return s.trim().startsWith('¿') && s.includes('?'); }
+
+// Stage 0
+function buildS0(){
+  const pics=document.getElementById('s0Pics'); pics.innerHTML='';
+  const bank=document.getElementById('s0Bank'); bank.innerHTML='';
+  const mx = OCCUPATIONS.length;
+  document.getElementById('mx0').textContent = mx;
+  OCCUPATIONS.forEach(([esp,icon],i)=>{
+    const card=document.createElement('div'); card.className='q';
+    card.innerHTML = '<div style="font-size:42px">'+icon+'</div><div class="bin" id="s0b'+i+'"></div>';
+    pics.appendChild(card); makeBinInteractive(card.querySelector('.bin'));
+  });
+  // Chips wrap
+  const arr = OCCUPATIONS.map(x=>x[0]);
+  arr.forEach(txt=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=txt; t.setAttribute('data-val',txt); t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+}
+function gradeS0(){
+  let score=0;
+  OCCUPATIONS.forEach(([esp,_],i)=>{
+    const bin=document.getElementById('s0b'+i);
+    const chosen=bin.querySelector('.tile')?.getAttribute('data-val')||'';
+    if(cmpExact(chosen, esp)) score++;
+  });
+  document.getElementById('sc0').textContent=score; updateTotal();
+}
+
+// Stage 1
+function buildS1(){
+  const pairs=document.getElementById('s1Pairs'); pairs.innerHTML='';
+  const bank=document.getElementById('s1Bank'); bank.innerHTML='';
+  document.getElementById('mx1').textContent = DATOS_MATCH.length;
+  DATOS_MATCH.forEach(([term,example],i)=>{
+    const row=document.createElement('div'); row.className='q';
+    row.innerHTML = '<strong>'+(i+1)+'.</strong> '+term+' → ';
+    const bin=document.createElement('div'); bin.className='bin'; makeBinInteractive(bin);
+    row.appendChild(bin);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+example; row.appendChild(key);
+    pairs.appendChild(row);
+  });
+  shuffle(DATOS_MATCH.map(x=>x[1])).forEach(ex=>{
+    const t=document.createElement('span'); t.className='tile'; t.textContent=ex; t.setAttribute('data-val',ex); t.draggable=true; makeTileInteractive(t); bank.appendChild(t);
+  });
+}
+function gradeS1(){
+  let score=0;
+  document.querySelectorAll('#s1Pairs .q').forEach((row,i)=>{
+    const correct = DATOS_MATCH[i][1];
+    const chosen = row.querySelector('.bin .tile')?.getAttribute('data-val')||'';
+    if(cmpExact(chosen, correct)){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); }
+    else { row.classList.add('incorrect'); row.classList.remove('correct'); }
+  });
+  document.getElementById('sc1').textContent = score; updateTotal();
+}
+
+// Stage 2
+function buildS2(){
+  const pairs=document.getElementById('s2Pairs'); pairs.innerHTML='';
+  const bank=document.getElementById('s2Bank'); bank.innerHTML='';
+  document.getElementById('mx2').textContent = QA_PAIRS.length;
+  QA_PAIRS.forEach(([q,a],i)=>{
+    const row=document.createElement('div'); row.className='q';
+    row.innerHTML = '<strong>'+(i+1)+'.</strong> '+q+' → ';
+    const bin=document.createElement('div'); bin.className='bin'; makeBinInteractive(bin);
+    row.appendChild(bin);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+a; row.appendChild(key);
+    pairs.appendChild(row);
+  });
+  shuffle(QA_PAIRS.map(x=>x[1])).forEach(ans=>{
+    const t=document.createElement('span'); t.className='tile'; t.textContent=ans; t.setAttribute('data-val',ans); t.draggable=true; makeTileInteractive(t); bank.appendChild(t);
+  });
+}
+function gradeS2(){
+  let score=0;
+  document.querySelectorAll('#s2Pairs .q').forEach((row,i)=>{
+    const correct = QA_PAIRS[i][1];
+    const chosen = row.querySelector('.bin .tile')?.getAttribute('data-val')||'';
+    if(cmpExact(chosen, correct)){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); }
+    else { row.classList.add('incorrect'); row.classList.remove('correct'); }
+  });
+  document.getElementById('sc2').textContent = score; updateTotal();
+}
+
+// Stage 3
+function buildS3(){
+  ['s3Q','s3A'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  const bank=document.getElementById('s3Bank'); bank.innerHTML='';
+  document.getElementById('mx3').textContent = SORT_ITEMS.length;
+  shuffle(SORT_ITEMS).forEach(txt=>{
+    const t=document.createElement('span'); t.className='tile'; t.textContent=txt; t.draggable=true; makeTileInteractive(t); bank.appendChild(t);
+  });
+}
+function gradeS3(){
+  let score=0;
+  document.querySelectorAll('#s3Q .tile').forEach(t=>{ if(isQuestion(t.textContent)) score++; });
+  document.querySelectorAll('#s3A .tile').forEach(t=>{ if(!isQuestion(t.textContent)) score++; });
+  document.getElementById('sc3').textContent = score; updateTotal();
+}
+
+// Stage 4
+function buildS4(){
+  const c=document.getElementById('s4Container'); c.innerHTML='';
+  document.getElementById('mx4').textContent = BIOS.length*5;
+  BIOS.forEach((bio,idx)=>{
+    const card=document.createElement('div'); card.className='q';
+    const p=document.createElement('p'); p.textContent = bio.text; card.appendChild(p);
+    const tbl=document.createElement('table'); tbl.className='table';
+    tbl.innerHTML = '<tr><th>Campo</th><th>Respuesta</th></tr>'
+      + ['nombre','edad','país','cumpleaños','ocupación'].map(k=>'<tr><td>'+k+'</td><td><input type="text" class="s4in" data-ans="'+bio.sol[k]+'" size="'+Math.max(6,bio.sol[k].length+1)+'"></td></tr>').join('');
+    card.appendChild(tbl);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+Object.values(bio.sol).join(' | ');
+    card.appendChild(key);
+    c.appendChild(card);
+  });
+}
+function gradeS4(){
+  let score=0;
+  document.querySelectorAll('#s4Container .q').forEach(card=>{
+    card.querySelectorAll('.s4in').forEach(inp=>{
+      const ans=inp.getAttribute('data-ans');
+      if(cmpExact(inp.value, ans)) score++;
+    });
+  });
+  document.getElementById('sc4').textContent = score; updateTotal();
+}
+
+// Totals + CSV
+function updateTotal(){
+  const ids=[0,1,2,3,4];
+  const scores=ids.map(i=>+document.getElementById('sc'+i).textContent||0);
+  const maxes =ids.map(i=>+document.getElementById('mx'+i).textContent||0);
+  document.getElementById('totalScore').textContent=scores.reduce((a,b)=>a+b,0);
+  document.getElementById('totalMax').textContent=maxes.reduce((a,b)=>a+b,0);
+}
+function radioVal(name){ const el=document.querySelector('input[name="'+name+'"]:checked'); return el?el.value:''; }
+function exportCSV(){
+  const ids=[0,1,2,3,4];
+  const row=[]; ids.forEach(i=>{ row.push(+document.getElementById('sc'+i).textContent||0); row.push(+document.getElementById('mx'+i).textContent||0); });
+  const sa1=radioVal('sa1'), sa2=radioVal('sa2'), sa3=radioVal('sa3'), sa4=radioVal('sa4');
+  const total=row.filter((_,i)=>i%2===0).reduce((a,b)=>a+b,0);
+  const totalMax=row.filter((_,i)=>i%2===1).reduce((a,b)=>a+b,0);
+  exportCSVGeneric('R1_U1_datos_personales_results.csv','timestamp,name,s0,s0_max,s1,s1_max,s2,s2_max,s3,s3_max,s4,s4_max,total,total_max,sa1,sa2,sa3,sa4',[...row,total,totalMax,sa1,sa2,sa3,sa4]);
+}
+
+function init(){
+  buildS0(); buildS1(); buildS2(); buildS3(); buildS4(); applyTeacher();
+  document.getElementById('checkAll').addEventListener('click', ()=>{ gradeS0(); gradeS1(); gradeS2(); gradeS3(); gradeS4(); });
+  document.getElementById('resetAll').addEventListener('click', ()=>{ location.reload(); });
+  document.getElementById('exportCSV').addEventListener('click', exportCSV);
+}
+init();
+
+</script>
+</body></html>
