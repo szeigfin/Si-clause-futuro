@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 2 · Unidad 2 — SABER vs CONOCER (yo irregular + verbos -zco) · ProfeVT</title>
+<style>:root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--accent2:#22c55e;--ok:#16a34a;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:18px 16px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{font-weight:900;letter-spacing:.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.1rem}
+header p{margin:.25rem 0 0 0;opacity:.95}
+.wrap{max-width:1080px;margin:20px auto;padding:0 12px}
+.card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:16px 0}
+.stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+.stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+.muted{color:var(--muted);font-size:.95rem}
+.q{margin:10px 0;padding:12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;position:relative}
+.q.correct{border-color:#86efac;background:#f0fdf4}
+.q.incorrect{border-color:#fecaca;background:#fff7f7}
+.foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:.85rem}
+button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+button.ghost{background:#e2e8f0;color:#111827}
+button.ok{background:var(--ok)}
+button.warn{background:#f59e0b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:220px;overflow-y:auto;padding-right:4px}
+.tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+.tile.selected{outline:3px solid #0ea5e9;background:#e0f2fe}
+.bin{min-height:52px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+.score{font-weight:800}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+.inline-blank{display:inline-block;margin:0 .25rem}
+.rule{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0}
+.table{width:100%;border-collapse:collapse;margin:6px 0}
+.table th,.table td{border:1px solid #e2e8f0;padding:8px;border-radius:4px}
+.grid2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:820px){ .grid2{grid-template-columns:1fr 1fr} }
+.gloss{cursor:pointer;border-bottom:2px dotted #60a5fa}
+.gloss-tip{position:absolute;z-index:10;background:#111827;color:#fff;padding:6px 10px;border-radius:8px;font-size:.9rem;box-shadow:0 6px 16px rgba(2,6,23,.25);max-width:280px;display:none}
+.gloss.show .gloss-tip{display:block}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#e0f2fe;border:1px solid #bae6fd;color:#0369a1;font-size:.8rem;margin-left:6px}
+hr{border:0;border-top:1px solid #e2e8f0;margin:10px 0}
+</style></head><body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Reporteros 2 · Unidad 2 — SABER vs CONOCER (yo irregular + verbos -zco) · ProfeVT</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <p class="muted">Objetivos: ① diferenciar significados ② conjugar (presente) ③ elegir el verbo correcto ④ ampliar con -zco. <br><em>Los acentos cuentan.</em> Añade <span class="kbd">?teacher=1</span> al enlace para ver claves.</p>
+  </div>
+
+<!-- Stage 0 -->
+<div class="card stage" id="s0">
+  <h2>0) Significado — ¿SABER o CONOCER?</h2>
+  <div class="rule small">
+    <strong>SABER</strong>: información o habilidad aprendida (<em>saber + infinitivo</em>).<br>
+    <strong>CONOCER</strong>: familiaridad con <em>personas (a)</em>, <em>lugares</em> o <em>temas</em>; también “conocer” = “meet (for the first time)”. 
+    <span class="badge">Haz clic en <span data-gloss="to know (information), to know how to do something" >saber</span> o <span data-gloss="to be familiar with, or to meet someone" >conocer</span> para ver pistas.</span>
+  </div>
+  <div class="q">
+    <div class="grid2">
+      <div><strong>SABER</strong><div class="bin" id="s0Saber"></div></div>
+      <div><strong>CONOCER</strong><div class="bin" id="s0Conocer"></div></div>
+    </div>
+    <hr>
+    <div class="chips" id="s0Bank"></div>
+    <div class="key" id="s0Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS0()">Calificar Etapa 0</button>
+    <span>Puntaje: <span id="sc0" class="score">0</span> / <span id="mx0">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 1 -->
+<div class="card stage" id="s1">
+  <h2>1) Conjugación — Presente</h2>
+  <div class="rule small">Arrastra la forma correcta a cada persona. <strong>OJO:</strong> Yo <em>sé</em>; Yo <em>conozco</em>.</div>
+  <div class="q">
+    <div class="grid2">
+      <div><strong>SABER</strong><div id="s1Saber"></div></div>
+      <div><strong>CONOCER</strong><div id="s1Conocer"></div></div>
+    </div>
+    <hr>
+    <div class="chips" id="s1Bank"></div>
+    <div class="key" id="s1Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+    <span>Puntaje: <span id="sc1" class="score">0</span> / <span id="mx1">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 2 -->
+<div class="card stage" id="s2">
+  <h2>2) Usa la forma correcta en contexto</h2>
+  <div class="q" id="s2Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+    <span>Puntaje: <span id="sc2" class="score">0</span> / <span id="mx2">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 3 -->
+<div class="card stage" id="s3">
+  <h2>3) Familia -ZCO — Yo irregular</h2>
+  <div class="rule small">Empareja el infinitivo con su forma de <strong>yo</strong> (<em>agradecer → agradezco</em>).</div>
+  <div class="q">
+    <div class="chips" id="s3Bank"></div>
+    <div id="s3Pairs"></div>
+    <div class="key" id="s3Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+    <span>Puntaje: <span id="sc3" class="score">0</span> / <span id="mx3">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 4 -->
+<div class="card stage" id="s4">
+  <h2>4) Completa con la forma correcta (escritura)</h2>
+  <div id="s4Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+    <span>Puntaje: <span id="sc4" class="score">0</span> / <span id="mx4">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 5 -->
+<div class="card stage" id="s5">
+  <h2>5) Clasifica por uso — ¿SABER o CONOCER?</h2>
+  <div class="q">
+    <div class="chips" id="s5Bank"></div>
+    <div class="grid2">
+      <div><strong>SABER</strong><div class="bin" id="s5Saber"></div></div>
+      <div><strong>CONOCER</strong><div class="bin" id="s5Conocer"></div></div>
+    </div>
+    <div class="key" id="s5Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS5()">Calificar Etapa 5</button>
+    <span>Puntaje: <span id="sc5" class="score">0</span> / <span id="mx5">0</span></span>
+  </div>
+</div>
+
+<!-- Stage 6 -->
+<div class="card stage" id="s6">
+  <h2>6) Revisión final — elige la forma</h2>
+  <div id="s6Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS6()">Calificar Etapa 6</button>
+    <span>Puntaje: <span id="sc6" class="score">0</span> / <span id="mx6">0</span></span>
+  </div>
+</div>
+
+  <div class="card foot small">
+    <button id="checkAll" class="ok">Calificar todo</button>
+    <button id="resetAll" class="ghost">Reiniciar</button>
+    <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+    <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+  </div>
+</div>
+<script>
+
+const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cmpExact(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+let selectedTile = null;
+function makeTileInteractive(tile){
+  tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+  tile.addEventListener('click', ()=>{
+    if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+    if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+    else { tile.classList.add('selected'); selectedTile = tile; }
+  });
+}
+function makeBinInteractive(bin){
+  bin.addEventListener('dragover', e=>e.preventDefault());
+  bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+}
+function exportCSVGeneric(filename, headers, row){
+  const ts=new Date().toISOString();
+  const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+  const blob=new Blob([headers+"\n"+[ts,name].concat(row).join(',')],{type:"text/csv"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+}
+function enableGloss(){ 
+  document.querySelectorAll('[data-gloss]').forEach(el=>{
+    el.classList.add('gloss');
+    el.addEventListener('click', ()=>{
+      const tipText = el.getAttribute('data-gloss');
+      let tip = el.querySelector('.gloss-tip');
+      if(!tip){ tip = document.createElement('span'); tip.className='gloss-tip'; tip.textContent=tipText; el.appendChild(tip); }
+      el.classList.toggle('show');
+      tip.style.left = '0px';
+      tip.style.top = (el.offsetHeight + 6) + 'px';
+    });
+  });
+}
+
+
+const S0_ITEMS = ["la hora del concierto", "la capital de México", "tocar la guitarra", "al cantante famoso", "el jazz", "esta ciudad", "a mis vecinos", "usar una impresora 3D", "la respuesta correcta", "a tu profesor de ciencias"];
+const S0_ANS = {"la hora del concierto": "saber", "la capital de México": "saber", "tocar la guitarra": "saber+inf", "al cantante famoso": "conocer_persona", "el jazz": "conocer_tema", "esta ciudad": "conocer_lugar", "a mis vecinos": "conocer_persona", "usar una impresora 3D": "saber+inf", "la respuesta correcta": "saber", "a tu profesor de ciencias": "conocer_persona"};
+const S1_PEOPLE = ["yo", "tú", "él/ella/Ud.", "nosotros/as", "vosotros/as", "ellos/ellas/Uds."];
+const S1_VERBS  = {"saber": ["sé", "sabes", "sabe", "sabemos", "sabéis", "saben"], "conocer": ["conozco", "conoces", "conoce", "conocemos", "conocéis", "conocen"]};
+const S1_DISTRACTORS = ["se", "sabeis", "conozo", "conocéis", "sabenes", "conocís", "séis"];
+const S2_SENTENCES = [["Yo ___ tocar el piano.", "sé"], ["¿Tú ___ a la nueva profesora?", "conoces"], ["Mi hermano no ___ la respuesta.", "sabe"], ["Nosotros ___ bien esta ciudad.", "conocemos"], ["Ellos no ___ hablar francés.", "saben"], ["¿Ustedes ___ al cantante de la banda?", "conocen"], ["Mi abuela ___ usar el proyector.", "sabe"], ["Vosotros ___ el museo de arte moderno, ¿no?", "conocéis"]];
+const ZCO = {"agradecer": "agradezco", "aparecer": "aparezco", "ofrecer": "ofrezco", "parecer": "parezco", "producir": "produzco", "traducir": "traduzco", "conocer": "conozco"};
+const S4_CLOZE = [["Yo no ___ (saber) si la banda toca hoy.", "sé"], ["¿Tú ___ (conocer) a la cantante?", "conoces"], ["Mi primo ___ (saber) jugar al béisbol.", "sabe"], ["Nosotros ___ (conocer) el parque nacional.", "conocemos"], ["Ellas ___ (saber) leer cómics en francés.", "saben"], ["Uds. ___ (conocer) al compositor famoso.", "conocen"]];
+const S5_BANK = ["___ la hora del vuelo", "___ tocar la batería", "___ a la fotógrafa", "___ la música clásica", "___ esta playa", "___ al perro de mi vecino", "___ escribir en chino", "___ el reguetón", "___ al director"];
+const S5_ANS = {"___ la hora del vuelo": "saber", "___ tocar la batería": "saber", "___ a la fotógrafa": "conocer", "___ la música clásica": "conocer", "___ esta playa": "conocer", "___ al perro de mi vecino": "conocer", "___ escribir en chino": "saber", "___ el reguetón": "conocer", "___ al director": "conocer"};
+const S6_ITEMS = [["Yo ____ a tus padres. (saber/conocer)", "conozco"], ["¿Tú ____ quién es el cantante? (saber/conocer)", "sabes"], ["Mi clase ____ al compositor argentino. (saber/conocer)", "conoce"], ["Nosotros ____ dónde está el teatro. (saber/conocer)", "sabemos"], ["Ellos ____ Barcelona muy bien. (saber/conocer)", "conocen"]];
+
+// S0
+function buildS0(){
+  ['s0Saber','s0Conocer'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  const bank=document.getElementById('s0Bank'); bank.innerHTML='';
+  shuffle(S0_ITEMS).forEach(txt=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=txt; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  document.getElementById('mx0').textContent=S0_ITEMS.length;
+  document.getElementById('s0Key').textContent="Saber = info/skill; Conocer = personas/lugares/temas/meet.";
+}
+function isSaber(txt){
+  const tag = S0_ANS[txt]||'';
+  return tag.startsWith('saber');
+}
+function gradeS0(){
+  let score=0;
+  document.querySelectorAll('#s0Saber .tile').forEach(t=>{ if(isSaber(t.textContent)) score++; });
+  document.querySelectorAll('#s0Conocer .tile').forEach(t=>{ if(!isSaber(t.textContent)) score++; });
+  document.getElementById('sc0').textContent=score; updateTotal();
+}
+
+// S1
+function buildS1(){
+  function tableFor(verbId){
+    const host=document.getElementById(verbId);
+    const tbl=document.createElement('table'); tbl.className='table';
+    let rows='<tr><th>Persona</th><th>Forma</th></tr>';
+    S1_PEOPLE.forEach((p,i)=>{ rows+=`<tr><td>${p}</td><td><div class="bin" id="${verbId}_b${i}"></div></td></tr>`; });
+    tbl.innerHTML=rows; host.appendChild(tbl);
+    S1_PEOPLE.forEach((_,i)=>makeBinInteractive(document.getElementById(`${verbId}_b${i}`)));
+  }
+  tableFor('s1Saber'); tableFor('s1Conocer');
+  const bank=document.getElementById('s1Bank'); bank.innerHTML='';
+  const forms=S1_VERBS['saber'].concat(S1_VERBS['conocer']).concat(S1_DISTRACTORS);
+  shuffle(forms).forEach(f=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=f; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  document.getElementById('mx1').textContent=S1_PEOPLE.length*2;
+  document.getElementById('s1Key').textContent="Sé/sabes/sabe/sabemos/sabéis/saben · Conozco/conoces/conoce/conocemos/conocéis/conocen";
+}
+function gradeS1(){
+  let score=0;
+  S1_PEOPLE.forEach((_,i)=>{
+    const a=document.querySelector('#s1Saber_b'+i+' .tile')?.textContent||'';
+    if(cmpExact(a,S1_VERBS['saber'][i])) score++;
+  });
+  S1_PEOPLE.forEach((_,i)=>{
+    const a=document.querySelector('#s1Conocer_b'+i+' .tile')?.textContent||'';
+    if(cmpExact(a,S1_VERBS['conocer'][i])) score++;
+  });
+  document.getElementById('sc1').textContent=score; updateTotal();
+}
+
+// S2
+function buildS2(){
+  const c=document.getElementById('s2Container'); c.innerHTML='';
+  document.getElementById('mx2').textContent=S2_SENTENCES.length;
+  S2_SENTENCES.forEach(([txt,ans],i)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=i;
+    const drop=document.createElement('div'); drop.className='bin'; drop.style.minHeight='42px'; makeBinInteractive(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    const options=[].concat(S1_VERBS['saber'],S1_VERBS['conocer']);
+    const set = Array.from(new Set([ans].concat(shuffle(options).slice(0,6))));
+    shuffle(set).forEach(a=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=a; t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    q.innerHTML='<strong>'+(i+1)+'.</strong> '+txt;
+    q.appendChild(drop); q.appendChild(chips);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS2(){
+  let score=0;
+  document.querySelectorAll('#s2Container .q').forEach((q,i)=>{
+    const ans=S2_SENTENCES[i][1];
+    const chosen=q.querySelector('.bin .tile')?.textContent||'';
+    if(cmpExact(chosen, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc2').textContent=score; updateTotal();
+}
+
+// S3
+function buildS3(){
+  const bank=document.getElementById('s3Bank'); bank.innerHTML='';
+  const pairs=document.getElementById('s3Pairs'); pairs.innerHTML='';
+  const yoForms=shuffle(Object.values(ZCO));
+  yoForms.forEach(f=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=f; t.setAttribute('data-val',f); t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  Object.keys(ZCO).forEach((inf,i)=>{
+    const row=document.createElement('div'); row.className='q'; row.dataset.idx=i;
+    const prompt=document.createElement('div'); prompt.innerHTML='<strong>'+(i+1)+'.</strong> '+inf+' → yo:';
+    const drop=document.createElement('div'); drop.className='bin'; drop.style.minHeight='42px'; makeBinInteractive(drop);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ZCO[inf];
+    row.appendChild(prompt); row.appendChild(drop); row.appendChild(key); pairs.appendChild(row);
+  });
+  document.getElementById('mx3').textContent=Object.keys(ZCO).length;
+}
+function gradeS3(){
+  let score=0; let idx=0;
+  for(const [inf,yo] of Object.entries(ZCO)){
+    const row=document.querySelectorAll('#s3Pairs .q')[idx++];
+    const chosen=row.querySelector('.bin .tile');
+    if(chosen && cmpExact(chosen.getAttribute('data-val'), yo)){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); }
+    else { row.classList.add('incorrect'); row.classList.remove('correct'); }
+  }
+  document.getElementById('sc3').textContent=score; updateTotal();
+}
+
+// S4
+function buildS4(){
+  const c=document.getElementById('s4Container'); c.innerHTML='';
+  document.getElementById('mx4').textContent=S4_CLOZE.length;
+  S4_CLOZE.forEach(([prompt,ans],i)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=i;
+    const size=Math.max(ans.length+1,4);
+    const input='<span class="inline-blank"><input type="text" size="'+size+'" class="s4in" data-ans="'+ans+'" /></span>';
+    q.innerHTML='<strong>'+(i+1)+'.</strong> '+prompt.replace('___', input);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS4(){
+  let score=0;
+  document.querySelectorAll('#s4Container .q').forEach(q=>{
+    const val=q.querySelector('.s4in').value;
+    const ans=q.querySelector('.s4in').getAttribute('data-ans');
+    if(cmpExact(val, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc4').textContent=score; updateTotal();
+}
+
+// S5
+function buildS5(){
+  const bank=document.getElementById('s5Bank'); bank.innerHTML='';
+  shuffle(S5_BANK).forEach(txt=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=txt; t.draggable=true; makeTileInteractive(t); bank.appendChild(t); });
+  ['s5Saber','s5Conocer'].forEach(id=>makeBinInteractive(document.getElementById(id)));
+  document.getElementById('mx5').textContent=S5_BANK.length;
+  document.getElementById('s5Key').textContent='Coloca info/habilidad en SABER; familiaridad/personas en CONOCER.';
+}
+function isSaberPhrase(txt){
+  return S5_ANS[txt]==='saber';
+}
+function gradeS5(){
+  let score=0;
+  document.querySelectorAll('#s5Saber .tile').forEach(t=>{ if(isSaberPhrase(t.textContent)) score++; });
+  document.querySelectorAll('#s5Conocer .tile').forEach(t=>{ if(!isSaberPhrase(t.textContent)) score++; });
+  document.getElementById('sc5').textContent=score; updateTotal();
+}
+
+// S6
+function buildS6(){
+  const c=document.getElementById('s6Container'); c.innerHTML='';
+  document.getElementById('mx6').textContent=S6_ITEMS.length;
+  S6_ITEMS.forEach(([stem,ans],i)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=i;
+    const options=[].concat(S1_VERBS['saber'], S1_VERBS['conocer']);
+    const set = Array.from(new Set([ans].concat(shuffle(options).slice(0,5))));
+    const drop=document.createElement('div'); drop.className='bin'; drop.style.minHeight='42px'; makeBinInteractive(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    shuffle(set).forEach(o=>{ const t=document.createElement('span'); t.className='tile'; t.textContent=o; t.draggable=true; makeTileInteractive(t); chips.appendChild(t); });
+    q.innerHTML='<strong>'+(i+1)+'.</strong> '+stem;
+    q.appendChild(drop); q.appendChild(chips);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+ans; q.appendChild(key);
+    c.appendChild(q);
+  });
+}
+function gradeS6(){
+  let score=0;
+  document.querySelectorAll('#s6Container .q').forEach((q,i)=>{
+    const ans=S6_ITEMS[i][1];
+    const chosen=q.querySelector('.bin .tile')?.textContent||'';
+    if(cmpExact(chosen, ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.getElementById('sc6').textContent=score; updateTotal();
+}
+
+function updateTotal(){
+  const ids=[0,1,2,3,4,5,6];
+  const scores=ids.map(i=>+document.getElementById('sc'+i).textContent||0);
+  const maxes =ids.map(i=>+document.getElementById('mx'+i).textContent||0);
+  document.getElementById('totalScore').textContent=scores.reduce((a,b)=>a+b,0);
+  document.getElementById('totalMax').textContent=maxes.reduce((a,b)=>a+b,0);
+}
+function exportCSV(){
+  const ids=[0,1,2,3,4,5,6];
+  const row=[]; ids.forEach(i=>{ row.push(+document.getElementById('sc'+i).textContent||0); row.push(+document.getElementById('mx'+i).textContent||0); });
+  const total=row.filter((_,i)=>i%2===0).reduce((a,b)=>a+b,0);
+  const totalMax=row.filter((_,i)=>i%2===1).reduce((a,b)=>a+b,0);
+  exportCSVGeneric('R2_U2_saber_conocer_results.csv','timestamp,name,s0,s0_max,s1,s1_max,s2,s2_max,s3,s3_max,s4,s4_max,s5,s5_max,s6,s6_max,total,total_max',[...row,total,totalMax]);
+}
+
+function init(){
+  buildS0(); buildS1(); buildS2(); buildS3(); buildS4(); buildS5(); buildS6(); applyTeacher(); enableGloss();
+  document.getElementById('checkAll').addEventListener('click', ()=>{ gradeS0(); gradeS1(); gradeS2(); gradeS3(); gradeS4(); gradeS5(); gradeS6(); });
+  document.getElementById('resetAll').addEventListener('click', ()=>{ location.reload(); });
+  document.getElementById('exportCSV').addEventListener('click', exportCSV);
+}
+init();
+
+</script>
+</body></html>
