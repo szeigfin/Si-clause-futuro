@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Presente — tener, ser, llamarse (ProfeVT)</title>
+<style>
+:root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--ok:#16a34a;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:18px 16px;background:linear-gradient(90deg,#0ea5e9,#22c55e);color:white;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{font-weight:900;letter-spacing:.5px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.1rem}
+header p{margin:.25rem 0 0 0;opacity:.95}
+.wrap{max-width:980px;margin:20px auto;padding:0 12px}
+.card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:16px 0}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+.col{flex:1 1 340px}
+.muted{color:var(--muted);font-size:.95rem}
+.stage{border-left:6px solid var(--accent);padding-left:12px;margin-top:10px}
+.stage h2{margin:.2rem 0 .6rem;font-size:1.1rem}
+.q{margin:10px 0;padding:12px;border:1px solid #e2e8f0;border-radius:12px;background:#fff}
+.q.correct{border-color:#86efac;background:#f0fdf4}
+.q.incorrect{border-color:#fecaca;background:#fff7f7}
+.foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:.85rem}
+button{border:0;background:var(--accent);color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+button.ghost{background:#e2e8f0;color:#111827}
+button.ok{background:var(--ok)}
+button.warn{background:#f59e0b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:180px;overflow-y:auto;padding-right:4px}
+.tile{padding:8px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;cursor:grab;user-select:none}
+.tile.selected{outline:3px solid #0ea5e9;background:#e0f2fe}
+.bin{min-height:72px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px}
+.key{display:none;margin-top:6px;font-size:.9rem;color:#2563eb}
+.score{font-weight:800}
+.kbd{font-family:ui-monospace, Menlo, Consolas, monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+input[type="text"]{padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-size:16px;vertical-align:baseline}
+.inline-blank{display:inline-block;margin:0 .25rem}
+summary{cursor:pointer;font-weight:700}
+details{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin-top:8px}
+.vocab{columns:2;column-gap:24px}
+@media(min-width:820px){ .vocab{columns:3} }
+</style></head><body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Presente — tener, ser, llamarse (ProfeVT)</h1>
+  <p>Nombre: <input id="studentName" type="text" placeholder="Escribe tu nombre..." style="max-width:320px;margin-left:8px" /></p>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <p class="muted">Meta: saludar, presentarte y dar datos personales con <strong>ser, tener, llamarse</strong>. Acentos = ortografía. Modelos con <span class="kbd">?teacher=1</span>.</p>
+        <details><summary>Vocabulario útil</summary><div class="vocab" id="vocabBox"></div></details>
+      </div>
+      <div class="col">
+        <div class="foot small">
+          <button id="checkAll" class="ok">Calificar todo</button>
+          <button id="resetAll" class="ghost">Reiniciar</button>
+          <button id="exportCSV" class="warn">Descargar resultados (.csv)</button>
+          <span>Puntaje total: <span id="totalScore" class="score">0</span> / <span id="totalMax">0</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="card stage" id="stage1">
+  <h2>Etapa 1 — ¿Correcto en presente?</h2>
+  <p class="muted">Arrastra o haz clic para clasificar oraciones con <em>ser, tener, llamarse</em>.</p>
+  <div class="q" id="s1q">
+    <div class="chips" id="s1Bank"></div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <div class="col"><strong>Correcto</strong><div class="bin" id="s1Good"></div></div>
+      <div class="col"><strong>Incorrecto</strong><div class="bin" id="s1Bad"></div></div>
+    </div>
+    <div class="key" id="s1Key"></div>
+  </div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS1()">Calificar Etapa 1</button>
+    <span>Puntaje: <span id="s1Score" class="score">0</span> / <span id="s1Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage2">
+  <h2>Etapa 2 — Conjuga (arrastrar o clic-para-colocar)</h2>
+  <div id="s2Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS2()">Calificar Etapa 2</button>
+    <span>Puntaje: <span id="s2Score" class="score">0</span> / <span id="s2Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage3">
+  <h2>Etapa 3 — Completa en contexto (cloze)</h2>
+  <p class="muted">Escribe las formas en <strong>presente</strong>. <em>Los acentos cuentan</em>.</p>
+  <div id="s3Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS3()">Calificar Etapa 3</button>
+    <span>Puntaje: <span id="s3Score" class="score">0</span> / <span id="s3Max">0</span></span>
+  </div>
+</div>
+
+<div class="card stage" id="stage4">
+  <h2>Etapa 4 — Constructor de oraciones</h2>
+  <p class="muted">Ordena para presentar datos personales con <em>ser, tener, llamarse</em>.</p>
+  <div id="s4Container"></div>
+  <div class="foot small">
+    <button class="ok" onclick="gradeS4()">Calificar Etapa 4</button>
+    <span>Puntaje: <span id="s4Score" class="score">0</span> / <span id="s4Max">0</span></span>
+  </div>
+</div>
+
+</div>
+<script>
+
+const teacherMode = new URLSearchParams(location.search).get('teacher')==='1';
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+// Accent-sensitive compare: do NOT strip accents; only trim + lower
+function cmpExact(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+function applyTeacher(){ if(teacherMode){ document.querySelectorAll('.key').forEach(k=>k.style.display='block'); } }
+let selectedTile = null;
+function makeTileInteractive(tile){
+  tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+  tile.addEventListener('click', ()=>{
+    if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+    if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+    else { tile.classList.add('selected'); selectedTile = tile; }
+  });
+}
+function makeBinInteractive(bin){
+  bin.addEventListener('dragover', e=>e.preventDefault());
+  bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+}
+function exportCSVGeneric(filename, headers, row){
+  const ts=new Date().toISOString();
+  const name=(document.querySelector('#studentName').value||'').replace(/,/g,' ');
+  const blob=new Blob([headers+"\n"+[ts,name].concat(row).join(',')],{type:"text/csv"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},500);
+}
+
+
+const VOCAB = ["1 uno", "2 dos", "3 tres", "4 cuatro", "5 cinco", "6 seis", "7 siete", "8 ocho", "9 nueve", "10 diez", "11 once", "12 doce", "13 trece", "14 catorce", "15 quince", "16 dieciséis", "17 diecisiete", "18 dieciocho", "19 diecinueve", "20 veinte", "21 veintiuno", "22 veintidós", "23 veintitrés", "24 veinticuatro", "25 veinticinco", "26 veintiséis", "27 veintisiete", "28 veintiocho", "29 veintinueve", "30 treinta", "31 treinta y uno", "32 treinta y dos", "33 treinta y tres", "34 treinta y cuatro", "35 treinta y cinco", "36 treinta y seis", "37 treinta y siete", "38 treinta y ocho", "39 treinta y nueve", "40 cuarenta", "41 cuarenta y uno", "42 cuarenta y dos", "43 cuarenta y tres", "44 cuarenta y cuatro", "45 cuarenta y cinco", "46 cuarenta y seis", "47 cuarenta y siete", "48 cuarenta y ocho", "49 cuarenta y nueve", "50 cincuenta", "60 sesenta", "70 setenta", "80 ochenta", "90 noventa", "100 cien", "el nombre", "la edad", "el país", "la ocupación", "el correo electrónico", "el número de teléfono", "el cumpleaños", "saludar", "dar un beso", "dar un apretón de manos", "dar un abrazo", "encantado/a = mucho gusto", "el señor / la señora / la señorita", "doña / don", "actor/actriz", "astronauta", "cantante", "cocinero/a", "deportista", "director/a", "doctor/a", "escritor/a", "estudiante", "fotógrafo/a", "juez/jueza", "periodista", "profesor/a"];
+function buildVocab(){
+  const box=document.querySelector('#vocabBox'); if(!box) return;
+  box.innerHTML = VOCAB.map(v=>'<div>'+v+'</div>').join('');
+}
+
+const S1_GOOD = ["Yo soy estudiante.", "Tú eres de México.", "Ella se llama Ana.", "Nosotros tenemos quince años.", "Vosotros sois profesores.", "Ellos tienen correo electrónico.", "Me llamo Marcos.", "Ustedes son periodistas."];
+const S1_BAD  = ["Yo ser estudiante.", "Tú está de México.", "Ella se llamo Ana.", "Nosotros tene quince años.", "Vosotros estáis profesores.", "Ellos tien correo electrónico.", "Me llamas Marcos.", "Ustedes es periodistas."];
+function buildS1(){
+  const bank = document.querySelector('#s1Bank'); bank.innerHTML='';
+  const all = shuffle(S1_GOOD.concat(S1_BAD));
+  all.forEach(txt=>{ const sp=document.createElement('span'); sp.className='tile'; sp.textContent=txt; sp.draggable=true; sp.dataset.correct=S1_GOOD.includes(txt)?'good':'bad'; makeTileInteractive(sp); bank.appendChild(sp); });
+  makeBinInteractive(document.querySelector('#s1Good')); makeBinInteractive(document.querySelector('#s1Bad'));
+  document.querySelector('#s1Key').textContent='Modelos correctos: ' + S1_GOOD.join(' | ');
+  document.querySelector('#s1Max').textContent = all.length;
+}
+function gradeS1(){
+  const good=document.querySelector('#s1Good'), bad=document.querySelector('#s1Bad');
+  let score=0; [good,bad].forEach(bin=>{ bin.querySelectorAll('.tile').forEach(t=>{ if((bin===good && t.dataset.correct==='good') || (bin===bad && t.dataset.correct==='bad')) score++; }); });
+  document.querySelector('#s1Score').textContent=score; updateTotal();
+}
+
+const S2_ITEMS = [{"subj": "yo", "inf": "tener", "ans": "tengo", "opts": ["tengo", "tienes", "tiene", "teno", "tiengo"]}, {"subj": "tú", "inf": "tener", "ans": "tienes", "opts": ["tienes", "tiene", "tienés", "tenes", "tienas"]}, {"subj": "él", "inf": "tener", "ans": "tiene", "opts": ["tiene", "tienes", "tinen", "tiende", "tene"]}, {"subj": "nosotros", "inf": "tener", "ans": "tenemos", "opts": ["tenemos", "tienen", "tenéis", "tenímos", "tenemoses"]}, {"subj": "vosotros", "inf": "tener", "ans": "tenéis", "opts": ["tenéis", "teneis", "tenemos", "teníais", "tienen"]}, {"subj": "ellos", "inf": "tener", "ans": "tienen", "opts": ["tienen", "tiene", "tine", "tienenos", "tinen"]}, {"subj": "yo", "inf": "ser", "ans": "soy", "opts": ["soy", "eres", "es", "soi", "soyé"]}, {"subj": "tú", "inf": "ser", "ans": "eres", "opts": ["eres", "es", "son", "sos", "eres."]}, {"subj": "ella", "inf": "ser", "ans": "es", "opts": ["es", "eres", "son", "sea", "sos"]}, {"subj": "nosotros", "inf": "ser", "ans": "somos", "opts": ["somos", "sois", "son", "semos", "somois"]}, {"subj": "vosotros", "inf": "ser", "ans": "sois", "opts": ["sois", "somos", "son", "soís", "sóis"]}, {"subj": "ellos", "inf": "ser", "ans": "son", "opts": ["son", "somos", "es", "sons", "sones"]}, {"subj": "yo", "inf": "llamarse", "ans": "me llamo", "opts": ["me llamo", "me llamas", "me llama", "se llamo", "me llamarse"]}, {"subj": "tú", "inf": "llamarse", "ans": "te llamas", "opts": ["te llamas", "te llama", "te llamo", "se llamas", "te llamase"]}, {"subj": "usted", "inf": "llamarse", "ans": "se llama", "opts": ["se llama", "se llamas", "se llamo", "te llama", "se llamar"]}, {"subj": "nosotros", "inf": "llamarse", "ans": "nos llamamos", "opts": ["nos llamamos", "nos llama", "nos llamáis", "se llamamos", "nos llamemos"]}, {"subj": "vosotros", "inf": "llamarse", "ans": "os llamáis", "opts": ["os llamáis", "os llamas", "os llamais", "se llamáis", "os llamemos"]}, {"subj": "ellas", "inf": "llamarse", "ans": "se llaman", "opts": ["se llaman", "se llama", "se llamáis", "te llaman", "se llamen"]}];
+function buildS2(){
+  const cont=document.querySelector('#s2Container'); cont.innerHTML='';
+  document.querySelector('#s2Max').textContent=S2_ITEMS.length;
+  S2_ITEMS.forEach((it,idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    const drop=document.createElement('div'); drop.className='bin'; drop.style.minHeight='44px'; makeBinInteractive(drop);
+    const prompt=document.createElement('div'); prompt.innerHTML='<strong>'+(idx+1)+'.</strong> ('+it.subj+') '+it.inf+' → '; prompt.appendChild(drop);
+    const chips=document.createElement('div'); chips.className='chips';
+    shuffle(it.opts).forEach(o=>{ const s=document.createElement('span'); s.className='tile'; s.textContent=o; s.setAttribute('data-val',o); s.draggable=true; makeTileInteractive(s); chips.appendChild(s); });
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+it.ans;
+    q.appendChild(prompt); q.appendChild(chips); q.appendChild(key); cont.appendChild(q);
+  });
+}
+function gradeS2(){
+  let score=0;
+  document.querySelectorAll('#s2Container .q').forEach(q=>{ 
+    const idx=+q.dataset.idx; const ans=S2_ITEMS[idx].ans; 
+    const chosen=q.querySelector('.bin .tile'); 
+    if(chosen && cmpExact(chosen.getAttribute('data-val'), ans)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); } 
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.querySelector('#s2Score').textContent=score; updateTotal();
+}
+
+const S3_ITEMS = [{"txt": "Hola, yo ___ (ser) Carla y ___ (tener) 16 años.", "ans": ["soy", "tengo"]}, {"txt": "Él ___ (llamarse) Luis y ___ (ser) de Perú.", "ans": ["se llama", "es"]}, {"txt": "Nosotros ___ (ser) estudiantes y ___ (tener) correo electrónico.", "ans": ["somos", "tenemos"]}, {"txt": "Tú ___ (llamarse) Marta y ___ (tener) 14 años, ¿no?", "ans": ["te llamas", "tienes"]}, {"txt": "Ustedes ___ (ser) periodistas y ___ (tener) 30 entrevistas.", "ans": ["son", "tienen"]}, {"txt": "Me presento: ___ (llamarse, yo) Ana. ___ (ser, yo) profesora.", "ans": ["me llamo", "soy"]}, {"txt": "Ellas ___ (tener) 22 y 23 años y ___ (ser) de España.", "ans": ["tienen", "son"]}, {"txt": "Vosotros ___ (ser) amigos y ___ (llamarse) Leo y Darío.", "ans": ["sois", "os llamáis"]}];
+function buildS3(){
+  const c=document.querySelector('#s3Container'); c.innerHTML='';
+  document.querySelector('#s3Max').textContent=S3_ITEMS.length;
+  S3_ITEMS.forEach((it,idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    let parts = it.txt.split('___');
+    let html = '<strong>'+(idx+1)+'.</strong> ';
+    for(let i=0;i<parts.length;i++){ 
+      html += parts[i];
+      if(i<it.ans.length){ 
+        const size = Math.max(it.ans[i].length+1, 4);
+        html += '<span class="inline-blank"><input type="text" class="s3in" data-idx="'+idx+'" data-slot="'+i+'" size="'+size+'" placeholder="..." /></span>';
+      }
+    }
+    q.innerHTML = html + '<div class="key">Modelo: '+ it.ans.join(' / ') +'</div>';
+    c.appendChild(q);
+  });
+}
+function gradeS3(){
+  let score=0;
+  document.querySelectorAll('#s3Container .q').forEach(q=>{ 
+    const idx=+q.dataset.idx; const correct=S3_ITEMS[idx].ans;
+    let ok=true;
+    q.querySelectorAll('.s3in').forEach(inp=>{ 
+      const slot=+inp.dataset.slot;
+      if(!cmpExact(inp.value, correct[slot])) ok=false;
+    });
+    if(ok){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.querySelector('#s3Score').textContent=score; updateTotal();
+}
+
+const S4_ITEMS = [{"tokens": ["Me", "llamo", "Sofía,", "soy", "estudiante", "y", "tengo", "15", "años."], "key": "Me llamo Sofía, soy estudiante y tengo 15 años."}, {"tokens": ["Él", "se", "llama", "Juan", "y", "es", "doctor."], "key": "Él se llama Juan y es doctor."}, {"tokens": ["Somos", "de", "México", "y", "tenemos", "dieciséis", "años."], "key": "Somos de México y tenemos dieciséis años."}, {"tokens": ["¿Cómo", "te", "llamas?", "—", "Me", "llamo", "Lucía."], "key": "¿Cómo te llamas? — Me llamo Lucía."}, {"tokens": ["Ustedes", "son", "periodistas", "y", "tienen", "40", "entrevistas."], "key": "Ustedes son periodistas y tienen 40 entrevistas."}];
+function buildS4(){
+  const c=document.querySelector('#s4Container'); c.innerHTML='';
+  document.querySelector('#s4Max').textContent=S4_ITEMS.length;
+  S4_ITEMS.forEach((it,idx)=>{
+    const q=document.createElement('div'); q.className='q'; q.dataset.idx=idx;
+    const bank=document.createElement('div'); bank.className='chips';
+    shuffle(it.tokens).forEach(tok=>{ const s=document.createElement('span'); s.className='tile'; s.textContent=tok; s.draggable=true; makeTileInteractive(s); bank.appendChild(s); });
+    const bin=document.createElement('div'); bin.className='bin'; makeBinInteractive(bin);
+    const key=document.createElement('div'); key.className='key'; key.textContent='Modelo: '+it.key;
+    q.innerHTML='<strong>'+(idx+1)+'.</strong> Ordena:';
+    q.appendChild(bank); q.appendChild(bin); q.appendChild(key); c.appendChild(q);
+  });
+}
+function gradeS4(){
+  let score=0; 
+  document.querySelectorAll('#s4Container .q').forEach(q=>{ 
+    const idx=+q.dataset.idx; const expected=S4_ITEMS[idx].tokens; 
+    const got=Array.from(q.querySelectorAll('.bin .tile')).map(t=>t.textContent); 
+    if(got.length===expected.length && got.every((w,i)=>cmpExact(w, expected[i]))){ 
+      score++; q.classList.add('correct'); q.classList.remove('incorrect'); 
+    } else { q.classList.add('incorrect'); q.classList.remove('correct'); }
+  });
+  document.querySelector('#s4Score').textContent=score; updateTotal();
+}
+
+function updateTotal(){
+  const s1=+document.querySelector('#s1Score').textContent||0;
+  const s2=+document.querySelector('#s2Score').textContent||0;
+  const s3=+document.querySelector('#s3Score').textContent||0;
+  const s4=+document.querySelector('#s4Score').textContent||0;
+  const m1=+document.querySelector('#s1Max').textContent||0;
+  const m2=+document.querySelector('#s2Max').textContent||0;
+  const m3=+document.querySelector('#s3Max').textContent||0;
+  const m4=+document.querySelector('#s4Max').textContent||0;
+  document.querySelector('#totalScore').textContent=s1+s2+s3+s4;
+  document.querySelector('#totalMax').textContent=m1+m2+m3+m4;
+}
+function exportCSV(){
+  const s1=+document.querySelector('#s1Score').textContent||0;
+  const s2=+document.querySelector('#s2Score').textContent||0;
+  const s3=+document.querySelector('#s3Score').textContent||0;
+  const s4=+document.querySelector('#s4Score').textContent||0;
+  const m1=+document.querySelector('#s1Max').textContent||0;
+  const m2=+document.querySelector('#s2Max').textContent||0;
+  const m3=+document.querySelector('#s3Max').textContent||0;
+  const m4=+document.querySelector('#s4Max').textContent||0;
+  exportCSVGeneric('presente_ser_tener_llamarse_results.csv',
+    'timestamp,name,s1,s1_max,s2,s2_max,s3,s3_max,s4,s4_max,total,total_max',
+    [s1,m1,s2,m2,s3,m3,s4,m4,(s1+s2+s3+s4),(m1+m2+m3+m4)]);
+}
+function init(){
+  buildVocab(); buildS1(); buildS2(); buildS3(); buildS4(); applyTeacher();
+  document.querySelector('#checkAll').addEventListener('click', ()=>{ gradeS1(); gradeS2(); gradeS3(); gradeS4(); });
+  document.querySelector('#resetAll').addEventListener('click', ()=>{ location.reload(); });
+  document.querySelector('#exportCSV').addEventListener('click', exportCSV);
+}
+init();
+
+</script>
+</body></html>
