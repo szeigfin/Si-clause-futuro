@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProfeVT · Actividad 2 — Nacionalidades por continente (v3b)</title>
+<style>
+  :root{--bg:#f7fafc;--ink:#0f172a;--muted:#475569;--card:#ffffff;--accent:#2563eb;--ok:#16a34a;--bad:#dc2626}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:#0f172a;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
+  .card{background:#fff;border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:#475569;border-left:4px solid #2563eb;padding-left:10px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));gap:12px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .item{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+  .flag{font-size:44px}
+  .outline{width:86px;height:60px;object-fit:contain;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+  .name{font-weight:800}
+  .in{flex:1}
+  input[type="text"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1;font-size:16px}
+  .hint{font-size:.85rem;color:#64748b;margin-top:4px;display:none}
+  .item.show-hint .hint{display:block}
+  .ok{border-color:#86efac;background:#f0fdf4}
+  .bad{border-color:#fecaca;background:#fff7f7}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+  button{border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  button.primary{background:#2563eb;color:#fff}
+  button.ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827}
+  .hud{display:flex;gap:10px;flex-wrap:wrap}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;margin-left:.4rem;font-size:.8rem}
+  pre.report{background:#0f172a;color:#e5e7eb;padding:10px;border-radius:10px;white-space:pre-wrap}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pillcount{background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Actividad 2 — Escribe la nacionalidad (por continente)</h1>
+  <div style="margin-left:auto">
+    <span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir">
+      <b>ES:</b> Escribe la <u>nacionalidad</u> en minúsculas. Si hay forma masculina y femenina, escribe <b>ambas</b> con una barra: <b>mexicano/mexicana</b>. Si solo existe una forma (p. ej., <i>canadiense, estadounidense, costarricense, nicaragüense, somalí, vietnamita, nepalí</i>), escribe una sola palabra. Usa acentos correctos.<br>
+      <b>EN:</b> Write the <u>nationality</u> in lowercase. If there’s a masculine and feminine form, write <b>both</b> with a slash: <b>mexicano/mexicana</b>. If there is only one form (e.g., <i>canadiense, estadounidense, costarricense, nicaragüense, somalí, vietnamita, nepalí</i>), write a single word. Use correct accents.
+    </p>
+    <p class="dir"><b>Corrección inmediata / Immediate correction:</b> After <em>Check</em>, incorrect answers show the correct form below. Typing hides the hint.</p>
+    <div class="hud">
+      <span class="pill">Tiempo / Time: <span id="timeOnPage">0s</span></span>
+      <span class="pill">Fuera de pestaña / Tab-away: <span id="tabAway">0s</span></span>
+    </div>
+  </section>
+
+  
+  <section class="card" id="sec-africa">
+    <h2>ÁFRICA <span class="pillcount"><span id="corr-africa">0</span> / <span id="max-africa">0</span></span></h2>
+    <div class="grid" id="grid-africa"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-africa">Reset</button>
+      <button class="primary" id="check-africa">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_el_caribe">
+    <h2>AMÉRICA: EL CARIBE <span class="pillcount"><span id="corr-america_el_caribe">0</span> / <span id="max-america_el_caribe">0</span></span></h2>
+    <div class="grid" id="grid-america_el_caribe"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_el_caribe">Reset</button>
+      <button class="primary" id="check-america_el_caribe">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_del_norte">
+    <h2>AMÉRICA DEL NORTE <span class="pillcount"><span id="corr-america_del_norte">0</span> / <span id="max-america_del_norte">0</span></span></h2>
+    <div class="grid" id="grid-america_del_norte"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_del_norte">Reset</button>
+      <button class="primary" id="check-america_del_norte">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_central">
+    <h2>AMÉRICA CENTRAL <span class="pillcount"><span id="corr-america_central">0</span> / <span id="max-america_central">0</span></span></h2>
+    <div class="grid" id="grid-america_central"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_central">Reset</button>
+      <button class="primary" id="check-america_central">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_del_sur">
+    <h2>AMÉRICA DEL SUR <span class="pillcount"><span id="corr-america_del_sur">0</span> / <span id="max-america_del_sur">0</span></span></h2>
+    <div class="grid" id="grid-america_del_sur"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_del_sur">Reset</button>
+      <button class="primary" id="check-america_del_sur">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-europa">
+    <h2>EUROPA <span class="pillcount"><span id="corr-europa">0</span> / <span id="max-europa">0</span></span></h2>
+    <div class="grid" id="grid-europa"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-europa">Reset</button>
+      <button class="primary" id="check-europa">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-asia">
+    <h2>ASIA <span class="pillcount"><span id="corr-asia">0</span> / <span id="max-asia">0</span></span></h2>
+    <div class="grid" id="grid-asia"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-asia">Reset</button>
+      <button class="primary" id="check-asia">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-oceania">
+    <h2>OCEANÍA <span class="pillcount"><span id="corr-oceania">0</span> / <span id="max-oceania">0</span></span></h2>
+    <div class="grid" id="grid-oceania"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-oceania">Reset</button>
+      <button class="primary" id="check-oceania">Check</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Informe / Report (plain text)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="cta">
+      <button class="ghost" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghost" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+var REGIONS = [{"title": "ÁFRICA", "key": "africa", "items": [{"name": "Guinea Ecuatorial", "flag": "🇬🇶", "file": "Equatorial_Guinea_location_map.svg", "answer": "guineano/guineana", "gendered": true}, {"name": "Nigeria", "flag": "🇳🇬", "file": "Nigeria_location_map.svg", "answer": "nigeriano/nigeriana", "gendered": true}, {"name": "Kenia", "flag": "🇰🇪", "file": "Kenya_location_map.svg", "answer": "keniano/keniana", "gendered": true}, {"name": "Tanzania", "flag": "🇹🇿", "file": "Tanzania_location_map.svg", "answer": "tanzano/tanzana", "gendered": true}, {"name": "Somalia", "flag": "🇸🇴", "file": "Somalia_location_map.svg", "answer": "somalí", "gendered": false}, {"name": "Burundi", "flag": "🇧🇮", "file": "Burundi_location_map.svg", "answer": "burundés/burundesa", "gendered": true}]}, {"title": "AMÉRICA: EL CARIBE", "key": "america_el_caribe", "items": [{"name": "Cuba", "flag": "🇨🇺", "file": "Cuba_location_map.svg", "answer": "cubano/cubana", "gendered": true}, {"name": "República Dominicana", "flag": "🇩🇴", "file": "Dominican_Republic_location_map.svg", "answer": "dominicano/dominicana", "gendered": true}, {"name": "Puerto Rico", "flag": "🇵🇷", "file": "Puerto-Rico-blank.svg", "answer": "puertorriqueño/puertorriqueña", "gendered": true}, {"name": "Jamaica", "flag": "🇯🇲", "file": "Jamaica_location_map.svg", "answer": "jamaicano/jamaicana", "gendered": true}, {"name": "Haití", "flag": "🇭🇹", "file": "Haiti_location_map.svg", "answer": "haitiano/haitiana", "gendered": true}]}, {"title": "AMÉRICA DEL NORTE", "key": "america_del_norte", "items": [{"name": "Canadá", "flag": "🇨🇦", "file": "Canada_blank_map.svg", "answer": "canadiense", "gendered": false}, {"name": "Estados Unidos", "flag": "🇺🇸", "file": "Blank_US_Map,_Mainland_with_no_States.svg", "answer": "estadounidense", "gendered": false}, {"name": "México", "flag": "🇲🇽", "file": "Blank_Mexico_map,_no_States.svg", "answer": "mexicano/mexicana", "gendered": true}, {"name": "Groenlandia", "flag": "🇬🇱", "file": "Greenland_location_map.svg", "answer": "groenlandés/groenlandesa", "gendered": true}, {"name": "Bermudas", "flag": "🇧🇲", "file": "Bermuda_location_map.svg", "answer": "bermudeño/bermudeña", "gendered": true}]}, {"title": "AMÉRICA CENTRAL", "key": "america_central", "items": [{"name": "Costa Rica", "flag": "🇨🇷", "file": "Costa_Rica_location_map.svg", "answer": "costarricense", "gendered": false}, {"name": "Guatemala", "flag": "🇬🇹", "file": "Guatemala_blank.svg", "answer": "guatemalteco/guatemalteca", "gendered": true}, {"name": "Honduras", "flag": "🇭🇳", "file": "Honduras_blank_map.svg", "answer": "hondureño/hondureña", "gendered": true}, {"name": "Nicaragua", "flag": "🇳🇮", "file": "Map_of_Nicaragua.svg", "answer": "nicaragüense", "gendered": false}, {"name": "Panamá", "flag": "🇵🇦", "file": "Panama_location_map.svg", "answer": "panameño/panameña", "gendered": true}, {"name": "El Salvador", "flag": "🇸🇻", "file": "El_Salvador_location_map.svg", "answer": "salvadoreño/salvadoreña", "gendered": true}, {"name": "Belice", "flag": "🇧🇿", "file": "Belize_location_map.svg", "answer": "beliceño/beliceña", "gendered": true}]}, {"title": "AMÉRICA DEL SUR", "key": "america_del_sur", "items": [{"name": "Argentina", "flag": "🇦🇷", "file": "Argentina_blank.svg", "answer": "argentino/argentina", "gendered": true}, {"name": "Bolivia", "flag": "🇧🇴", "file": "Bolivia_location_map.svg", "answer": "boliviano/boliviana", "gendered": true}, {"name": "Chile", "flag": "🇨🇱", "file": "Chile_blank_map.svg", "answer": "chileno/chilena", "gendered": true}, {"name": "Colombia", "flag": "🇨🇴", "file": "Colombia_continental_location_map.svg", "answer": "colombiano/colombiana", "gendered": true}, {"name": "Ecuador", "flag": "🇪🇨", "file": "Ecuador_location_map.svg", "answer": "ecuatoriano/ecuatoriana", "gendered": true}, {"name": "Perú", "flag": "🇵🇪", "file": "Blank_map_of_Peru.svg", "answer": "peruano/peruana", "gendered": true}, {"name": "Paraguay", "flag": "🇵🇾", "file": "Paraguay_location_map.svg", "answer": "paraguayo/paraguaya", "gendered": true}, {"name": "Uruguay", "flag": "🇺🇾", "file": "Uruguay_location_map.svg", "answer": "uruguayo/uruguaya", "gendered": true}, {"name": "Venezuela", "flag": "🇻🇪", "file": "Venezuela_location_map.svg", "answer": "venezolano/venezolana", "gendered": true}, {"name": "Brasil", "flag": "🇧🇷", "file": "Brazil_location_map.svg", "answer": "brasileño/brasileña", "gendered": true}]}, {"title": "EUROPA", "key": "europa", "items": [{"name": "Alemania", "flag": "🇩🇪", "file": "Germany_location_map.svg", "answer": "alemán/alemana", "gendered": true}, {"name": "Francia", "flag": "🇫🇷", "file": "France_location_map.svg", "answer": "francés/francesa", "gendered": true}, {"name": "Irlanda", "flag": "🇮🇪", "file": "Ireland_blank_map.svg", "answer": "irlandés/irlandesa", "gendered": true}, {"name": "Italia", "flag": "🇮🇹", "file": "Italy_location_map.svg", "answer": "italiano/italiana", "gendered": true}, {"name": "Polonia", "flag": "🇵🇱", "file": "Poland_location_map.svg", "answer": "polaco/polaca", "gendered": true}, {"name": "Reino Unido", "flag": "🇬🇧", "file": "United_Kingdom_location_map.svg", "answer": "británico/británica", "gendered": true}, {"name": "Rusia", "flag": "🇷🇺", "file": "Russia_blank_map.svg", "answer": "ruso/rusa", "gendered": true}]}, {"title": "ASIA", "key": "asia", "items": [{"name": "China", "flag": "🇨🇳", "file": "China_blank_map.svg", "answer": "chino/china", "gendered": true}, {"name": "Japón", "flag": "🇯🇵", "file": "Japan_blank_map.svg", "answer": "japonés/japonesa", "gendered": true}, {"name": "Vietnam", "flag": "🇻🇳", "file": "Vietnam_location_map.svg", "answer": "vietnamita", "gendered": false}, {"name": "Nepal", "flag": "🇳🇵", "file": "Nepal_location_map.svg", "answer": "nepalí", "gendered": false}, {"name": "India", "flag": "🇮🇳", "file": "India_blank_map.svg", "answer": "indio/india", "gendered": true}, {"name": "Corea del Sur", "flag": "🇰🇷", "file": "South_Korea_location_map.svg", "answer": "coreano/coreana", "gendered": true}]}, {"title": "OCEANÍA", "key": "oceania", "items": [{"name": "Australia", "flag": "🇦🇺", "file": "Australia_blank_map.svg", "answer": "australiano/australiana", "gendered": true}, {"name": "Nueva Zelanda", "flag": "🇳🇿", "file": "New_Zealand_blank_map.svg", "answer": "neozelandés/neozelandesa", "gendered": true}, {"name": "Fiyi", "flag": "🇫🇯", "file": "Fiji_location_map.svg", "answer": "fiyiano/fiyiana", "gendered": true}]}];
+
+function commonsPath(filename){ return "https://commons.wikimedia.org/wiki/Special:FilePath/"+filename; }
+function norm(s){ return (s||'').normalize('NFC').trim().toLowerCase().replace(/\s+/g,' '); }
+
+var pageStart = performance.now();
+var timeAwayTotal = 0, lastHiddenAt = null;
+var attemptsTotal = 0;
+
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt = null; }
+});
+setInterval(function(){
+  var sec = Math.round((performance.now()-pageStart)/1000);
+  var t = document.getElementById("timeOnPage");
+  if(t) t.textContent = sec+"s";
+  var ta = document.getElementById("tabAway");
+  if(ta) ta.textContent = Math.round(timeAwayTotal/1000)+"s";
+}, 500);
+
+function build(){
+  for (var rIndex=0; rIndex<REGIONS.length; rIndex++){
+    var r = REGIONS[rIndex];
+    var cont = document.getElementById('grid-'+r.key);
+    var maxSpan = document.getElementById('max-'+r.key);
+    var corrSpan = document.getElementById('corr-'+r.key);
+    if(maxSpan) maxSpan.textContent = r.items.length;
+    if(corrSpan) corrSpan.textContent = 0;
+    if(cont){ cont.innerHTML=''; }
+    for (var i=0; i<r.items.length; i++){
+      var it = r.items[i];
+      var box = document.createElement('div'); box.className='item';
+      box.innerHTML = ''
+        + '<div class="flag">'+it.flag+'</div>'
+        + '<img class="outline" alt="outline '+it.name+'" src="'+commonsPath(it.file)+'" onerror="this.style.opacity=.25" />'
+        + '<div class="name">'+it.name+'</div>'
+        + '<div class="in">'
+        + '  <input type="text" data-idx="'+i+'" data-region="'+r.key+'" placeholder="nacionalidad…">'
+        + '  <div class="hint"></div>'
+        + '</div>';
+      if (cont){
+        (function(box){
+          var input = box.querySelector('input');
+          var hint = box.querySelector('.hint');
+          input.addEventListener('input', function(){
+            box.classList.remove('show-hint');
+            box.classList.remove('ok');
+            box.classList.remove('bad');
+            hint.textContent='';
+          });
+        })(box);
+        cont.appendChild(box);
+      }
+    }
+  }
+}
+
+function checkRegion(key){
+  attemptsTotal++;
+  var region = null;
+  for (var i=0;i<REGIONS.length;i++){ if(REGIONS[i].key===key){ region=REGIONS[i]; break; } }
+  if(!region) return;
+  var correct=0;
+  var inputs = document.querySelectorAll('input[data-region="'+key+'"]');
+  for (var j=0;j<inputs.length;j++){
+    var inp = inputs[j];
+    var idx = +inp.getAttribute('data-idx');
+    var exp = region.items[idx].answer;
+    var val = norm(inp.value);
+    var ok = val.length>0 && (val === norm(exp));
+    var card = inp.closest('.item');
+    var hint = card.querySelector('.hint');
+    if(ok){
+      correct++;
+      card.classList.add('ok');
+      card.classList.remove('bad');
+      card.classList.remove('show-hint');
+      hint.textContent='';
+    }else if(val.length>0){
+      card.classList.add('bad');
+      card.classList.remove('ok');
+      card.classList.add('show-hint');
+      hint.textContent = "💡 Correcto / Correct: " + exp;
+    }else{
+      card.classList.remove('ok'); card.classList.remove('bad'); card.classList.remove('show-hint');
+      hint.textContent='';
+    }
+  }
+  var c = document.getElementById('corr-'+key);
+  if(c) c.textContent = correct;
+}
+
+function resetRegion(key){
+  var inputs = document.querySelectorAll('input[data-region="'+key+'"]');
+  for (var j=0;j<inputs.length;j++){
+    var inp = inputs[j];
+    inp.value='';
+    var card = inp.closest('.item');
+    var hint = card.querySelector('.hint');
+    card.classList.remove('ok'); card.classList.remove('bad'); card.classList.remove('show-hint');
+    hint.textContent='';
+  }
+  var c = document.getElementById('corr-'+key);
+  if(c) c.textContent = 0;
+}
+
+function formatSeconds(s){ var m=Math.floor(s/60), r=(s%60); return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim();
+  var secs = Math.round((performance.now()-pageStart)/1000);
+  var total=0, correct=0;
+  for (var rIndex=0; rIndex<REGIONS.length; rIndex++){
+    var r = REGIONS[rIndex];
+    total += r.items.length;
+    var corrEl = document.getElementById('corr-'+r.key);
+    correct += (corrEl ? (+corrEl.textContent||0) : 0);
+  }
+  var lines = [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total attempts: "+attemptsTotal,
+    "Time away from tab: "+formatSeconds(Math.round(timeAwayTotal/1000)),
+    "Total correct: "+correct+" / "+total
+  ];
+  return lines.join("\r\n");
+}
+function refreshPreview(){ var el=document.getElementById("reportPreview"); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  var txt = buildReportText();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ alert("Copied"); }).catch(function(){
+      var ta = document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+    });
+  }else{
+    var ta = document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+  }
+}
+function downloadReport(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  var txt = buildReportText();
+  var blob = new Blob([txt],{type:"text/plain;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a"); a.href=url; a.download=(name||"report")+"_Act2_Nacionalidades_porContinente_v3b.txt";
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  build();
+  for (var i=0;i<REGIONS.length;i++){
+    (function(r){
+      var checkBtn = document.getElementById('check-'+r.key);
+      var resetBtn = document.getElementById('reset-'+r.key);
+      if(checkBtn) checkBtn.addEventListener('click', function(){ checkRegion(r.key); });
+      if(resetBtn) resetBtn.addEventListener('click', function(){ resetRegion(r.key); });
+    })(REGIONS[i]);
+  }
+  var prev = document.getElementById("previewBtn");
+  var copy = document.getElementById("copyBtn");
+  var dl = document.getElementById("downloadReport");
+  if(prev) prev.addEventListener("click", refreshPreview);
+  if(copy) copy.addEventListener("click", copyReport);
+  if(dl) dl.addEventListener("click", downloadReport);
+  setTimeout(refreshPreview, 400);
+});
+</script>
+</body>
+</html>
