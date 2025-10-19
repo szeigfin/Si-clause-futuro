@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProfeVT · ¿Habla de nacionalidad o de origen?</title>
+<style>
+  :root{--bg:#f7fafc;--ink:#0f172a;--muted:#475569;--card:#ffffff;--accent:#2563eb;--ok:#16a34a;--bad:#dc2626}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));gap:12px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .item{display:flex;gap:12px;align-items:center;padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+  .flag{font-size:44px}
+  .outline{width:86px;height:60px;object-fit:contain;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+  .name{font-weight:800}
+  select{padding:8px 10px;border-radius:10px;border:1px solid #cbd5e1;font-size:15px}
+  .ok{border-color:#86efac;background:#f0fdf4}
+  .bad{border-color:#fecaca;background:#fff7f7}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+  button{border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  button.primary{background:var(--accent);color:#fff}
+  button.ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;margin-left:.4rem;font-size:.8rem}
+  pre.report{background:#0f172a;color:#e5e7eb;padding:10px;border-radius:10px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>¿Habla de nacionalidad o de origen?</h1>
+  <div style="margin-left:auto">
+    <span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir">
+      <b>ES:</b> Lee la oración junto a la bandera y la silueta. Elige en el menú: <b>“Habla de nacionalidad”</b> si la oración dice <i>“Es + (nacionalidad)”</i>, o <b>“Habla de origen”</b> si la oración dice <i>“Es de + (país)”</i>. <em>“Habla de…”</em> significa <i>“It is speaking about…”</i>.<br>
+      <b>EN:</b> Read the sentence next to the flag and outline. Choose <b>“Habla de nacionalidad”</b> when it says <i>“Es + (nationality)”</i>, or <b>“Habla de origen”</b> when it says <i>“Es de + (country)”</i>. <em>“Habla de…”</em> means <i>“It is speaking about…”</i>.
+    </p>
+  </section>
+
+  
+  <section class="card" id="sec-america_del_norte">
+    <h2>América del Norte <span class="pill"><span id="corr-america_del_norte">0</span> / <span id="tot-america_del_norte">0</span></span></h2>
+    <div class="grid" id="grid-america_del_norte"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_del_norte">Reset</button>
+      <button class="primary" id="check-america_del_norte">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_central">
+    <h2>América Central <span class="pill"><span id="corr-america_central">0</span> / <span id="tot-america_central">0</span></span></h2>
+    <div class="grid" id="grid-america_central"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_central">Reset</button>
+      <button class="primary" id="check-america_central">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_el_caribe">
+    <h2>América: El Caribe <span class="pill"><span id="corr-america_el_caribe">0</span> / <span id="tot-america_el_caribe">0</span></span></h2>
+    <div class="grid" id="grid-america_el_caribe"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_el_caribe">Reset</button>
+      <button class="primary" id="check-america_el_caribe">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-america_del_sur">
+    <h2>América del Sur <span class="pill"><span id="corr-america_del_sur">0</span> / <span id="tot-america_del_sur">0</span></span></h2>
+    <div class="grid" id="grid-america_del_sur"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-america_del_sur">Reset</button>
+      <button class="primary" id="check-america_del_sur">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-europa">
+    <h2>Europa <span class="pill"><span id="corr-europa">0</span> / <span id="tot-europa">0</span></span></h2>
+    <div class="grid" id="grid-europa"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-europa">Reset</button>
+      <button class="primary" id="check-europa">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-africa">
+    <h2>África <span class="pill"><span id="corr-africa">0</span> / <span id="tot-africa">0</span></span></h2>
+    <div class="grid" id="grid-africa"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-africa">Reset</button>
+      <button class="primary" id="check-africa">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-asia">
+    <h2>Asia <span class="pill"><span id="corr-asia">0</span> / <span id="tot-asia">0</span></span></h2>
+    <div class="grid" id="grid-asia"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-asia">Reset</button>
+      <button class="primary" id="check-asia">Check</button>
+    </div>
+  </section>
+
+  <section class="card" id="sec-oceania">
+    <h2>Oceanía <span class="pill"><span id="corr-oceania">0</span> / <span id="tot-oceania">0</span></span></h2>
+    <div class="grid" id="grid-oceania"></div>
+    <div class="cta">
+      <button class="ghost" id="reset-oceania">Reset</button>
+      <button class="primary" id="check-oceania">Check</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Informe / Report (plain text)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="cta">
+      <button class="ghost" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghost" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+var REGIONS = [{"key": "america_del_norte", "title": "América del Norte", "items": [{"region": "América del Norte", "country": "México", "flag": "🇲🇽", "file": "Blank_Mexico_map,_no_States.svg", "sentence": "Es de México.", "type": "origen"}, {"region": "América del Norte", "country": "Estados Unidos", "flag": "🇺🇸", "file": "Blank_US_Map,_Mainland_with_no_States.svg", "sentence": "Es estadounidense.", "type": "nacionalidad"}, {"region": "América del Norte", "country": "Canadá", "flag": "🇨🇦", "file": "Canada_blank_map.svg", "sentence": "Es de Canadá.", "type": "origen"}]}, {"key": "america_central", "title": "América Central", "items": [{"region": "América Central", "country": "Guatemala", "flag": "🇬🇹", "file": "Guatemala_blank.svg", "sentence": "Es guatemalteca.", "type": "nacionalidad"}, {"region": "América Central", "country": "Honduras", "flag": "🇭🇳", "file": "Honduras_blank_map.svg", "sentence": "Es de Honduras.", "type": "origen"}, {"region": "América Central", "country": "Nicaragua", "flag": "🇳🇮", "file": "Map_of_Nicaragua.svg", "sentence": "Es nicaragüense.", "type": "nacionalidad"}]}, {"key": "america_el_caribe", "title": "América: El Caribe", "items": [{"region": "América: El Caribe", "country": "Cuba", "flag": "🇨🇺", "file": "Cuba_location_map.svg", "sentence": "Es de Cuba.", "type": "origen"}, {"region": "América: El Caribe", "country": "República Dominicana", "flag": "🇩🇴", "file": "Dominican_Republic_location_map.svg", "sentence": "Es dominicana.", "type": "nacionalidad"}, {"region": "América: El Caribe", "country": "Puerto Rico", "flag": "🇵🇷", "file": "Puerto-Rico-blank.svg", "sentence": "Es de Puerto Rico.", "type": "origen"}]}, {"key": "america_del_sur", "title": "América del Sur", "items": [{"region": "América del Sur", "country": "Argentina", "flag": "🇦🇷", "file": "Argentina_blank.svg", "sentence": "Es argentina.", "type": "nacionalidad"}, {"region": "América del Sur", "country": "Colombia", "flag": "🇨🇴", "file": "Colombia_continental_location_map.svg", "sentence": "Es de Colombia.", "type": "origen"}, {"region": "América del Sur", "country": "Perú", "flag": "🇵🇪", "file": "Blank_map_of_Peru.svg", "sentence": "Es peruana.", "type": "nacionalidad"}, {"region": "América del Sur", "country": "Chile", "flag": "🇨🇱", "file": "Chile_blank_map.svg", "sentence": "Es de Chile.", "type": "origen"}]}, {"key": "europa", "title": "Europa", "items": [{"region": "Europa", "country": "España", "flag": "🇪🇸", "file": "Provinces_of_Spain_-_blank_map.svg", "sentence": "Es española.", "type": "nacionalidad"}, {"region": "Europa", "country": "Francia", "flag": "🇫🇷", "file": "France_location_map.svg", "sentence": "Es de Francia.", "type": "origen"}, {"region": "Europa", "country": "Italia", "flag": "🇮🇹", "file": "Italy_location_map.svg", "sentence": "Es italiana.", "type": "nacionalidad"}, {"region": "Europa", "country": "Alemania", "flag": "🇩🇪", "file": "Germany_location_map.svg", "sentence": "Es de Alemania.", "type": "origen"}]}, {"key": "africa", "title": "África", "items": [{"region": "África", "country": "Guinea Ecuatorial", "flag": "🇬🇶", "file": "Equatorial_Guinea_location_map.svg", "sentence": "Es guineana.", "type": "nacionalidad"}, {"region": "África", "country": "Nigeria", "flag": "🇳🇬", "file": "Nigeria_location_map.svg", "sentence": "Es de Nigeria.", "type": "origen"}, {"region": "África", "country": "Somalia", "flag": "🇸🇴", "file": "Somalia_location_map.svg", "sentence": "Es somalí.", "type": "nacionalidad"}]}, {"key": "asia", "title": "Asia", "items": [{"region": "Asia", "country": "China", "flag": "🇨🇳", "file": "China_blank_map.svg", "sentence": "Es de China.", "type": "origen"}, {"region": "Asia", "country": "Japón", "flag": "🇯🇵", "file": "Japan_blank_map.svg", "sentence": "Es japonesa.", "type": "nacionalidad"}, {"region": "Asia", "country": "Vietnam", "flag": "🇻🇳", "file": "Vietnam_location_map.svg", "sentence": "Es de Vietnam.", "type": "origen"}]}, {"key": "oceania", "title": "Oceanía", "items": [{"region": "Oceanía", "country": "Australia", "flag": "🇦🇺", "file": "Australia_blank_map.svg", "sentence": "Es australiana.", "type": "nacionalidad"}, {"region": "Oceanía", "country": "Nueva Zelanda", "flag": "🇳🇿", "file": "New_Zealand_blank_map.svg", "sentence": "Es de Nueva Zelanda.", "type": "origen"}]}];
+
+function commonsPath(filename){ return "https://commons.wikimedia.org/wiki/Special:FilePath/"+filename; }
+
+var pageStart = performance.now();
+var timeAwayTotal = 0, lastHiddenAt = null;
+var attemptsTotal = 0;
+
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt = null; }
+});
+
+function build(){
+  for (var i=0;i<REGIONS.length;i++){
+    var r = REGIONS[i];
+    var cont = document.getElementById('grid-'+r.key);
+    cont.innerHTML='';
+    var corr = document.getElementById('corr-'+r.key);
+    var tot = document.getElementById('tot-'+r.key);
+    var correct=0;
+    for (var j=0;j<r.items.length;j++){
+      var it = r.items[j];
+      var box = document.createElement('div'); box.className='item';
+      box.innerHTML = ''
+        + '<div class="flag">'+it.flag+'</div>'
+        + '<img class="outline" alt="outline '+it.country+'" src="'+commonsPath(it.file)+'" onerror="this.style.opacity=.25" />'
+        + '<div class="name">'+it.sentence+'</div>'
+        + '<div class="in">'
+        + '  <select data-idx="'+j+'" data-region="'+r.key+'">'
+        + '    <option value="">Selecciona…</option>'
+        + '    <option value="nacionalidad">Habla de nacionalidad</option>'
+        + '    <option value="origen">Habla de origen</option>'
+        + '  </select>'
+        + '</div>';
+      cont.appendChild(box);
+    }
+    tot.textContent = r.items.length;
+    corr.textContent = correct;
+  }
+}
+
+function checkRegion(key){
+  attemptsTotal++;
+  var region = null;
+  for (var i=0;i<REGIONS.length;i++){ if(REGIONS[i].key===key){ region=REGIONS[i]; break; } }
+  if(!region) return;
+  var correct=0;
+  var selects = document.querySelectorAll('select[data-region="'+key+'"]');
+  for (var j=0;j<selects.length;j++){
+    var sel = selects[j];
+    var idx = +sel.getAttribute('data-idx');
+    var it = region.items[idx];
+    var card = sel.closest('.item');
+    var ok = sel.value === it.type;
+    card.classList.toggle('ok', ok);
+    card.classList.toggle('bad', !ok && sel.value!=='');
+    if(ok) correct++;
+  }
+  var corr = document.getElementById('corr-'+key);
+  if(corr) corr.textContent = correct;
+}
+
+function resetRegion(key){
+  var selects = document.querySelectorAll('select[data-region="'+key+'"]');
+  for (var j=0;j<selects.length;j++){
+    var sel = selects[j];
+    sel.value='';
+    var card = sel.closest('.item');
+    card.classList.remove('ok','bad');
+  }
+  var corr = document.getElementById('corr-'+key);
+  if(corr) corr.textContent = 0;
+}
+
+function formatSeconds(s){ var m=Math.floor(s/60), r=(s%60); return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim();
+  var secs = Math.round((performance.now()-pageStart)/1000);
+  var total=0, correct=0;
+  for (var i=0;i<REGIONS.length;i++){
+    var r = REGIONS[i];
+    total += r.items.length;
+    var corrEl = document.getElementById('corr-'+r.key);
+    correct += (corrEl ? (+corrEl.textContent||0) : 0);
+  }
+  var lines = [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total attempts: "+attemptsTotal,
+    "Time away from tab: "+formatSeconds(Math.round(timeAwayTotal/1000)),
+    "Total correct: "+correct+" / "+total
+  ];
+  return lines.join("\r\n");
+}
+function refreshPreview(){ var el=document.getElementById("reportPreview"); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  var txt = buildReportText();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ alert("Copied"); }).catch(function(){
+      var ta = document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+    });
+  }else{
+    var ta = document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+  }
+}
+function downloadReport(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  var txt = buildReportText();
+  var blob = new Blob([txt],{type:"text/plain;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a"); a.href=url; a.download=(name||"report")+"_Act_HablaDe_Nacionalidad_Origen.txt";
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  build();
+  // Wire buttons per region
+  for (var i=0;i<REGIONS.length;i++){
+    (function(r){
+      var checkBtn = document.getElementById('check-'+r.key);
+      var resetBtn = document.getElementById('reset-'+r.key);
+      if(checkBtn) checkBtn.addEventListener('click', function(){ checkRegion(r.key); });
+      if(resetBtn) resetBtn.addEventListener('click', function(){ resetRegion(r.key); });
+    })(REGIONS[i]);
+  }
+  document.getElementById("previewBtn").addEventListener("click", refreshPreview);
+  document.getElementById("copyBtn").addEventListener("click", copyReport);
+  document.getElementById("downloadReport").addEventListener("click", downloadReport);
+  setTimeout(refreshPreview, 400);
+});
+</script>
+</body>
+</html>
