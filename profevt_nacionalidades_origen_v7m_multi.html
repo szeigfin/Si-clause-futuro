@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProfeVT · Nacionalidades y Origen — Multi-Actividades (v7m)</title>
+<style>
+  :root{
+    --bg:#f7f8fb; --ink:#111827; --muted:#6b7280; --primary:#2563eb;
+    --ok:#16a34a; --bad:#dc2626; --warn:#b45309;
+    --card:#ffffff; --chip:#eef2ff; --drop:#e5f0ff;
+    --shadow:0 6px 24px rgba(0,0,0,.08); --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  body{background:var(--bg); color:var(--ink)}
+  header{position:sticky;top:0;background:linear-gradient(180deg,#fff,#f5f7ff);border-bottom:1px solid #e5e7eb;z-index:10;padding:20px}
+  h1{margin:0 0 6px 0;font-size:clamp(20px,3vw,28px)}
+  .sub{margin:0;color:var(--muted);font-size:13px}
+  .wrap{max-width:1120px;margin:16px auto;padding:0 16px 64px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid #e5e7eb;margin:16px 0;padding:16px}
+  .dir{font-size:14px;color:var(--muted);border-left:4px solid var(--primary);padding-left:10px;margin:8px 0}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#f3f4f6;font-size:12px;margin-right:6px}
+  .flex{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+  button{appearance:none;border:none;background:var(--primary);color:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+  button.secondary{background:#1118270d;color:var(--ink);border:1px solid #e5e7eb}
+  .hr{height:1px;background:#e5e7eb;margin:14px 0}
+  .small{font-size:12px;color:var(--muted)}
+  .ok{color:var(--ok)} .bad{color:var(--bad)} .warn{color:var(--warn);font-weight:700}
+  .item-status{font-size:12px;margin-left:8px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chips.rightwrap{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
+  .chip{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:999px;background:var(--chip);
+        border:1px solid #c7d2fe;cursor:grab;user-select:none;font-weight:700}
+  .chip.dragging{opacity:.75;transform:scale(1.03)}
+  .chip.selected{outline:3px solid #1d4ed8;background:#e0e7ff}
+  .bin{min-height:44px;min-width:220px;background:var(--drop);border:2px dashed #93c5fd;border-radius:12px;padding:6px;display:inline-flex;
+       gap:8px;align-items:center;flex-wrap:wrap}
+  .bin.ready{outline:3px solid #1d4ed8; cursor:pointer}
+  .bin.error{border-color:#dc2626; background:#fee2e2}
+  .bin.correct{border-color:#16a34a; background:#e7f8ea}
+  .flag{font-size:40px;line-height:1}
+  .a1card{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+  .a1grid{display:grid;grid-template-columns:repeat(3,minmax(240px,1fr));gap:12px}
+  @media (max-width:900px){.a1grid{grid-template-columns:repeat(2,minmax(240px,1fr))}}
+  @media (max-width:640px){.a1grid{grid-template-columns:1fr}}
+  input[type="text"]{border:1px solid #e5e7eb;border-radius:8px;padding:6px 8px}
+  details summary{cursor:pointer}
+  .outline{width:70px;height:44px;display:flex;align-items:center;justify-content:center}
+  .hover-reveal{position:relative}
+  .hover-reveal:hover::after{
+    content: attr(data-answer);
+    position:absolute; top:100%; left:0; white-space:nowrap;
+    background:#111827; color:#fff; padding:4px 6px; border-radius:6px; font-size:12px; transform:translateY(4px);
+  }
+  .label{font-size:12px;color:#6b7280}
+  .bio{background:#fbfbff;border:1px dashed #c7d2fe;padding:10px;border-radius:12px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row{display:flex;align-items:center;gap:10px;margin:6px 0}
+  .pass-icon{font-size:18px}
+  .stdtag{display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border-radius:999px;background:#e5e7eb;font-size:12px;color:#374151}
+  .ican{margin:6px 0 0 0}
+  .place-banner{position:sticky; top:64px; background:#fff; border:1px solid #c7d2fe; border-radius:10px; padding:6px 10px; font-size:12px; box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<header>
+  <h1>Nacionalidades y Origen — ProfeVT (v7m)</h1>
+  <p class="sub">Click→Click for #1 • Drag also works • Sticky tray • Lightweight silhouettes • Full build</p>
+</header>
+
+<div class="wrap">
+
+  <!-- I CAN + ACTFL -->
+  <section class="card">
+    <h2>“I can…” / «Puedo…»</h2>
+    <ul class="ican">
+      <li>EN: I can say where someone is from and their nationality using complete sentences with correct accents and punctuation.</li>
+      <li>ES: Puedo decir de dónde es una persona y cuál es su nacionalidad usando oraciones completas con acentos y puntuación correctos.</li>
+      <li>EN: I can identify and use masculine/feminine forms of nationalities.</li>
+      <li>ES: Puedo identificar y usar las formas masculinas y femeninas de las nacionalidades.</li>
+      <li>EN: I can read short biographical texts and answer comprehension questions in Spanish.</li>
+      <li>ES: Puedo leer textos biográficos cortos y responder preguntas de comprensión en español.</li>
+    </ul>
+    <div style="margin-top:8px">
+      <span class="stdtag">ACTFL Communication 1.1 (Interpersonal)</span>
+      <span class="stdtag">ACTFL Communication 1.2 (Interpretive)</span>
+      <span class="stdtag">ACTFL Communication 1.3 (Presentational)</span>
+      <span class="stdtag">ACTFL Cultures 2.1 (Practices & Perspectives)</span>
+      <span class="stdtag">ACTFL Cultures 2.2 (Products & Perspectives)</span>
+      <span class="stdtag">ACTFL Connections 3.1 (Making Connections)</span>
+      <span class="stdtag">ACTFL Comparisons 4.1/4.2 (Language & Culture)</span>
+      <span class="stdtag">ACTFL Communities 5.1 (School & Global Communities)</span>
+      <span class="stdtag">NCSSFL-ACTFL Can-Do: Novice Mid–High</span>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <section class="card">
+    <h2>Panel / HUD</h2>
+    <div class="pill">Nombre / Name: <input id="studentName" placeholder="Tu nombre / Your name"></div>
+    <div class="pill">Tiempo total / Total time: <span id="timeOnPage">0s</span></div>
+    <div class="pill">Fuera de pestaña / Tab-away: <span id="tabAway">0s</span></div>
+    <div class="pill">Intentos totales / Attempts: <span id="attemptsTotal">0</span></div>
+    <div class="pill">Aciertos / Correct: <span id="correctTotal">0</span>/<span id="totalItems">0</span></div>
+    <p id="tabWarning" class="warn" style="display:none">Advertencia: Has estado fuera de la pestaña más de 10 segundos.</p>
+  </section>
+
+  <!-- Activity 1 -->
+  <section class="card" id="act1">
+    <div class="flex" style="justify-content:space-between;align-items:flex-start">
+      <div style="flex:1">
+        <h2>Actividad 1: Banderas → País (15) <span class="item-status" id="a1status"></span></h2>
+        <details class="small"><summary>Example / Ejemplo</summary>
+          <div class="small">🇪🇸 + [cuadro] → haz clic en <code>España</code> y luego haz clic en el cuadro correcto. Si no es el correcto, el cuadro se pone rojo y el chip vuelve al banco.</div>
+        </details>
+        <p class="dir">
+          <b>ES:</b> Opción A) Arrastra. Opción B) <b>Haz clic</b> en un chip (azul) y luego <b>haz clic</b> en el espacio correcto. Si es incorrecto, el espacio se pondrá <span style="color:#dc2626">rojo</span> breve y el chip volverá al banco.<br>
+          <b>EN:</b> Option A) Drag. Option B) <b>Click</b> a chip (turns blue) then <b>click</b> the correct box. If wrong, the box flashes <span style="color:#dc2626">red</span> and the chip returns to the bank.
+        </p>
+        <div class="place-banner" id="placeBanner" style="display:none">Place mode: <b id="placeWhat"></b>. Click the correct box.</div>
+      </div>
+      <div style="min-width:300px;flex:0 0 300px;position:sticky;top:80px">
+        <div class="label" style="margin-top:0"><b>Países / Countries</b></div>
+        <div id="a1Chips" class="chips rightwrap bin"></div>
+      </div>
+    </div>
+    <div class="a1grid" id="a1Rows" style="margin-top:12px"></div>
+    <div class="cta">
+      <button class="secondary" id="shuffleA1">Reiniciar / Shuffle</button>
+      <button id="checkA1">Revisar / Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a1score"></div>
+  </section>
+
+  <!-- Activity 2 -->
+  <section class="card" id="act2">
+    <h2>Actividad 2: Escribe nacionalidades (m/f) — 15 <span class="item-status" id="a2status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small">México → <b>mexicano/a</b>; Estados Unidos → <b>estadounidense</b></div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Escribe <b>ambas</b> formas con una barra (p. ej., <code>mexicano/a</code>). Si solo hay una (<i>estadounidense</i>), escribe solo esa.<br>
+      <b>EN:</b> Write <b>both</b> forms with a slash (e.g., <code>mexicano/a</code>). If there’s only one (<i>estadounidense</i>), write just that.
+    </p>
+    <div id="a2List" class="two-col"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA2" style="width:auto">Reset</button>
+      <button id="checkA2">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a2score"></div>
+  </section>
+
+  <!-- Activity 3 -->
+  <section class="card" id="act3">
+    <h2>Actividad 3: País → Nacionalidad (entrada libre) — 15 <span class="item-status" id="a3status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small">🇪🇸 España (fem.) → escribe <b>española</b> · <span class="pass-icon">🛂</span></div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Escribe la nacionalidad correcta para cada país. Acentos obligatorios. Masc./fem. indicado.<br>
+      <b>EN:</b> Type the correct nationality for each country. Accents required. Masc./fem. indicated.
+    </p>
+    <div id="a3List"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA3" style="width:auto">Reset</button>
+      <button id="checkA3">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a3score"></div>
+  </section>
+
+  <!-- Activity 4 (dropdowns) -->
+  <section class="card" id="act4">
+    <h2>Actividad 4: Clasifica — ¿Habla de nacionalidad u origen? (15) <span class="item-status" id="a4status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small">“Frida Kahlo es mexicana.” → selecciona <b>Habla de nacionalidad</b> en el menú.</div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Elige en el menú: <b>Habla de nacionalidad</b> o <b>Habla de origen</b>. “Habla de” = “está hablando sobre…”.<br>
+      <b>EN:</b> Choose from the menu: <b>Talking about nationality</b> or <b>Talking about origin</b>. “Habla de” = “it is talking about…”.
+    </p>
+    <div id="a4List"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA4" style="width:auto">Reset</button>
+      <button id="checkA4">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a4score"></div>
+  </section>
+
+  <!-- Activity 5 -->
+  <section class="card" id="act5">
+    <h2>Actividad 5: Bandera + mapa (SVG) → Es de… / Es… (15) <span class="item-status" id="a5status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small">🇨🇴 + contorno → “<b>Ella es de Colombia.</b>” y “<b>Ella es colombiana.</b>”</div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Observa la bandera y el contorno. Escribe: “Él/Ella es de ___.” y “Él/Ella es ___.” (nacionalidad). Pasa el cursor para ver un modelo.<br>
+      <b>EN:</b> Look at the flag and outline. Write: “Él/Ella es de ___.” and “Él/Ella es ___.” (nationality). Hover to see a model.
+    </p>
+    <div id="a5List"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA5" style="width:auto">Reset</button>
+      <button id="checkA5">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a5score"></div>
+  </section>
+
+  <!-- Activity 6 -->
+  <section class="card" id="act6">
+    <h2>Actividad 6: Corrige los errores (15) <span class="item-status" id="a6status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small"><i>el es de mexico</i> → <b>Él es de México.</b> (mayúscula, acento, punto)</div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Reescribe cada oración con acentos, mayúscula inicial, punto final y formas correctas.<br>
+      <b>EN:</b> Rewrite each sentence with correct accents, initial capital, final period, and correct forms.
+    </p>
+    <div id="a6List"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA6" style="width:auto">Reset</button>
+      <button id="checkA6">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a6score"></div>
+  </section>
+
+  <!-- Activity 7 -->
+  <section class="card" id="act7">
+    <h2>Actividad 7: Mini-biografías + Preguntas (combinado) — 10 <span class="item-status" id="a7status"></span></h2>
+    <details class="small"><summary>Example / Ejemplo</summary>
+      <div class="small">Ej.: AOC → “<b>Ella es de los Estados Unidos.</b>” / “<b>Ella es estadounidense.</b>”.</div>
+    </details>
+    <p class="dir">
+      <b>ES:</b> Lee la mini-biografía con bandera y contorno (sin pistas). Responde con oraciones completas.<br>
+      <b>EN:</b> Read the mini-biography with flag and outline (no hints). Answer in full sentences.
+    </p>
+    <div id="a7List"></div>
+    <div class="cta">
+      <button class="secondary" id="resetA7" style="width:auto">Reset</button>
+      <button id="checkA7">Check</button>
+    </div>
+    <div class="hr"></div><div class="small" id="a7score"></div>
+  </section>
+
+  <!-- Report -->
+  <section class="card">
+    <h2>Informe de puntuación / Score Report</h2>
+    <p class="dir">
+      <b>ES:</b> Descarga un archivo <code>.txt</code> con nombre, tiempo, intentos, aciertos y puntos de esfuerzo.<br>
+      <b>EN:</b> Download a <code>.txt</code> with name, time, attempts, correct, and an effort score.
+    </p>
+    <div class="cta">
+      <button id="downloadReport">Descargar informe (.txt) / Download Report (.txt)</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ===== Helpers & Metrics ===== */
+const $ = q => document.querySelector(q);
+const $$ = q => Array.from(document.querySelectorAll(q));
+const norm = s => (s||"").normalize("NFC").replace(/\\s+/g,' ').trim().toLowerCase();
+const eqAccentSensitive = (t,u) => norm(t) === norm(u);
+const shuffle = a => { const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]} return x };
+function requirePronounPeriod(val){ const s=val.trim(); return {pron:/^(Él|Ella)\\b/.test(s), period:/\\.$/.test(s)}; }
+
+let pageStart = performance.now();
+let timeAwayTotal = 0, lastHiddenAt = null;
+let lastCheckAt = 0;
+const stats = { attempts:0, rapidChecks:0 };
+const sections = ["a1","a2","a3","a4","a5","a6","a7"];
+sections.forEach(k => stats[k] = {items:[],correct:0,attempts:0});
+
+function updateHUD(){
+  const t = Math.round((performance.now() - pageStart)/1000);
+  $("#timeOnPage").textContent = t+"s";
+  $("#tabAway").textContent = Math.round(timeAwayTotal/1000)+"s";
+  $("#attemptsTotal").textContent = stats.attempts;
+  const totalItems = sections.reduce((a,k)=>a+stats[k].items.length,0);
+  const totalCorrect = sections.reduce((a,k)=>a+stats[k].correct,0);
+  $("#totalItems").textContent = totalItems; $("#correctTotal").textContent = totalCorrect;
+}
+setInterval(updateHUD,500);
+document.addEventListener('click',(e)=>{ if(!e.target.classList.contains('chip')){ const sel=document.querySelector('.chip.selected'); if(sel) sel.classList.remove('selected'); } });
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ const d = performance.now()-lastHiddenAt; timeAwayTotal+=d; lastHiddenAt=null; if(timeAwayTotal>10000) $("#tabWarning").style.display="block"; }
+});
+function markCheck(){ const n=performance.now(); if(lastCheckAt && (n-lastCheckAt)<1000){ stats.rapidChecks++; } lastCheckAt=n; stats.attempts++; }
+
+/* ===== Data ===== */
+const DATA = [
+  {flag:"🇲🇽",name:"México", natM:"mexicano", natF:"mexicana", code:"MX"},
+  {flag:"🇪🇸",name:"España", natM:"español", natF:"española", code:"ES"},
+  {flag:"🇺🇸",name:"Estados Unidos", natM:"estadounidense", natF:"estadounidense", code:"US"},
+  {flag:"🇦🇷",name:"Argentina", natM:"argentino", natF:"argentina", code:"AR"},
+  {flag:"🇨🇴",name:"Colombia", natM:"colombiano", natF:"colombiana", code:"CO"},
+  {flag:"🇵🇪",name:"Perú", natM:"peruano", natF:"peruana", code:"PE"},
+  {flag:"🇨🇱",name:"Chile", natM:"chileno", natF:"chilena", code:"CL"},
+  {flag:"🇵🇷",name:"Puerto Rico", natM:"puertorriqueño", natF:"puertorriqueña", code:"PR"},
+  {flag:"🇨🇺",name:"Cuba", natM:"cubano", natF:"cubana", code:"CU"},
+  {flag:"🇩🇴",name:"República Dominicana", natM:"dominicano", natF:"dominicana", code:"DO"},
+  {flag:"🇬🇹",name:"Guatemala", natM:"guatemalteco", natF:"guatemalteca", code:"GT"},
+  {flag:"🇭🇳",name:"Honduras", natM:"hondureño", natF:"hondureña", code:"HN"},
+  {flag:"🇳🇮",name:"Nicaragua", natM:"nicaragüense", natF:"nicaragüense", code:"NI"},
+  {flag:"🇨🇷",name:"Costa Rica", natM:"costarricense", natF:"costarricense", code:"CR"},
+  {flag:"🇺🇾",name:"Uruguay", natM:"uruguayo", natF:"uruguaya", code:"UY"}
+];
+
+/* ===== SVG Light Outlines ===== */
+const SVG_PATHS = {
+  MX: "M7,40 L20,30 L30,32 L45,25 L55,28 L60,35 L52,40 L48,38 L40,42 L30,40 L22,45 Z",
+  ES: "M15,25 L80,25 L85,35 L80,45 L15,45 L10,35 Z",
+  US: "M5,30 L20,28 L40,25 L70,28 L92,30 L90,40 L70,42 L45,45 L20,40 L8,38 Z",
+  AR: "M30,15 L40,20 L42,30 L38,40 L35,50 L33,60 L28,62 L26,55 L25,45 L27,35 Z",
+  CO: "M28,20 L38,18 L48,24 L46,36 L38,40 L30,35 L26,28 Z",
+  PE: "M35,18 L45,22 L42,34 L38,45 L32,40 L28,30 Z",
+  CL: "M55,10 L57,20 L58,30 L59,40 L60,50 L60,60 L57,62 L55,55 L54,45 L53,35 L53,25 Z",
+  PR: "M30,32 L60,32 L65,36 L60,40 L30,40 L25,36 Z",
+  CU: "M15,28 C25,22,55,22,75,30 65,35,45,38,25,36 20,34,18,31,15,28 Z",
+  DO: "M30,30 L45,30 L55,35 L50,42 L40,42 L30,38 Z",
+  GT: "M30,22 L45,22 L44,30 L40,36 L46,42 L30,42 L25,35 Z",
+  HN: "M25,32 L60,32 L65,36 L60,40 L25,40 L22,36 Z",
+  NI: "M30,30 L50,30 L55,35 L50,42 L35,42 L28,36 Z",
+  CR: "M30,34 L55,34 L58,38 L55,42 L30,42 L27,38 Z",
+  UY: "M40,20 L50,22 L52,30 L50,40 L45,48 L38,45 L36,35 Z"
+};
+function svgOutline(code){
+  const d = SVG_PATHS[code];
+  const path = d ? ('<path d="'+d+'" fill="none" stroke="#6366f1" stroke-width="1.2"/>')
+                 : ('<text x="50" y="38" text-anchor="middle" font-size="18" fill="#334155" font-family="sans-serif">'+code+'</text>');
+  return '<svg viewBox="0 0 100 66" xmlns="http://www.w3.org/2000/svg">'+path+'</svg>';
+}
+
+/* ===== Chip Click→Click + DnD (GLOBAL) ===== */
+let selectedChip = null;
+function selectChip(ch){
+  if(selectedChip === ch){ ch.classList.remove('selected'); selectedChip=null; setA1BinsReady(false); setPlaceBanner(); return; }
+  if(selectedChip){ selectedChip.classList.remove('selected'); }
+  selectedChip = ch; ch.classList.add('selected'); setA1BinsReady(true); setPlaceBanner();
+}
+function makeChip(ch){
+  ch.addEventListener('click', ()=> selectChip(ch));
+  ch.addEventListener('dragstart', e=>{ ch.classList.add('dragging'); e.dataTransfer.setData('text/plain', ch.dataset.value || ch.textContent); e.dataTransfer.effectAllowed='move'; });
+  ch.addEventListener('dragend', ()=> ch.classList.remove('dragging'));
+}
+function setA1BinsReady(on){
+  $$('#act1 .bin[data-a1]').forEach(b=> b.classList.toggle('ready', !!on));
+}
+function setPlaceBanner(){
+  const b = $("#placeBanner"), w=$("#placeWhat");
+  if(!b) return;
+  if(selectedChip){ b.style.display="block"; w.textContent = selectedChip.dataset.value || selectedChip.textContent; }
+  else { b.style.display="none"; w.textContent=""; }
+}
+
+/* ===== Activity 1 ===== */
+let A1 = shuffle(DATA.slice());
+function buildA1(){
+  const rows=$("#a1Rows"); rows.innerHTML="";
+  A1.forEach((it,i)=>{
+    const row=document.createElement('div'); row.className='a1card';
+    row.innerHTML = '<div class="flag">'+it.flag+'</div>'
+                  + '<div class="bin" data-a1="'+i+'" aria-label="Drop country here"></div>';
+    rows.appendChild(row);
+  });
+  const tray=$("#a1Chips"); tray.innerHTML="";
+  shuffle(A1.map(x=>x.name)).forEach(val=>{
+    const c=document.createElement('div'); c.className='chip'; c.draggable=true; c.dataset.value=val; c.textContent=val;
+    tray.appendChild(c); makeChip(c);
+  });
+  // DnD for A1 bins
+  $$('#act1 .bin').forEach(bin=>{
+    bin.addEventListener('dragover', e=>{ e.preventDefault(); bin.classList.add('ready'); });
+    bin.addEventListener('dragleave', ()=> bin.classList.remove('ready'));
+    bin.addEventListener('drop', e=>{
+      e.preventDefault(); bin.classList.remove('ready');
+      const val = e.dataTransfer.getData('text/plain');
+      if(!val) return;
+      const chip = [...$$('#a1Chips .chip, #a1Rows .chip')].find(c=> (c.dataset.value||c.textContent)===val);
+      if(chip){ bin.appendChild(chip); if(chip===selectedChip){ chip.classList.remove('selected'); selectedChip=null; setA1BinsReady(false); setPlaceBanner(); } }
+    });
+  });
+  setA1BinsReady(false); setPlaceBanner();
+}
+
+// Delegated click to place with correctness gate + return-to-bank on wrong
+document.addEventListener('click', (ev)=>{
+  const bin = ev.target.closest('.bin');
+  if(!bin || !selectedChip) return;
+  const a1Index = bin.getAttribute('data-a1');
+  if(a1Index===null){ // other activities (none use bins), just place
+    bin.appendChild(selectedChip);
+    selectedChip.classList.remove('selected'); selectedChip=null; setA1BinsReady(false); setPlaceBanner();
+    return;
+  }
+  const idx = parseInt(a1Index,10);
+  const target = (A1[idx] && A1[idx].name) ? A1[idx].name : "";
+  const cand = selectedChip.dataset.value || selectedChip.textContent || "";
+  bin.classList.remove('error','correct');
+  if(eqAccentSensitive(target, cand)){
+    bin.appendChild(selectedChip);
+    bin.classList.add('correct');
+    selectedChip.classList.remove('selected'); selectedChip=null; setA1BinsReady(false); setPlaceBanner();
+  } else {
+    bin.classList.add('error');
+    setTimeout(()=> bin.classList.remove('error'), 1200);
+    // Return chip to bank & exit place mode
+    const bank = $("#a1Chips"); if(bank){ bank.appendChild(selectedChip); }
+    selectedChip.classList.remove('selected'); selectedChip=null; setA1BinsReady(false); setPlaceBanner();
+  }
+});
+
+/* ===== Activity 2 ===== */
+let A2 = DATA.slice();
+function buildA2(){
+  const box=$("#a2List"); box.innerHTML="";
+  stats.a2.items = A2.map(it=>({target:it,correct:false,attempts:0}));
+  stats.a2.correct=0; stats.a2.attempts=0;
+  A2.forEach((it,i)=>{
+    const row=document.createElement("div"); row.className="card"; row.style.padding="10px";
+    row.innerHTML = ''
+      + '<div class="flex" style="align-items:center;gap:10px">'
+      +   '<div class="flag">'+it.flag+'</div>'
+      +   '<div class="outline">'+svgOutline(it.code)+'</div>'
+      +   '<div class="label">'+it.name+'</div>'
+      + '</div>'
+      + '<div class="small" style="margin-top:6px"><b>Escribe nacionalidad m/f o única:</b> '
+      +   '<input id="a2inp_'+i+'" placeholder="mexicano/a · española · estadounidense">'
+      + '</div>'
+      + '<div class="item-status" id="a2_item_'+i+'"></div>';
+    box.appendChild(row);
+  });
+}
+function checkA2(){
+  markCheck(); stats.a2.attempts++; let correct=0;
+  A2.forEach((it,i)=>{
+    const val = ($("#a2inp_"+i).value || "");
+    const target = (it.natM===it.natF) ? it.natM : (it.natM+"/"+it.natF);
+    const ok = eqAccentSensitive(target, val);
+    const st = $("#a2_item_"+i); st.textContent = ok? "✓ Correcto" : ("✗ Modelo: "+target); st.className="item-status "+(ok?"ok":"bad");
+    stats.a2.items[i].attempts++; stats.a2.items[i].correct = ok || stats.a2.items[i].correct;
+    if(ok) correct++;
+  });
+  stats.a2.correct = correct; $("#a2status").textContent = correct+" / "+A2.length+" correctos"; $("#a2score").textContent = "Intentos: "+stats.a2.attempts+" • Correctos: "+correct+"/"+A2.length;
+}
+
+/* ===== Activity 3 ===== */
+let A3 = DATA.slice().map((c,idx)=>({country:c, need: idx%2? "F":"M"}));
+function buildA3(){
+  const box=$("#a3List"); box.innerHTML="";
+  stats.a3.items = A3.map(it=>({target:it,correct:false,attempts:0}));
+  stats.a3.correct=0; stats.a3.attempts=0;
+  A3.forEach((it,i)=>{
+    const want = it.need==="F" ? "(fem.)" : "(masc.)";
+    const row=document.createElement("div"); row.className="card"; row.style.padding="10px";
+    row.innerHTML = ''
+      + '<div class="row">'
+      +   '<div class="flag">'+it.country.flag+'</div>'
+      +   '<div class="pass-icon" title="Pasaporte">🛂</div>'
+      +   '<div class="label">'+it.country.name+' '+want+'</div>'
+      +   '<input id="a3inp_'+i+'" placeholder="nacionalidad">'
+      + '</div>'
+      + '<div class="item-status" id="a3_item_'+i+'"></div>';
+    box.appendChild(row);
+  });
+}
+function checkA3(){
+  markCheck(); stats.a3.attempts++; let correct=0;
+  A3.forEach((it,i)=>{
+    const val = ($("#a3inp_"+i).value || "");
+    const target = it.need==="F"? it.country.natF : it.country.natM;
+    const ok = eqAccentSensitive(target, val);
+    const st = $("#a3_item_"+i); st.textContent = ok? "✓ Correcto" : ("✗ Modelo: "+target); st.className="item-status "+(ok?"ok":"bad");
+    stats.a3.items[i].attempts++; stats.a3.items[i].correct = ok || stats.a3.items[i].correct;
+    if(ok) correct++;
+  });
+  stats.a3.correct = correct; $("#a3status").textContent = correct+" / "+A3.length+" correctos"; $("#a3score").textContent = "Intentos: "+stats.a3.attempts+" • Correctos: "+correct+"/"+A3.length;
+}
+
+/* ===== Activity 4 (dropdowns) ===== */
+const A4_SENT = [
+  "Shakira es colombiana.",
+  "Lionel Messi es de Argentina.",
+  "Frida Kahlo es mexicana.",
+  "Rosalía es de España.",
+  "Bad Bunny es puertorriqueño.",
+  "Pablo Neruda es de Chile.",
+  "Ellen Ochoa es estadounidense.",
+  "Dolores Huerta es de los Estados Unidos.",
+  "Sonia Sotomayor es estadounidense.",
+  "Gabriel García Márquez es de Colombia.",
+  "Rigoberta Menchú es guatemalteca.",
+  "Celia Cruz es de Cuba.",
+  "Salvador Dalí es español.",
+  "Jennifer Lopez es de los Estados Unidos.",
+  "Isabel Allende es chilena."
+];
+function buildA4(){
+  const list=$("#a4List"); list.innerHTML="";
+  stats.a4.items = A4_SENT.map(() => ({target:null,correct:false,attempts:0}));
+  stats.a4.correct=0; stats.a4.attempts=0;
+  A4_SENT.forEach((txt,i)=>{
+    const row=document.createElement("div"); row.className="row";
+    row.innerHTML = ''
+      + '<div class="small" style="min-width:360px"><b>'+(i+1)+'.</b> '+txt+'</div>'
+      + '<select id="a4sel_'+i+'" class="small">'
+      +   '<option value="">— selecciona / select —</option>'
+      +   '<option value="nac">Habla de nacionalidad</option>'
+      +   '<option value="ori">Habla de origen</option>'
+      + '</select>'
+      + '<span class="item-status" id="a4_item_'+i+'"></span>';
+    list.appendChild(row);
+  });
+}
+function checkA4(){
+  markCheck(); stats.a4.attempts++; let correct=0;
+  A4_SENT.forEach((txt,i)=>{
+    const sel = $("#a4sel_"+i);
+    const choice = sel ? sel.value : "";
+    const isNationality = /(?:ano|ana|eño|eña|ense|ol|ola|eco|eca|ayo|aya|ino|ina|pañol|pañola|ricense|puertorriqueño|puertorriqueña|guatemalteco|guatemalteca|chileno|chilena|estadounidense)\\b/i.test(txt);
+    const expects = isNationality ? "nac" : "ori";
+    const ok = choice === expects;
+    const st=$("#a4_item_"+i); st.textContent = ok? "✓" : "✗"; st.className="item-status "+(ok?"ok":"bad");
+    stats.a4.items[i].attempts++; stats.a4.items[i].correct = ok || stats.a4.items[i].correct;
+    if(ok) correct++;
+  });
+  stats.a4.correct = correct; $("#a4status").textContent = correct+" / "+A4_SENT.length+" correctos"; $("#a4score").textContent = "Intentos: "+stats.a4.attempts+" • Correctos: "+correct+"/"+A4_SENT.length;
+}
+
+/* ===== Activity 5 ===== */
+let A5 = DATA.slice();
+function buildA5(){
+  const box=$("#a5List"); box.innerHTML="";
+  stats.a5.items = A5.flatMap(it=>[{target:'Ella es de '+it.name+'.',correct:false,attempts:0},{target:'Ella es '+it.natF+'.',correct:false,attempts:0}]);
+  stats.a5.correct=0; stats.a5.attempts=0;
+  A5.forEach((it,i)=>{
+    const row=document.createElement("div"); row.className="card"; row.style.padding="10px";
+    const hoverModel = 'Modelo: Ella es de '+it.name+'. / Ella es '+it.natF+'.';
+    row.innerHTML = ''
+      + '<div class="flex" style="align-items:center">'
+      +   '<div class="hover-reveal" data-answer="'+hoverModel+'"><div class="flag">'+it.flag+'</div></div>'
+      +   '<div class="hover-reveal outline" data-answer="'+hoverModel+'">'+svgOutline(it.code)+'</div>'
+      +   '<div style="flex:1;margin-left:8px">'
+      +     '<div class="small"><b>1)</b> Origen → <input id="a5ori_'+i+'" placeholder="Él/Ella es de ..."></div>'
+      +     '<div class="small" style="margin-top:6px"><b>2)</b> Nacionalidad → <input id="a5nac_'+i+'" placeholder="Él/Ella es ..."></div>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="item-status" id="a5_item_'+i+'"></div>';
+    box.appendChild(row);
+  });
+}
+function checkA5(){
+  markCheck(); stats.a5.attempts++; let correct=0;
+  A5.forEach((it,i)=>{
+    const o = ($("#a5ori_"+i).value || "");
+    const n = ($("#a5nac_"+i).value || "");
+    const okO = eqAccentSensitive('Ella es de '+it.name+'.', o) && requirePronounPeriod(o).pron && requirePronounPeriod(o).period;
+    const okN = eqAccentSensitive('Ella es '+it.natF+'.', n) && requirePronounPeriod(n).pron && requirePronounPeriod(n).period;
+    const st = $("#a5_item_"+i);
+    let msg = (okO? "✓ Origen " : "✗ Origen ") + (okN? "• ✓ Nacionalidad" : "• ✗ Nacionalidad");
+    if(!requirePronounPeriod(o).pron || !requirePronounPeriod(o).period || !requirePronounPeriod(n).pron || !requirePronounPeriod(n).period) msg += " (Usa Él/Ella y punto)";
+    st.textContent = msg; st.className="item-status "+((okO&&okN)?"ok":"bad");
+    stats.a5.items[i*2+0].attempts++; stats.a5.items[i*2+0].correct = okO || stats.a5.items[i*2+0].correct;
+    stats.a5.items[i*2+1].attempts++; stats.a5.items[i*2+1].correct = okN || stats.a5.items[i*2+1].correct;
+    if(okO) correct++; if(okN) correct++;
+  });
+  stats.a5.correct = correct; $("#a5status").textContent = correct+" / "+stats.a5.items.length+" correctos"; $("#a5score").textContent = "Intentos: "+stats.a5.attempts+" • Correctos: "+correct+"/"+stats.a5.items.length;
+}
+
+/* ===== Activity 6 ===== */
+const A6 = [
+  {bad:"el es de mexico", good:"Él es de México."},
+  {bad:"ella es espanola", good:"Ella es española."},
+  {bad:"el es estados unidos", good:"Él es de los Estados Unidos."},
+  {bad:"ella es argentino.", good:"Ella es argentina."},
+  {bad:"el es de peru", good:"Él es de Perú."},
+  {bad:"ella es colombiana", good:"Ella es colombiana."},
+  {bad:"el es espanol", good:"Él es español."},
+  {bad:"ella es de argentina", good:"Ella es de Argentina."},
+  {bad:"el es estadounidense", good:"Él es estadounidense."},
+  {bad:"ella es de chile.", good:"Ella es de Chile."},
+  {bad:"el es costarricense", good:"Él es costarricense."},
+  {bad:"ella es dominicano.", good:"Ella es dominicana."},
+  {bad:"el es de cuba", good:"Él es de Cuba."},
+  {bad:"ella es guatemalteco", good:"Ella es guatemalteca."},
+  {bad:"el es de nicaragua.", good:"Él es de Nicaragua."}
+];
+function buildA6(){
+  const box=$("#a6List"); box.innerHTML="";
+  stats.a6.items = A6.map(x=>({target:x.good,correct:false,attempts:0}));
+  stats.a6.correct=0; stats.a6.attempts=0;
+  A6.forEach((it,i)=>{
+    const row=document.createElement("div"); row.className="card"; row.style.padding="10px";
+    row.innerHTML = ''
+      + '<div class="small"><b>'+(i+1)+'.</b> <i>'+it.bad+'</i></div>'
+      + '<div class="small" style="margin-top:6px">↳ Reescribe: <input id="a6inp_'+i+'" placeholder="Corrige y escribe aquí"></div>'
+      + '<div class="item-status" id="a6_item_'+i+'"></div>';
+    box.appendChild(row);
+  });
+}
+function checkA6(){
+  markCheck(); stats.a6.attempts++; let correct=0;
+  A6.forEach((it,i)=>{
+    const val = ($("#a6inp_"+i).value || "");
+    const ok = eqAccentSensitive(it.good, val) && requirePronounPeriod(val).pron && requirePronounPeriod(val).period;
+    const st = $("#a6_item_"+i); st.textContent = ok? "✓ Correcto" : "✗ Revisa acentos/mayúscula/punto/pronombre"; st.className="item-status "+(ok?"ok":"bad");
+    stats.a6.items[i].attempts++; stats.a6.items[i].correct = ok || stats.a6.items[i].correct;
+    if(ok) correct++;
+  });
+  stats.a6.correct = correct; $("#a6status").textContent = correct+" / "+A6.length+" correctos"; $("#a6score").textContent = "Intentos: "+stats.a6.attempts+" • Correctos: "+correct+"/"+A6.length;
+}
+
+/* ===== Activity 7 ===== */
+const BIOS = [
+  {flag:"🇺🇸", code:"US", name:"Alexandria Ocasio-Cortez", text:"Alexandria Ocasio-Cortez es de los Estados Unidos. Su familia es de Puerto Rico. Es congresista en Nueva York. Tiene dos hermanos. Es famosa porque habla sobre justicia social y cambio climático.", origen:"Ella es de los Estados Unidos.", nac:"Ella es estadounidense."},
+  {flag:"🇨🇴", code:"CO", name:"Shakira", text:"Shakira es de Colombia. Vive en Barcelona. Es cantante y bailarina. Tiene dos hijos. Es famosa porque canta en español e inglés y apoya proyectos sociales.", origen:"Ella es de Colombia.", nac:"Ella es colombiana."},
+  {flag:"🇦🇷", code:"AR", name:"Lionel Messi", text:"Lionel Messi es de Argentina. Vive en Miami, Florida. Es futbolista profesional. Tiene tres hijos. Es famoso porque ganó la Copa del Mundo y juega en el Inter Miami.", origen:"Él es de Argentina.", nac:"Él es argentino."},
+  {flag:"🇲🇽", code:"MX", name:"Frida Kahlo", text:"Frida Kahlo es de México. Vivió en Coyoacán, Ciudad de México. Es pintora famosa. Es famosa porque pintó autorretratos con mucho color y emoción.", origen:"Ella es de México.", nac:"Ella es mexicana."},
+  {flag:"🇪🇸", code:"ES", name:"Rosalía", text:"Rosalía es de España. Vive en Barcelona. Es cantante de música pop y flamenco. Es famosa porque mezcla estilos modernos y tradicionales.", origen:"Ella es de España.", nac:"Ella es española."},
+  {flag:"🇵🇷", code:"PR", name:"Bad Bunny", text:"Bad Bunny es de Puerto Rico. Vive entre San Juan y Estados Unidos. Es cantante del género urbano. Es famoso porque crea música innovadora y colabora con artistas internacionales.", origen:"Él es de Puerto Rico.", nac:"Él es puertorriqueño."},
+  {flag:"🇨🇱", code:"CL", name:"Pablo Neruda", text:"Pablo Neruda es de Chile. Es poeta muy reconocido. Es famoso porque escribió poemas de amor y recibió el Premio Nobel de Literatura.", origen:"Él es de Chile.", nac:"Él es chileno."},
+  {flag:"🇺🇸", code:"US", name:"Ellen Ochoa", text:"Ellen Ochoa es de los Estados Unidos. Es ingeniera y astronauta. Es famosa porque fue la primera mujer hispana en viajar al espacio.", origen:"Ella es de los Estados Unidos.", nac:"Ella es estadounidense."},
+  {flag:"🇺🇸", code:"US", name:"Dolores Huerta", text:"Dolores Huerta es de los Estados Unidos. Su familia es de origen mexicano. Es activista laboral y de derechos civiles. Es famosa porque cofundó la UFW y el lema “¡Sí, se puede!”.", origen:"Ella es de los Estados Unidos.", nac:"Ella es estadounidense."},
+  {flag:"🇺🇸", code:"US", name:"Sonia Sotomayor", text:"Sonia Sotomayor es de los Estados Unidos. Sus padres eran de Puerto Rico. Es jueza de la Corte Suprema. Es famosa por su trayectoria en la justicia y por ser la primera mujer latina en la Corte.", origen:"Ella es de los Estados Unidos.", nac:"Ella es estadounidense."}
+];
+function buildA7(){
+  const box=$("#a7List"); box.innerHTML="";
+  stats.a7.items = BIOS.flatMap(b=>[{target:b.origen,correct:false,attempts:0},{target:b.nac,correct:false,attempts:0}]);
+  stats.a7.correct=0; stats.a7.attempts=0;
+  BIOS.forEach((b,bi)=>{
+    const card=document.createElement("div"); card.className="card"; card.style.padding="10px";
+    card.innerHTML = ''
+      + '<div class="flex" style="align-items:flex-start">'
+      +   '<div class="flag">'+b.flag+'</div>'
+      +   '<div class="outline">'+svgOutline(b.code)+'</div>'
+      +   '<div class="bio" style="flex:1;margin-left:8px"><b>'+b.name+'</b>. '+b.text+'</div>'
+      + '</div>'
+      + '<div class="small" style="margin-top:6px">'
+      +   '<div>¿De dónde es? → <input id="a7ori_'+bi+'" placeholder="Él/Ella es de ..."></div>'
+      +   '<div>¿Cuál es su nacionalidad? → <input id="a7nac_'+bi+'" placeholder="Él/Ella es ..."></div>'
+      + '</div>'
+      + '<div class="item-status" id="a7_item_'+bi+'"></div>';
+    box.appendChild(card);
+  });
+}
+function checkA7(){
+  markCheck(); stats.a7.attempts++; let correct=0;
+  BIOS.forEach((b,bi)=>{
+    const o = ($("#a7ori_"+bi).value || "");
+    const n = ($("#a7nac_"+bi).value || "");
+    const okO = eqAccentSensitive(b.origen, o) && requirePronounPeriod(o).pron && requirePronounPeriod(o).period;
+    const okN = eqAccentSensitive(b.nac, n) && requirePronounPeriod(n).pron && requirePronounPeriod(n).period;
+    const st = $("#a7_item_"+bi);
+    let msg = (okO? "✓ Origen correcto. " : "✗ Origen: revisa pronombre/acentos/punto. ")
+            + (okN? "✓ Nacionalidad correcta." : "✗ Nacionalidad: revisa pronombre/acentos/punto.");
+    st.textContent = msg; st.className="item-status "+((okO&&okN)?"ok":"bad");
+    stats.a7.items[bi*2+0].attempts++; stats.a7.items[bi*2+0].correct = okO || stats.a7.items[bi*2+0].correct;
+    stats.a7.items[bi*2+1].attempts++; stats.a7.items[bi*2+1].correct = okN || stats.a7.items[bi*2+1].correct;
+    if(okO) correct++; if(okN) correct++;
+  });
+  stats.a7.correct = correct; $("#a7status").textContent = correct+" / "+stats.a7.items.length+" correctos"; $("#a7score").textContent = "Intentos: "+stats.a7.attempts+" • Correctos: "+correct+"/"+stats.a7.items.length;
+}
+
+/* ===== Report ===== */
+function percent(n,d){ return d? Math.round((n/d)*100):0; }
+function effortScore(){
+  const totalItems = sections.reduce((a,k)=>a+stats[k].items.length,0);
+  const totalCorrect = sections.reduce((a,k)=>a+stats[k].correct,0);
+  const timeOnPage = Math.round((performance.now()-pageStart)/1000);
+  const acc = Math.round((totalCorrect/Math.max(1,totalItems))*6);
+  const timePts = Math.min(3, Math.round(timeOnPage/120));
+  const penalty = (stats.rapidChecks>3 ? 1 : 0) + (timeAwayTotal>30000 ? 1 : 0);
+  return Math.max(0, Math.min(10, acc + timePts - penalty));
+}
+function sectionReport(key,label){
+  const sec = stats[key];
+  const correct = sec.correct, total = sec.items.length;
+  return "-- "+label+" --\\nAttempts: "+sec.attempts+" | Correct: "+correct+"/"+total+"\\n";
+}
+function downloadReport(){
+  const name = ($("#studentName").value || "SinNombre").trim().replace(/[^\\w\\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  const timeOnPage = Math.round((performance.now()-pageStart)/1000);
+  const totalItems = sections.reduce((a,k)=>a+stats[k].items.length,0);
+  const totalCorrect = sections.reduce((a,k)=>a+stats[k].correct,0);
+  const lines = [
+    "ProfeVT — Nacionalidades y Origen (v7m)",
+    "Nombre/Name: "+name,
+    "Tiempo/Time: "+timeOnPage+"s | Fuera de pestaña/Tab-away: "+Math.round(timeAwayTotal/1000)+"s",
+    "Intentos/Attempts: "+stats.attempts+" | Checks rápidos/Rapid checks (<1s): "+stats.rapidChecks,
+    "Aciertos/Correct: "+totalCorrect+"/"+totalItems+" ("+percent(totalCorrect,totalItems)+"%)",
+    "Puntos de esfuerzo / Effort points (0–10): "+effortScore(),
+    "",
+    sectionReport("a1","Actividad 1"),sectionReport("a2","Actividad 2"),sectionReport("a3","Actividad 3"),
+    sectionReport("a4","Actividad 4"),sectionReport("a5","Actividad 5"),sectionReport("a6","Actividad 6"),sectionReport("a7","Actividad 7"),
+    "Generated: "+new Date().toLocaleString()
+  ].join("\\n");
+  const blob = new Blob([lines],{type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download=(name||"informe")+"_Nacionalidades_Origen_v7m.txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+}
+$("#downloadReport").addEventListener("click", downloadReport);
+
+/* ===== Init & Buttons ===== */
+function init(){
+  buildA1(); buildA2(); buildA3(); buildA4(); buildA5(); buildA6(); buildA7();
+  updateHUD();
+}
+$("#shuffleA1").addEventListener("click",()=>{ A1 = shuffle(DATA.slice()); buildA1(); setA1BinsReady(false); setPlaceBanner(); });
+$("#checkA1").addEventListener("click",()=>{
+  const total = A1.length;
+  const placed = $$('#act1 .bin[data-a1] .chip').length;
+  $("#a1status").textContent = placed+" / "+total+" placed";
+  $("#a1score").textContent = "Coloca todas las fichas y luego continúa.";
+});
+
+$("#resetA2").addEventListener("click",buildA2); $("#checkA2").addEventListener("click",checkA2);
+$("#resetA3").addEventListener("click",buildA3); $("#checkA3").addEventListener("click",checkA3);
+$("#resetA4").addEventListener("click",buildA4); $("#checkA4").addEventListener("click",checkA4);
+$("#resetA5").addEventListener("click",buildA5); $("#checkA5").addEventListener("click",checkA5);
+$("#resetA6").addEventListener("click",buildA6); $("#checkA6").addEventListener("click",checkA6);
+$("#resetA7").addEventListener("click",buildA7); $("#checkA7").addEventListener("click",checkA7);
+
+init();
+</script>
+</body>
+</html>
