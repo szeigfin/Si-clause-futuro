@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProfeVT · Actividad 1 — Banderas → País (por región, v3c)</title>
+<style>
+  :root{--bg:#f7fafc;--ink:#0f172a;--muted:#475569;--card:#ffffff;--accent:#2563eb;--ok:#16a34a;--bad:#dc2626}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(260px,1fr));gap:12px}
+  @media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(240px,1fr))}}
+  @media (max-width:640px){.grid{grid-template-columns:1fr}}
+  .row{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+  .flag{font-size:42px;line-height:1}
+  .bin{min-height:48px;min-width:220px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc;padding:6px;display:flex;flex-wrap:wrap;gap:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;max-height:240px;overflow:auto;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:8px}
+  .tile{padding:8px 12px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;cursor:grab;user-select:none;font-weight:700}
+  .tile.selected{outline:3px solid var(--accent);background:#e0e7ff}
+  .cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}
+  button{border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  button.primary{background:var(--accent);color:#fff}
+  button.ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827}
+  .score{font-weight:800}
+  .good{border-color:#86efac;background:#f0fdf4}
+  .badb{border-color:#fecaca;background:#fff7f7}
+  .small{font-size:.9rem;color:var(--muted)}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pill{background:#e2e8f0;color:#0f172a;border-radius:999px;font-size:.75rem;padding:3px 8px}
+  .hud{display:flex;gap:10px;flex-wrap:wrap}
+  .hud .pill{background:#e5e7eb}
+  pre.report{background:#0f172a;color:#e5e7eb;padding:10px;border-radius:10px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Actividad 1 — Banderas → País (por región, v3c)</h1>
+  <div style="margin-left:auto">
+    <span class="small">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Cómo funciona / How it works</h2>
+    <p class="dir">
+      <b>ES:</b> Haz <u>clic</u> en una ficha (se resalta) y luego <u>clic</u> en un cuadro para colocarla. También puedes arrastrar y soltar. Usa <b>Check</b> en cada sección para calificar.<br>
+      <b>EN:</b> <u>Click</u> a chip (it highlights), then <u>click</u> a box to place it. Drag-and-drop also works. Use <b>Check</b> in each section to grade.
+    </p>
+    <div class="hud">
+      <span class="pill">Tiempo total / Total time: <span id="timeOnPage">0s</span></span>
+      <span class="pill">Fuera de pestaña / Tab-away: <span id="tabAway">0s</span></span>
+      <span class="pill">Intentos totales / Total attempts: <span id="attemptsTotal">0</span></span>
+      <span class="pill">Aciertos totales / Total correct: <span id="correctTotal">0</span> / <span id="totalItems">0</span></span>
+    </div>
+  </section>
+
+  <!-- Sections scaffold (same as v3b) -->
+  <section class="card" id="sec-africa">
+    <h2>ÁFRICA <span class="pill" id="pill-africa"></span></h2>
+    <div class="grid" id="rows-africa"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-africa"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-africa">Shuffle</button>
+      <button class="ghost" id="reset-africa">Reset</button>
+      <button class="primary" id="check-africa">Check</button>
+      <span class="small">Score: <span id="sc-africa" class="score">0</span> / <span id="mx-africa" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-caribe">
+    <h2>AMÉRICA: EL CARIBE <span class="pill" id="pill-caribe"></span></h2>
+    <div class="grid" id="rows-caribe"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-caribe"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-caribe">Shuffle</button>
+      <button class="ghost" id="reset-caribe">Reset</button>
+      <button class="primary" id="check-caribe">Check</button>
+      <span class="small">Score: <span id="sc-caribe" class="score">0</span> / <span id="mx-caribe" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-norte">
+    <h2>AMÉRICA DEL NORTE <span class="pill" id="pill-norte"></span></h2>
+    <div class="grid" id="rows-norte"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-norte"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-norte">Shuffle</button>
+      <button class="ghost" id="reset-norte">Reset</button>
+      <button class="primary" id="check-norte">Check</button>
+      <span class="small">Score: <span id="sc-norte" class="score">0</span> / <span id="mx-norte" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-centro">
+    <h2>AMÉRICA CENTRAL <span class="pill" id="pill-centro"></span></h2>
+    <div class="grid" id="rows-centro"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-centro"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-centro">Shuffle</button>
+      <button class="ghost" id="reset-centro">Reset</button>
+      <button class="primary" id="check-centro">Check</button>
+      <span class="small">Score: <span id="sc-centro" class="score">0</span> / <span id="mx-centro" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-sur">
+    <h2>AMÉRICA DEL SUR <span class="pill" id="pill-sur"></span></h2>
+    <div class="grid" id="rows-sur"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-sur"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-sur">Shuffle</button>
+      <button class="ghost" id="reset-sur">Reset</button>
+      <button class="primary" id="check-sur">Check</button>
+      <span class="small">Score: <span id="sc-sur" class="score">0</span> / <span id="mx-sur" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-europa">
+    <h2>EUROPA <span class="pill" id="pill-europa"></span></h2>
+    <div class="grid" id="rows-europa"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-europa"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-europa">Shuffle</button>
+      <button class="ghost" id="reset-europa">Reset</button>
+      <button class="primary" id="check-europa">Check</button>
+      <span class="small">Score: <span id="sc-europa" class="score">0</span> / <span id="mx-europa" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-asia">
+    <h2>ASIA <span class="pill" id="pill-asia"></span></h2>
+    <div class="grid" id="rows-asia"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-asia"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-asia">Shuffle</button>
+      <button class="ghost" id="reset-asia">Reset</button>
+      <button class="primary" id="check-asia">Check</button>
+      <span class="small">Score: <span id="sc-asia" class="score">0</span> / <span id="mx-asia" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card" id="sec-oceania">
+    <h2>OCEANÍA <span class="pill" id="pill-oceania"></span></h2>
+    <div class="grid" id="rows-oceania"></div>
+    <p class="small"><b>Banco / Bank</b></p>
+    <div class="chips" id="bank-oceania"></div>
+    <div class="cta">
+      <button class="ghost" id="shuffle-oceania">Shuffle</button>
+      <button class="ghost" id="reset-oceania">Reset</button>
+      <button class="primary" id="check-oceania">Check</button>
+      <span class="small">Score: <span id="sc-oceania" class="score">0</span> / <span id="mx-oceania" class="score">0</span></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Informe / Report (plain text)</h2>
+    <p class="dir"><b>ES:</b> Vista previa del archivo .txt y botones para copiar o descargar. <b>EN:</b> Plain-text preview and copy/download.</p>
+    <pre id="reportPreview" class="report">— Genera el informe con “Actualizar vista previa” —</pre>
+    <div class="cta">
+      <button class="ghost" id="previewBtn">Actualizar vista previa / Update preview</button>
+      <button class="ghost" id="copyBtn">Copiar / Copy</button>
+      <button class="primary" id="downloadReport">Descargar (.txt) / Download (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ===== Metrics ===== */
+let pageStart = performance.now();
+let timeAwayTotal = 0, lastHiddenAt = null;
+let lastCheckAt = 0;
+let attemptsTotal = 0;
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt = null; }
+});
+function updateHUD(){
+  const t = Math.round((performance.now()-pageStart)/1000);
+  document.getElementById("timeOnPage").textContent = t+"s";
+  document.getElementById("tabAway").textContent = Math.round(timeAwayTotal/1000)+"s";
+  document.getElementById("attemptsTotal").textContent = attemptsTotal;
+  const totals = Object.values(SECTION_STATS).reduce((acc,s)=>{ acc.items+=s.total; acc.correct+=s.correct; return acc; }, {items:0,correct:0});
+  document.getElementById("totalItems").textContent = totals.items;
+  document.getElementById("correctTotal").textContent = totals.correct;
+}
+setInterval(updateHUD, 500);
+function markCheck(){ lastCheckAt = performance.now(); attemptsTotal++; }
+
+/* ===== Data ===== */
+const AFRICA = [
+  {flag:"🇬🇶", name:"Guinea Ecuatorial"},
+  {flag:"🇳🇬", name:"Nigeria"},
+  {flag:"🇰🇪", name:"Kenia"},
+  {flag:"🇹🇿", name:"Tanzania"},
+  {flag:"🇸🇴", name:"Somalia"},
+  {flag:"🇧🇮", name:"Burundi"}
+];
+const CARIBE = [
+  {flag:"🇨🇺", name:"Cuba"},
+  {flag:"🇩🇴", name:"República Dominicana"},
+  {flag:"🇵🇷", name:"Puerto Rico"},
+  {flag:"🇯🇲", name:"Jamaica"},
+  {flag:"🇭🇹", name:"Haití"}
+];
+const NORTE = [
+  {flag:"🇨🇦", name:"Canadá"},
+  {flag:"🇺🇸", name:"Estados Unidos"},
+  {flag:"🇲🇽", name:"México"},
+  {flag:"🇬🇱", name:"Groenlandia"},
+  {flag:"🇧🇲", name:"Bermudas"}
+];
+const CENTRO = [
+  {flag:"🇨🇷", name:"Costa Rica"},
+  {flag:"🇬🇹", name:"Guatemala"},
+  {flag:"🇭🇳", name:"Honduras"},
+  {flag:"🇳🇮", name:"Nicaragua"},
+  {flag:"🇵🇦", name:"Panamá"},
+  {flag:"🇸🇻", name:"El Salvador"},
+  {flag:"🇧🇿", name:"Belice"}
+];
+const SUR = [
+  {flag:"🇦🇷", name:"Argentina"},
+  {flag:"🇧🇴", name:"Bolivia"},
+  {flag:"🇨🇱", name:"Chile"},
+  {flag:"🇨🇴", name:"Colombia"},
+  {flag:"🇪🇨", name:"Ecuador"},
+  {flag:"🇵🇪", name:"Perú"},
+  {flag:"🇵🇾", name:"Paraguay"},
+  {flag:"🇺🇾", name:"Uruguay"},
+  {flag:"🇻🇪", name:"Venezuela"},
+  {flag:"🇧🇷", name:"Brasil"}
+];
+const EUROPA = [
+  {flag:"🇩🇪", name:"Alemania"},
+  {flag:"🇫🇷", name:"Francia"},
+  {flag:"🇮🇪", name:"Irlanda"},
+  {flag:"🇮🇹", name:"Italia"},
+  {flag:"🇵🇱", name:"Polonia"},
+  {flag:"🇬🇧", name:"Reino Unido"},
+  {flag:"🇷🇺", name:"Rusia"}
+];
+const ASIA = [
+  {flag:"🇨🇳", name:"China"},
+  {flag:"🇯🇵", name:"Japón"},
+  {flag:"🇻🇳", name:"Vietnam"},
+  {flag:"🇳🇵", name:"Nepal"},
+  {flag:"🇮🇳", name:"India"},
+  {flag:"🇰🇷", name:"Corea del Sur"}
+];
+const OCEANIA = [
+  {flag:"🇦🇺", name:"Australia"},
+  {flag:"🇳🇿", name:"Nueva Zelanda"},
+  {flag:"🇫🇯", name:"Fiyi"}
+];
+
+/* ===== Shared chip/bin behavior ===== */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function cmp(a,b){ return (a||'').trim().toLowerCase() === (b||'').trim().toLowerCase(); }
+
+const SECTION_STATS = {}; // per section key -> {total, correct}
+function makeSection(key, data){
+  const grid = document.getElementById('rows-'+key);
+  const bank = document.getElementById('bank-'+key);
+  const sc = document.getElementById('sc-'+key);
+  const mx = document.getElementById('mx-'+key);
+  const pill = document.getElementById('pill-'+key);
+  const btnShuffle = document.getElementById('shuffle-'+key);
+  const btnReset = document.getElementById('reset-'+key);
+  const btnCheck = document.getElementById('check-'+key);
+
+  let ORDER = shuffle(data);
+  let selectedTile = null;
+  SECTION_STATS[key] = { total: ORDER.length, correct: 0 };
+  pill.textContent = '('+ORDER.length+')';
+  if(mx) mx.textContent = ORDER.length;
+
+  function makeTile(tile){
+    tile.addEventListener('dragstart', ()=>{ selectedTile = tile; tile.classList.add('selected'); });
+    tile.addEventListener('dragend', ()=>{ tile.classList.remove('selected'); selectedTile=null; });
+    tile.addEventListener('click', ()=>{
+      if(selectedTile && selectedTile!==tile){ selectedTile.classList.remove('selected'); }
+      if(tile.classList.contains('selected')){ tile.classList.remove('selected'); selectedTile=null; }
+      else { tile.classList.add('selected'); selectedTile = tile; }
+    });
+  }
+  function makeBin(bin){
+    bin.addEventListener('dragover', e=>e.preventDefault());
+    bin.addEventListener('drop', e=>{ e.preventDefault(); if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+    bin.addEventListener('click', ()=>{ if(selectedTile){ bin.appendChild(selectedTile); selectedTile.classList.remove('selected'); selectedTile=null; }});
+  }
+
+  function build(){
+    grid.innerHTML='';
+    ORDER.forEach((it,i)=>{
+      const r=document.createElement('div'); r.className='row'; r.id=key+'-row'+i;
+      r.innerHTML = '<div class="flag">'+it.flag+'</div><div class="bin" id="'+key+'-bin'+i+'"></div>';
+      grid.appendChild(r);
+      makeBin(document.getElementById(key+'-bin'+i));
+    });
+    bank.innerHTML='';
+    shuffle(ORDER.map(x=>x.name)).forEach(name=>{
+      const t=document.createElement('span'); t.className='tile'; t.textContent=name; t.dataset.val=name; t.draggable=true; makeTile(t);
+      bank.appendChild(t);
+    });
+    sc.textContent='0';
+    SECTION_STATS[key].correct = 0;
+  }
+
+  function resetAll(){
+    ORDER = shuffle(data);
+    document.querySelectorAll('#rows-'+key+' .row').forEach(r=>{ r.classList.remove('good','badb'); });
+    build(); updateHUD();
+  }
+  function shuffleOnly(){
+    const names = Array.from(document.querySelectorAll('#bank-'+key+' .tile')).map(t=>t.dataset.val);
+    bank.innerHTML='';
+    shuffle(names).forEach(name=>{
+      const t=document.createElement('span'); t.className='tile'; t.textContent=name; t.dataset.val=name; t.draggable=true; makeTile(t);
+      bank.appendChild(t);
+    });
+    document.querySelectorAll('#rows-'+key+' .bin').forEach(b=> b.innerHTML='');
+    document.querySelectorAll('#rows-'+key+' .row').forEach(r=>{ r.classList.remove('good','badb'); });
+    sc.textContent='0';
+    SECTION_STATS[key].correct = 0;
+    updateHUD();
+  }
+  function check(){
+    markCheck();
+    let score=0;
+    ORDER.forEach((it,i)=>{
+      const bin=document.getElementById(key+'-bin'+i);
+      const choice = bin.querySelector('.tile')?.dataset.val || '';
+      const row = document.getElementById(key+'-row'+i);
+      if(cmp(choice, it.name)){ score++; row.classList.add('good'); row.classList.remove('badb'); }
+      else { row.classList.add('badb'); row.classList.remove('good'); }
+    });
+    sc.textContent = score;
+    SECTION_STATS[key].correct = score;
+    updateHUD();
+  }
+
+  btnReset.addEventListener('click', resetAll);
+  btnShuffle.addEventListener('click', shuffleOnly);
+  btnCheck.addEventListener('click', check);
+  build();
+}
+
+/* ===== Build all sections ===== */
+function init(){
+  makeSection('africa', AFRICA);
+  makeSection('caribe', CARIBE);
+  makeSection('norte', NORTE);
+  makeSection('centro', CENTRO);
+  makeSection('sur', SUR);
+  makeSection('europa', EUROPA);
+  makeSection('asia', ASIA);
+  makeSection('oceania', OCEANIA);
+  updateHUD();
+}
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
+
+/* ===== Plain-text Report ===== */
+function formatSeconds(s){ const m=Math.floor(s/60), r=(s%60); return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  const name = (document.getElementById("studentName").value || "SinNombre").trim();
+  const secs = Math.round((performance.now()-pageStart)/1000);
+  const totals = Object.values(SECTION_STATS).reduce((acc,s)=>{ acc.items+=s.total; acc.correct+=s.correct; return acc; }, {items:0,correct:0});
+  const lines = [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total attempts: "+attemptsTotal,
+    "Time away from tab: "+formatSeconds(Math.round(timeAwayTotal/1000)),
+    "Total correct: "+totals.correct+" / "+totals.items
+  ];
+  return lines.join("\r\n");
+}
+function refreshPreview(){
+  document.getElementById("reportPreview").textContent = buildReportText();
+}
+function copyReport(){
+  const txt = buildReportText();
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert("Copied to clipboard.");
+  }).catch(()=>{
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); alert("Copied to clipboard."); }catch(e){}
+    document.body.removeChild(ta);
+  });
+}
+function downloadReport(){
+  const name = (document.getElementById("studentName").value || "SinNombre").trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  const txt = buildReportText();
+  const blob = new Blob([txt],{type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download=(name||"report")+"_Act1_porRegion_v3c.txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+}
+document.getElementById("previewBtn").addEventListener("click", refreshPreview);
+document.getElementById("copyBtn").addEventListener("click", copyReport);
+document.getElementById("downloadReport").addEventListener("click", downloadReport);
+// auto-fill preview on load after a moment
+setTimeout(refreshPreview, 400);
+</script>
+</body>
+</html>
