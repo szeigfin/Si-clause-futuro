@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reporteros2_unidad2_leccion2_irregularverbs1</title>
+<style>
+  :root{--bg:#f7fafc; --ink:#0f172a; --muted:#475569; --card:#fff; --accent:#0ea5e9; --ok:#16a34a; --bad:#dc2626; --chip:#e2e8f0; --drop:#f8fafc}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#0ea5e9,#22c55e);color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1180px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3{margin:.2rem 0 .6rem;font-size:1.05rem}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;font-size:.8rem}
+  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:12px}
+  @media(max-width:900px){ .grid2{grid-template-columns:1fr} }
+  .targets{display:grid;grid-template-columns:repeat(2,minmax(240px,1fr));gap:12px}
+  .target{border:2px dashed #cbd5e1;background:var(--drop);border-radius:12px;padding:12px;min-height:120px;position:relative;display:flex;flex-direction:column;gap:8px}
+  .target h4{margin:.1rem 0}
+  .bucket{min-height:44px;border:1px dashed #cbd5e1;border-radius:8px;background:#fff;padding:6px;display:flex;gap:6px;flex-wrap:wrap}
+  .bank{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fff}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;max-height:260px;overflow:auto}
+  .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-weight:700;display:inline-flex;gap:6px;align-items:center;cursor:pointer;user-select:none;border:1px solid #cbd5e1}
+  .chip.selected{outline:3px solid var(--accent)}
+  .ok{border-color:#86efac!important;background:#f0fdf4!important}
+  .bad{border-color:#fecaca!important;background:#fff7f7!important}
+  .ghostbtn{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
+  .primary{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;position:relative;margin-bottom:8px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;min-width:180px;background:#fff;cursor:pointer}
+  .speak{position:absolute;top:8px;right:8px;background:#e2e8f0;border:1px solid #cbd5e1;border-radius:999px;font-weight:800;padding:2px 8px;cursor:pointer}
+  .sent{border:2px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
+  .sent .drop{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border:1px dashed #cbd5e1;border-radius:8px;background:#fff;padding:6px}
+  .sent .bank{margin-top:6px}
+  .tip{display:none;opacity:0;transition:opacity .4s ease; background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:8px;margin:8px 0}
+  .tip.show{display:block;opacity:1}
+  input[type="text"]{padding:8px;border:1px solid #cbd5e1;border-radius:10px}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>reporteros2_unidad2_leccion2_irregularverbs1</h1>
+  <div style="margin-left:auto"><span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span></div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir"><b>ES:</b> Empieza con <b>vocabulario</b> (pedir, vestirse, morir, preferir, dormir, sentir) y luego practica el <b>pretérito</b>: ir, hacer, ver, dar y cambios de raíz en -ir.<br>
+    <b>EN:</b> Start with a <b>vocab review</b> (pedir, vestirse, morir, preferir, dormir, sentir) then practice the <b>preterite</b>: ir, hacer, ver, dar and -ir stem changes.</p>
+    <p class="dir"><b>ACTFL “I can…” (NH–IL):</b> recognize core meanings, sort preterite forms by subject, use irregulars in short sentences, and edit common errors. <b>Standards:</b> 1.1, 1.2, 1.3, 3.1.</p>
+    <div class="row"><span class="pill">Tiempo: <span id="timeOnPage">0s</span></span><span class="pill">Fuera de pestaña: <span id="tabAway">0s</span></span></div>
+
+    <details class="card" style="margin-top:10px">
+      <summary><strong>📚 Conjugación rápida</strong></summary>
+      <div class="dir">
+        <div><b>IR / SER:</b> fui, fuiste, fue, fuimos, fuisteis, fueron</div>
+        <div><b>HACER:</b> hice, hiciste, <b>hizo</b>, hicimos, hicisteis, hicieron</div>
+        <div><b>VER:</b> vi, viste, vio, vimos, visteis, vieron</div>
+        <div><b>DAR:</b> di, diste, dio, dimos, disteis, dieron</div>
+        <div style="margin-top:6px"><b>-ir stem change (solo 3ª pers.):</b> sentir → sintió/sintieron; vestir(se) → vistió/vistieron; dormir → durmió/durmieron; preferir → prefirió/prefirieron; morir → murió/murieron.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- V0: Vocab review -->
+  <section class="card" id="actV0">
+    <h3>Actividad 0 — Vocabulario (revisión)</h3>
+    <p class="dir">ES: Haz clic en una ficha (verbo) y luego en la tarjeta con el significado. EN: Click a verb chip, then click the correct meaning.</p>
+    <div class="grid2">
+      <div>
+        <div class="targets" id="v0Targets"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px">
+          <button class="ghostbtn" id="v0Reset">Reiniciar</button>
+          <button class="primary" id="v0Check">Calificar</button>
+        </div>
+        <div class="pill" id="v0Score">Correctos: 0 / 6</div>
+      </div>
+      <div>
+        <strong>Banco / Bank</strong>
+        <div class="bank"><div class="chips" id="v0Bank"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- V1: Conjugation sort -->
+  <section class="card" id="actV1">
+    <h3>Actividad 1 — Clasifica las formas (pretérito)</h3>
+    <p class="dir">Arrastra o haz clic para colocar cada forma en el pronombre correcto.</p>
+    <div class="grid2">
+      <div>
+        <div class="targets" id="v1Buckets"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px">
+          <button class="ghostbtn" id="v1Reset">Reiniciar</button>
+          <button class="primary" id="v1Check">Calificar</button>
+        </div>
+        <div class="pill" id="v1Score">Correctos: 0 / 24</div>
+      </div>
+      <div>
+        <strong>Formas / Forms</strong>
+        <div class="bank"><div class="chips" id="v1Bank"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A0: Classify -->
+  <section class="card" id="act0">
+    <h3>Actividad 2 — Clasifica los verbos</h3>
+    <p class="dir">ES: Haz clic en una ficha y luego en el recuadro correcto. EN: Click a chip, then click the correct box.</p>
+    <div class="grid2">
+      <div>
+        <div class="targets">
+          <div class="target" id="bucket-irreg">
+            <h4>Completamente irregulares (formas únicas)</h4>
+            <div class="bucket" data-bucket="irreg"></div>
+          </div>
+          <div class="target" id="bucket-stem">
+            <h4>Cambios de raíz (solo -ir, 3ª pers.)</h4>
+            <div class="bucket" data-bucket="stem"></div>
+          </div>
+        </div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px">
+          <button class="ghostbtn" id="a0Reset">Reiniciar</button>
+          <button class="primary" id="a0Check">Calificar</button>
+        </div>
+        <div class="pill" id="a0Score">Correctos: 0 / 11</div>
+      </div>
+      <div>
+        <strong>Banco / Bank</strong>
+        <div class="bank"><div class="chips" id="a0Bank"></div></div>
+      </div>
+    </div>
+    <div class="tip" id="tip-a0"><b>Regla:</b> los cambios de raíz en el pretérito ocurren <u>solo</u> en verbos de -ir y en 3ª persona.</div>
+  </section>
+
+  <!-- A1: Dropdown cloze (ir, hacer, ver, dar) -->
+  <section class="card" id="act1">
+    <h3>Actividad 3 — ¿Qué pasó? (ir, hacer, ver, dar) 🔊</h3>
+    <button class="ghostbtn" id="tipBtn1">💡 Tip</button>
+    <div class="tip" id="tip1">IR/SER comparten formas (fui, fuiste…), HACER tiene <b>hizo</b>, VER/DAR no llevan acentos (vi, dio…).</div>
+    <div id="a1Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a1Reset">Reiniciar</button>
+      <button class="primary" id="a1Check">Calificar</button>
+    </div>
+    <div class="pill" id="a1Score">Correctos: 0 / 12</div>
+  </section>
+
+  <!-- A2: Stem-change focus -->
+  <section class="card" id="act2">
+    <h3>Actividad 4 — Cambios de raíz (-ir)</h3>
+    <p class="dir">Solo cambian él/ella/usted y ellos/ellas/ustedes.</p>
+    <div id="a2Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a2Reset">Reiniciar</button>
+      <button class="primary" id="a2Check">Calificar</button>
+    </div>
+    <div class="pill" id="a2Score">Correctos: 0 / 8</div>
+  </section>
+
+  <!-- A3: Sentence builder -->
+  <section class="card" id="act3">
+    <h3>Actividad 5 — Construye oraciones (pretérito)</h3>
+    <div id="a3Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a3Reset">Reiniciar</button>
+      <button class="primary" id="a3Check">Calificar</button>
+    </div>
+    <div class="pill" id="a3Score">Correctos: 0 / 4</div>
+  </section>
+
+  <!-- A4: Mini reading cloze -->
+  <section class="card" id="act4">
+    <h3>Actividad 6 — Diario de viaje (cloze) 🔊</h3>
+    <div id="a4Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a4Reset">Reiniciar</button>
+      <button class="primary" id="a4Check">Calificar</button>
+    </div>
+    <div class="pill" id="a4Score">Correctos: 0 / 8</div>
+  </section>
+
+  <!-- A5: Error Hunt (reusable module) -->
+  <section class="card" id="act5">
+    <h3>Actividad 7 — Caza de errores / Error Hunt</h3>
+    <p class="dir">Corrige la oración en el campo. Reglas clave: <b>hizo</b> (no *hico*), <b>fueron</b> (no *fuieron*), <b>vi/vio</b> (sin acento), <b>dio</b> (sin acento), <b>durmió / sintió</b> (cambios en 3ª persona).</p>
+    <div id="a5Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a5Reset">Reiniciar</button>
+      <button class="primary" id="a5Check">Calificar</button>
+    </div>
+    <div class="pill" id="a5Score">Correctos: 0 / 8</div>
+  </section>
+
+  <!-- Report -->
+  <section class="card">
+    <h2>Informe / Report (.txt)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghostbtn" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghostbtn" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Timing */
+var pageStart = performance.now(), timeAwayTotal = 0, lastHiddenAt=null;
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt=null; }
+});
+setInterval(()=>{
+  const s = Math.round((performance.now()-pageStart)/1000);
+  const t = document.getElementById('timeOnPage'); if(t) t.textContent = s+'s';
+  const ta = document.getElementById('tabAway'); if(ta) ta.textContent = Math.round(timeAwayTotal/1000)+'s';
+}, 500);
+
+/* Utils */
+function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
+function speak(text){ try{ const u=new SpeechSynthesisUtterance(text); u.lang='es-ES'; speechSynthesis.speak(u);}catch(e){} }
+function showTip(id){ const el=document.getElementById(id); if(el){ el.classList.add('show'); setTimeout(()=>el.classList.remove('show'), 10000); } }
+let selectedChip=null;
+function selectChip(chip){ if(selectedChip===chip){ chip.classList.remove('selected'); selectedChip=null; } else { if(selectedChip) selectedChip.classList.remove('selected'); selectedChip=chip; chip.classList.add('selected'); } }
+function placeChip(container){ if(!selectedChip) return; container.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; }
+function normSpaces(s){ return String(s||'').replace(/\\s+/g,' ').trim(); }
+
+/* Scoring */
+let totalChecks=0, incV0=0, incV1=0, inc0=0, inc1=0, inc2=0, inc3=0, inc4=0, inc5=0;
+
+/* ---------- V0: Vocabulary review ---------- */
+const V0_ITEMS = [
+  {icon:"🙋‍♂️", es:"pedir", en:"to ask for / request"},
+  {icon:"👗", es:"vestirse", en:"to get dressed"},
+  {icon:"💀", es:"morir", en:"to die"},
+  {icon:"⭐", es:"preferir", en:"to prefer"},
+  {icon:"😴", es:"dormir", en:"to sleep"},
+  {icon:"💚", es:"sentir(se)", en:"to feel"}
+];
+function buildV0(){
+  const tgt = document.getElementById('v0Targets');
+  const bank = document.getElementById('v0Bank');
+  if(!tgt||!bank) return;
+  tgt.innerHTML=''; bank.innerHTML='';
+  shuffle(V0_ITEMS).forEach(item=>{
+    const card = document.createElement('div');
+    card.className='target';
+    card.dataset.expect=item.es;
+    card.innerHTML = `<h4 style="margin:0;font-size:1rem">${item.icon} ${item.en}</h4><div class="bucket" data-filled="0" style="min-height:40px">Coloca el verbo</div>`;
+    card.addEventListener('click', ()=>{ if(selectedChip){ placeChip(card.querySelector('.bucket')); }});
+    document.getElementById('v0Targets').appendChild(card);
+  });
+  shuffle(V0_ITEMS).forEach(x=>{
+    const chip = document.createElement('span'); chip.className='chip'; chip.dataset.key=x.es; chip.textContent=x.es;
+    chip.addEventListener('click', ()=>{
+      if(selectedChip===chip){ chip.classList.remove('selected'); selectedChip=null; }
+      else { if(selectedChip) selectedChip.classList.remove('selected'); selectedChip=chip; chip.classList.add('selected'); }
+    });
+    bank.appendChild(chip);
+  });
+  document.getElementById('v0Check').onclick = ()=>{
+    let correct=0, total=0;
+    document.querySelectorAll('#v0Targets .target').forEach(card=>{
+      const expect = card.dataset.expect;
+      const slot = card.querySelector('.bucket');
+      const got = slot.querySelector('.chip') ? slot.querySelector('.chip').dataset.key : null;
+      if(got){ total++; }
+      if(got===expect){ correct++; card.classList.add('ok'); setTimeout(()=>card.classList.remove('ok'),650); }
+      else if(got){ card.classList.add('bad'); setTimeout(()=>card.classList.remove('bad'),650); incV0++; slot.innerHTML='Coloca el verbo'; slot.setAttribute('data-filled','0'); }
+    });
+    totalChecks++;
+    document.getElementById('v0Score').textContent = `Correctos: ${correct} / ${V0_ITEMS.length}`;
+  };
+  document.getElementById('v0Reset').onclick = buildV0;
+}
+
+/* ---------- V1: Conjugation sort (pretérito) ---------- */
+const V1_PRONOUNS = [
+  {label:"yo", key:"yo"}, {label:"tú", key:"tú"},
+  {label:"él/ella/usted", key:"él"}, {label:"nosotros", key:"nosotros"},
+  {label:"vosotros", key:"vosotros"}, {label:"ellos/ellas/ustedes", key:"ellos"}
+];
+const V1_FORMS = [
+  // PEDIR
+  {form:"pedí", p:"yo"}, {form:"pediste", p:"tú"}, {form:"pidió", p:"él"}, {form:"pedimos", p:"nosotros"}, {form:"pedisteis", p:"vosotros"}, {form:"pidieron", p:"ellos"},
+  // VESTIRSE
+  {form:"me vestí", p:"yo"}, {form:"te vestiste", p:"tú"}, {form:"se vistió", p:"él"}, {form:"nos vestimos", p:"nosotros"}, {form:"os vestisteis", p:"vosotros"}, {form:"se vistieron", p:"ellos"},
+  // MORIR
+  {form:"morí", p:"yo"}, {form:"moriste", p:"tú"}, {form:"murió", p:"él"}, {form:"morimos", p:"nosotros"}, {form:"moristeis", p:"vosotros"}, {form:"murieron", p:"ellos"},
+  // PREFERIR
+  {form:"preferí", p:"yo"}, {form:"preferiste", p:"tú"}, {form:"prefirió", p:"él"}, {form:"preferimos", p:"nosotros"}, {form:"preferisteis", p:"vosotros"}, {form:"prefirieron", p:"ellos"}
+];
+function buildV1(){
+  const buckets = document.getElementById('v1Buckets'); const bank = document.getElementById('v1Bank');
+  if(!buckets||!bank) return;
+  buckets.innerHTML=''; bank.innerHTML='';
+  V1_PRONOUNS.forEach(pr=>{
+    const t=document.createElement('div'); t.className='target';
+    t.innerHTML = `<h4>${pr.label}</h4><div class="bucket" data-pr="${pr.key}"></div>`;
+    const bkt = t.querySelector('.bucket');
+    bkt.addEventListener('click', ()=>{ if(selectedChip){ placeChip(bkt); }});
+    buckets.appendChild(t);
+  });
+  shuffle(V1_FORMS).forEach(f=>{
+    const chip=document.createElement('span'); chip.className='chip'; chip.dataset.p=f.p; chip.textContent=f.form;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', (e)=>{ selectedChip=chip; chip.classList.add('selected'); e.dataTransfer.setData('text/plain', f.form); });
+    chip.addEventListener('click', ()=>{
+      if(selectedChip===chip){ chip.classList.remove('selected'); selectedChip=null; }
+      else { if(selectedChip) selectedChip.classList.remove('selected'); selectedChip=chip; chip.classList.add('selected'); }
+    });
+    bank.appendChild(chip);
+  });
+  // enable drop
+  buckets.querySelectorAll('.bucket').forEach(b=>{
+    b.addEventListener('dragover', (e)=>e.preventDefault());
+    b.addEventListener('drop', (e)=>{ e.preventDefault(); if(selectedChip){ placeChip(b); } });
+  });
+  document.getElementById('v1Check').onclick = ()=>{
+    let correct=0, total=V1_FORMS.length;
+    buckets.querySelectorAll('.bucket').forEach(b=>{
+      b.querySelectorAll('.chip').forEach(ch=>{
+        const good = ch.dataset.p === b.dataset.pr;
+        if(good){ correct++; }
+        else { incV1++; }
+      });
+      if(b.children.length>0){ b.parentElement.classList.add('ok'); setTimeout(()=>b.parentElement.classList.remove('ok'),600); }
+    });
+    totalChecks++;
+    document.getElementById('v1Score').textContent = `Correctos: ${correct} / ${total}`;
+  };
+  document.getElementById('v1Reset').onclick = buildV1;
+}
+
+/* A0 */
+const A0_BANK = [
+  {text:"ir", type:"irreg"}, {text:"hacer", type:"irreg"}, {text:"ver", type:"irreg"}, {text:"dar", type:"irreg"},
+  {text:"sentir", type:"stem"}, {text:"dormir", type:"stem"}, {text:"vestir(se)", type:"stem"}, {text:"morir", type:"stem"}, {text:"preferir", type:"stem"}
+];
+function buildA0(){
+  const bank = document.getElementById('a0Bank'); const buckets=document.querySelectorAll('.bucket'); bank.innerHTML='';
+  shuffle(A0_BANK).forEach(it=>{
+    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=it.text; chip.dataset.type=it.type;
+    chip.addEventListener('click', ()=> selectChip(chip));
+    bank.appendChild(chip);
+  });
+  const wrappers = document.querySelectorAll('#act0 .bucket');
+  wrappers.forEach(b=>{ b.innerHTML=''; b.addEventListener('click', ()=> placeChip(b)); });
+  document.getElementById('a0Check').onclick = ()=>{
+    let correct=0, total=0;
+    document.querySelectorAll('#act0 .bucket').forEach(b=>{
+      const expect=b.dataset.bucket;
+      b.querySelectorAll('.chip').forEach(ch=>{ total++; if(ch.dataset.type===expect){ correct++; } else { inc0++; } });
+      if(b.children.length>0){ b.parentElement.classList.add('ok'); setTimeout(()=>b.parentElement.classList.remove('ok'),600); }
+    });
+    totalChecks++;
+    document.getElementById('a0Score').textContent = `Correctos: ${correct} / ${total||0}`;
+    showTip('tip-a0');
+  };
+  document.getElementById('a0Reset').onclick = buildA0;
+}
+
+/* A1 */
+const A1 = [
+  {s:"Ayer nosotros ___ al museo.", a:"fuimos", say:"Ayer nosotros fuimos al museo.", hint:"IR/SER: fuimos"},
+  {s:"Ella ___ la tarea temprano.", a:"hizo", say:"Ella hizo la tarea temprano.", hint:"HACER: hizo"},
+  {s:"Yo ___ una película muy buena.", a:"vi", say:"Yo vi una película muy buena.", hint:"VER: vi"},
+  {s:"Ellos me ___ un recuerdo del viaje.", a:"dieron", say:"Ellos me dieron un recuerdo del viaje.", hint:"DAR: dieron"},
+  {s:"Tú ___ a la playa el sábado, ¿no?", a:"fuiste", say:"Tú fuiste a la playa el sábado, ¿no?", hint:"IR/SER: fuiste"},
+  {s:"Nosotros ___ una excursión en el parque.", a:"hicimos", say:"Nosotros hicimos una excursión en el parque.", hint:"HACER: hicimos"},
+  {s:"Ustedes ___ fotos de las montañas.", a:"vieron", say:"Ustedes vieron fotos de las montañas.", hint:"VER: vieron"},
+  {s:"Yo te ___ la dirección del hotel.", a:"di", say:"Yo te di la dirección del hotel.", hint:"DAR: di"},
+  {s:"Él ___ al concierto anoche.", a:"fue", say:"Él fue al concierto anoche.", hint:"IR/SER: fue"},
+  {s:"Vosotros ___ una lista de planes.", a:"hicisteis", say:"Vosotros hicisteis una lista de planes.", hint:"HACER: hicisteis"},
+  {s:"Ellas ___ una exposición fantástica.", a:"vieron", say:"Ellas vieron una exposición fantástica.", hint:"VER: vieron"},
+  {s:"Tú me ___ ayuda con el equipaje.", a:"diste", say:"Tú me diste ayuda con el equipaje.", hint:"DAR: diste"}
+];
+const A1_OPTS = ["fui","fuiste","fue","fuimos","fuisteis","fueron","hice","hiciste","hizo","hicimos","hicisteis","hicieron","vi","viste","vio","vimos","visteis","vieron","di","diste","dio","dimos","disteis","dieron"];
+function buildA1(){
+  const c=document.getElementById('a1Items'); c.innerHTML='';
+  A1.forEach((it,i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const sel = `<select class="a1sel" data-i="${i}"><option value="">—</option>${A1_OPTS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    q.innerHTML = `<button class="speak">🔊</button><div><strong>${i+1}.</strong> ${it.s.replace('___', sel)} <button class="ghostbtn hint" data-i="${i}">Pista</button> <span class="pill" id="h-${i}" style="display:none">${it.hint}</span></div>`;
+    q.querySelector('.speak').addEventListener('click', ()=> speak(it.say));
+    c.appendChild(q);
+  });
+  c.querySelectorAll('.hint').forEach(b=> b.addEventListener('click', ()=>{
+    const i=b.getAttribute('data-i'); const s=document.getElementById('h-'+i); s.style.display = s.style.display==='none'?'inline-block':'none';
+  }));
+  document.getElementById('a1Check').onclick = ()=>{
+    let correct=0;
+    document.querySelectorAll('.a1sel').forEach(sel=>{
+      const i=+sel.dataset.i, val=sel.value, q=sel.closest('.q');
+      if(val===A1[i].a){ correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(val) inc1++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a1Score').textContent = `Correctos: ${correct} / ${A1.length}`;
+    showTip('tip1');
+  };
+  document.getElementById('a1Reset').onclick = buildA1;
+  document.getElementById('tipBtn1').onclick = ()=> showTip('tip1');
+}
+
+/* A2 */
+const A2 = [
+  {s:"Anoche él ___ (dormir) ocho horas.", a:"durmió"},
+  {s:"Ellos ___ (dormir) en el campamento.", a:"durmieron"},
+  {s:"Ayer ella se ___ (sentir) mal.", a:"sintió"},
+  {s:"Los estudiantes se ___ (sentir) muy libres en el viaje.", a:"sintieron"},
+  {s:"Yo ___ (dormir) en el albergue.", a:"dormí"},
+  {s:"Nosotros nos ___ (sentir) mejor después.", a:"sentimos"},
+  {s:"Tú ___ (dormir) poco.", a:"dormiste"},
+  {s:"Vosotros os ___ (sentir) cansados.", a:"sentisteis"}
+];
+const A2_OPTS = ["dormí","dormiste","durmió","dormimos","dormisteis","durmieron","sentí","sentiste","sintió","sentimos","sentisteis","sintieron"];
+function buildA2(){
+  const c=document.getElementById('a2Items'); c.innerHTML='';
+  A2.forEach((it,i)=>{
+    const q=document.createElement('div'); q.className='q';
+    const sel=`<select class="a2sel" data-i="${i}"><option value="">—</option>${A2_OPTS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    q.innerHTML = `<div><strong>${i+1}.</strong> ${it.s.replace('___', sel)}</div>`;
+    c.appendChild(q);
+  });
+  document.getElementById('a2Check').onclick = ()=>{
+    let correct=0;
+    document.querySelectorAll('.a2sel').forEach(sel=>{
+      const i=+sel.dataset.i, val=sel.value, q=sel.closest('.q');
+      if(val===A2[i].a){ correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(val) inc2++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a2Score').textContent = `Correctos: ${correct} / ${A2.length}`;
+  };
+  document.getElementById('a2Reset').onclick = buildA2;
+}
+
+/* A3 */
+const A3 = [
+  {model:["Ayer","fuimos","al","museo","y","vimos","una","exposición","."], words:["Ayer","fuimos","al","museo","y","vimos","una","exposición","."]},
+  {model:["Ella","hizo","la","tarea","y","me","dio","su","opinión","."], words:["Ella","hizo","la","tarea","y","me","dio","su","opinión","."]},
+  {model:["Ellos","durmieron","temprano","después","del","viaje","."], words:["Ellos","durmieron","temprano","después","del","viaje","."]},
+  {model:["El","guía","se","sintió","feliz","y","nos","dio","una","recomendación","."], words:["El","guía","se","sintió","feliz","y","nos","dio","una","recomendación","."]}
+];
+function buildA3(){
+  const c=document.getElementById('a3Items'); c.innerHTML='';
+  A3.forEach((it,idx)=>{
+    const s=document.createElement('div'); s.className='sent q';
+    s.innerHTML = `<div><strong>${idx+1}.</strong> Ordena las palabras.</div><div class="drop" id="a3drop-${idx}"></div><div class="bank"><div class="chips" id="a3bank-${idx}"></div></div>`;
+    c.appendChild(s);
+    const bank = s.querySelector('#a3bank-'+idx);
+    shuffle(it.words).forEach(w=>{
+      const chip=document.createElement('span'); chip.className='chip'; chip.textContent=w; chip.draggable=true;
+      chip.addEventListener('dragstart', (e)=>{ selectedChip=chip; chip.classList.add('selected'); e.dataTransfer.setData('text/plain', w); });
+      chip.addEventListener('click', ()=>{ const drop=s.querySelector('.drop'); if(chip.parentElement===bank){ drop.appendChild(chip);} else { bank.appendChild(chip);} chip.classList.remove('selected'); selectedChip=null; });
+      bank.appendChild(chip);
+    });
+    const drop = s.querySelector('.drop');
+    drop.addEventListener('dragover', (e)=>e.preventDefault());
+    drop.addEventListener('drop', (e)=>{ e.preventDefault(); if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+    drop.addEventListener('click', ()=>{ if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+  });
+  document.getElementById('a3Check').onclick = ()=>{
+    let ok=0;
+    A3.forEach((it,idx)=>{
+      const drop=document.getElementById('a3drop-'+idx);
+      const got = Array.from(drop.querySelectorAll('.chip')).map(x=>x.textContent);
+      const q = drop.closest('.q');
+      const pass = got.length===it.model.length && it.model.every((w,i)=> w===got[i]);
+      if(pass){ ok++; q.classList.add('correct'); q.classList.remove('incorrect'); } else { if(got.length>0) inc3++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a3Score').textContent = `Correctos: ${ok} / ${A3.length}`;
+  };
+  document.getElementById('a3Reset').onclick = buildA3;
+}
+
+/* A4 */
+const A4 = [
+  {text:"Ayer nosotros ___ (ir) a la ciudad y ___ (ver) un desfile.", answers:["fuimos","vimos"], say:"Ayer nosotros fuimos a la ciudad y vimos un desfile."},
+  {text:"El guía ___ (dar) instrucciones y nosotros ___ (hacer) una pausa.", answers:["dio","hicimos"], say:"El guía dio instrucciones y nosotros hicimos una pausa."},
+  {text:"Por la noche, ellos ___ (dormir) bien y ella se ___ (sentir) mejor.", answers:["durmieron","sintió"], say:"Por la noche, ellos durmieron bien y ella se sintió mejor."},
+  {text:"Yo ___ (ver) fotos y tú me ___ (dar) tu opinión.", answers:["vi","diste"], say:"Yo vi fotos y tú me diste tu opinión."}
+];
+const A4_OPTS = ["fui","fuiste","fue","fuimos","fueron","vi","vimos","vio","dieron","dio","diste","hice","hicimos","hizo","durmieron","sintió"];
+function buildA4(){
+  const c=document.getElementById('a4Items'); c.innerHTML='';
+  A4.forEach((it,i)=>{
+    const q=document.createElement('div'); q.className='q';
+    let html=it.text;
+    it.answers.forEach(()=>{
+      const sel=`<select class="a4sel" data-i="${i}"><option value="">—</option>${A4_OPTS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+      html = html.replace('___', sel);
+    });
+    q.innerHTML = `<button class="speak">🔊</button><div><strong>${i+1}.</strong> ${html}</div>`;
+    q.querySelector('.speak').addEventListener('click', ()=> speak(it.say));
+    c.appendChild(q);
+  });
+  document.getElementById('a4Check').onclick = ()=>{
+    let correct=0,total=0;
+    document.querySelectorAll('#act4 .q').forEach((qdiv,qi)=>{
+      const sels=qdiv.querySelectorAll('.a4sel'); total+=A4[qi].answers.length; let good=0;
+      sels.forEach((sel,idx)=>{ if(sel.value===A4[qi].answers[idx]) good++; });
+      if(good===A4[qi].answers.length){ correct+=good; qdiv.classList.add('correct'); qdiv.classList.remove('incorrect'); }
+      else{ if(Array.from(sels).some(s=>s.value)) inc4++; qdiv.classList.add('incorrect'); qdiv.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a4Score').textContent = `Correctos: ${correct} / ${total}`;
+  };
+  document.getElementById('a4Reset').onclick = buildA4;
+}
+
+/* A5: Reusable Error Hunt Module */
+function makeErrorHunt({containerId, items, checkBtnId, resetBtnId, scoreId, incorrectCounterRef}){
+  const state = { order: [] };
+  function build(){
+    const c = document.getElementById(containerId);
+    if(!c) return;
+    c.innerHTML='';
+    state.order = shuffle(items.slice());
+    state.order.forEach((it,i)=>{
+      const q=document.createElement('div'); q.className='q';
+      q.innerHTML = `<div><strong>${i+1}.</strong> ${it.wrong}</div>
+                     <div style="margin-top:6px">
+                       <input type="text" class="eh-in" data-i="${i}" placeholder="Escribe la oración corregida…" style="width:100%">
+                       <button class="ghostbtn eh-hint" data-i="${i}" style="margin-top:6px">Pista</button>
+                       <span class="pill" id="eh-h-${i}" style="display:none">${it.hint}</span>
+                     </div>`;
+      c.appendChild(q);
+    });
+    c.querySelectorAll('.eh-hint').forEach(b=> b.addEventListener('click', ()=>{
+      const i=b.getAttribute('data-i'); const s=document.getElementById('eh-h-'+i); s.style.display = s.style.display==='none'?'inline-block':'none';
+    }));
+  }
+  function check(){
+    let correct=0;
+    const c = document.getElementById(containerId);
+    const inputs = c.querySelectorAll('.eh-in');
+    inputs.forEach(inp=>{
+      const i=+inp.dataset.i;
+      const expected = state.order[i].right;
+      const q=inp.closest('.q');
+      if(normSpaces(inp.value) && normSpaces(inp.value)===normSpaces(expected)){
+        correct++; q.classList.add('correct'); q.classList.remove('incorrect');
+      }else{
+        if(normSpaces(inp.value)) incorrectCounterRef.count++;
+        q.classList.add('incorrect'); q.classList.remove('correct');
+      }
+    });
+    document.getElementById(scoreId).textContent = `Correctos: ${correct} / ${items.length}`;
+    totalChecks++;
+  }
+  function reset(){ build(); document.getElementById(scoreId).textContent = `Correctos: 0 / ${items.length}`; }
+  document.getElementById(checkBtnId).onclick = check;
+  document.getElementById(resetBtnId).onclick = reset;
+  build();
+  return { build, check, reset };
+}
+
+/* Error Hunt items for this page */
+const EH_ITEMS = [
+  {wrong:"Ayer yo ví una película y le dí mi opinión.", right:"Ayer yo vi una película y le di mi opinión.", hint:"VER/DAR no llevan acento: vi, dio."},
+  {wrong:"Ella hico la reserva y fuimos al hotel.", right:"Ella hizo la reserva y fuimos al hotel.", hint:"HACER: hizo (z), no *hico*."},
+  {wrong:"Ellos fuieron a la playa y vieron ballenas.", right:"Ellos fueron a la playa y vieron ballenas.", hint:"IR/SER: fueron (no *fuieron*)."},
+  {wrong:"Anoche él dormió bien y ella se sentió mejor.", right:"Anoche él durmió bien y ella se sintió mejor.", hint:"Stem-change -ir: durmió / sintió."},
+  {wrong:"Nosotros hicimos una excursión y vió pingüinos.", right:"Nosotros hicimos una excursión y vio pingüinos.", hint:"VER: vio (sin acento)."},
+  {wrong:"El guía nos dió mapas y istrucciones.", right:"El guía nos dio mapas y instrucciones.", hint:"DAR: dio (sin acento) + ortografía 'instrucciones'."},
+  {wrong:"Ustedes fuistéis al museo y vistes la exposición.", right:"Ustedes fuisteis al museo y visteis la exposición.", hint:"Vosotros: fuisteis / visteis."},
+  {wrong:"Ellas hizieron planes y dierón una recomendación.", right:"Ellas hicieron planes y dieron una recomendación.", hint:"HICIERON (no *hizieron*), DIERON (sin acento)."}
+];
+
+/* Report */
+function formatSeconds(s){ const m=Math.floor(s/60), r=s%60; return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  const name=(document.getElementById('studentName').value||'SinNombre').trim();
+  const secs=Math.round((performance.now()-pageStart)/1000);
+  return [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total checks: "+totalChecks,
+    "Incorrect V0 (vocab review): "+incV0,
+    "Incorrect V1 (conj sort): "+incV1,
+    "Incorrect A0 (classify): "+inc0,
+    "Incorrect A1 (ir/hacer/ver/dar): "+inc1,
+    "Incorrect A2 (stem-change): "+inc2,
+    "Incorrect A3 (builder): "+inc3,
+    "Incorrect A4 (reading cloze): "+inc4,
+    "Incorrect A5 (error hunt): "+inc5
+  ].join("\\r\\n");
+}
+function refreshPreview(){ const el=document.getElementById('reportPreview'); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  const txt=buildReportText();
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(()=>alert('Copied')).catch(()=>fallback()); }
+  else fallback();
+  function fallback(){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Copied'); }catch(e){} document.body.removeChild(ta); }
+}
+function downloadReport(){
+  const name=(document.getElementById('studentName').value||'SinNombre').trim().replace(/[^\\w\\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  const blob=new Blob([buildReportText()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(name||'report')+"_reporteros2_unidad2_leccion2_irregularverbs1.txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+/* Init */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildV0(); buildV1();
+  buildA0(); buildA1(); buildA2(); buildA3(); buildA4();
+  const moduleA5 = makeErrorHunt({
+    containerId:'a5Items',
+    items: EH_ITEMS,
+    checkBtnId:'a5Check',
+    resetBtnId:'a5Reset',
+    scoreId:'a5Score',
+    incorrectCounterRef:{ get count(){return inc5;}, set count(v){ inc5=v; } }
+  });
+  document.getElementById('previewBtn').addEventListener('click', refreshPreview);
+  document.getElementById('copyBtn').addEventListener('click', copyReport);
+  document.getElementById('downloadReport').addEventListener('click', downloadReport);
+  setTimeout(refreshPreview, 600);
+  showTip('tip-a0');
+});
+</script>
+</body>
+</html>
