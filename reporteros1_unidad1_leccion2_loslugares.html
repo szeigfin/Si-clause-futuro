@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reporteros1_unidad1_leccion2_loslugares</title>
+<style>
+  :root{
+    --bg:#f7fafc; --ink:#0f172a; --muted:#475569; --card:#fff; --accent:#2563eb;
+    --ok:#16a34a; --bad:#dc2626; --chip:#e2e8f0; --drop:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1180px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3{margin:.2rem 0 .6rem;font-size:1.05rem}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;font-size:.8rem}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:12px}
+  @media(max-width:900px){ .grid2{grid-template-columns:1fr} }
+  .targets{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));gap:12px}
+  @media(max-width:860px){ .targets{grid-template-columns:repeat(2,minmax(180px,1fr))} }
+  .target{border:2px dashed #cbd5e1;background:var(--drop);border-radius:12px;padding:12px;min-height:160px;position:relative;display:flex;flex-direction:column;gap:10px;justify-content:center;align-items:center;text-align:center}
+  .hint{font-size:.9rem;color:#64748b}
+  .big{font-size:46px;line-height:1}
+  .slot{min-height:38px;display:flex;align-items:center;justify-content:center;border:1px dashed #cbd5e1;border-radius:8px;width:100%;padding:6px 8px;background:#fff}
+  .ok{border-color:#86efac!important;background:#f0fdf4!important}
+  .bad{border-color:#fecaca!important;background:#fff7f7!important}
+  .bank{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fff}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;max-height:260px;overflow:auto}
+  .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-weight:700;display:inline-flex;gap:6px;align-items:center;cursor:pointer;user-select:none;border:1px solid #cbd5e1}
+  .chip.selected{outline:3px solid var(--accent)}
+  .ghostbtn{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
+  .primary{background:#2563eb;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .small{font-size:.9rem;color:#334155}
+  .q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;position:relative;margin-bottom:8px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;width:auto;min-width:180px;background:#fff;cursor:pointer}
+  .space{height:8px}
+  .ref{margin-top:8px;border-top:1px dashed #e5e7eb;padding-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+  .ref img{height:64px;border:1px solid #e5e7eb;border-radius:8px;background:#fff}
+  .hintbtn{border:1px dashed #94a3b8;background:#f1f5f9;border-radius:8px;padding:4px 8px;cursor:pointer;font-weight:700}
+  .inline-hint{display:none;color:#0f766e;background:#ecfeff;border:1px solid #99f6e4;border-radius:8px;padding:4px 8px;margin-left:8px}
+  /* Sentence assembly (A4) */
+  .sent{border:2px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
+  .sent .drop{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border:1px dashed #cbd5e1;border-radius:8px;background:#fff;padding:6px}
+  .sent .bank{margin-top:6px}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>reporteros1_unidad1_leccion2_loslugares</h1>
+  <div style="margin-left:auto">
+    <span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir">
+      <b>ES:</b> Completa las actividades sobre <i>lugares</i>. Coloca todas las respuestas y luego pulsa <b>Calificar</b> en cada actividad. <br>
+      <b>EN:</b> Complete the activities about <i>places</i>. Place all answers, then press <b>Check</b> in each activity.
+    </p>
+    <p class="dir"><b>ACTFL “I can…” (NH–IL):</b> <br>
+      • I can identify and categorize places in a community and on a map. <span class="pill">Interpretive</span><br>
+      • I can say where I live and describe places in simple sentences. <span class="pill">Presentational</span><br>
+      • I can ask and answer where a place is and what type it is. <span class="pill">Interpersonal</span>
+    </p>
+    <p class="dir"><b>ACTFL Standards (World-Readiness):</b> Communication <span class="kbd">1.1 Interpersonal</span>, <span class="kbd">1.2 Interpretive</span>, <span class="kbd">1.3 Presentational</span>; Cultures <span class="kbd">2.1 Products/Practices</span> (maps & capitals).</p>
+    <p class="dir"><b>Glosario / Glossary:</b> <span class="kbd">cerca = near</span>.</p>
+    <div class="row small">
+      <span class="pill">Tiempo / Time: <span id="timeOnPage">0s</span></span>
+      <span class="pill">Fuera de pestaña / Tab-away: <span id="tabAway">0s</span></span>
+    </div>
+  </section>
+
+  <!-- ACTIVITY 1 (unchanged visuals) -->
+  <section class="card" id="act1">
+    <h3>Actividad 1 — Empareja la pista con la palabra / Match the hint to the word</h3>
+    <div class="grid2">
+      <div>
+        <div class="targets" id="a1Targets"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px">
+          <button class="ghostbtn" id="a1Reset">Reiniciar</button>
+          <button class="primary" id="a1Check">Calificar</button>
+        </div>
+        <div class="small" id="a1Score">Correctos: 0 / 6</div>
+      </div>
+      <div>
+        <strong>Banco de fichas / Token bank</strong>
+        <div class="bank"><div class="chips" id="a1Bank"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY 2: dropdown cloze with per-item hints -->
+  <section class="card" id="act2">
+    <h3>Actividad 2 — Completa con el mejor término (menú) / Complete with the best term (dropdown)</h3>
+    <div id="a2Items" class="grid2"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a2Reset">Reiniciar</button>
+      <button class="primary" id="a2Check">Calificar</button>
+    </div>
+    <div class="small" id="a2Score">Correctos: 0 / 8</div>
+  </section>
+
+  <!-- ACTIVITY 3: dropdown concept -->
+  <section class="card" id="act3">
+    <h3>Actividad 3 — Elige la mejor opción / Choose the best option</h3>
+    <div id="a3Items" class="grid2"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a3Reset">Reiniciar</button>
+      <button class="primary" id="a3Check">Calificar</button>
+    </div>
+    <div class="small" id="a3Score">Correctos: 0 / 6</div>
+  </section>
+
+  <!-- ACTIVITY 4: Sentence assembly (word chips) with small example -->
+  <section class="card" id="act4">
+    <h3>Actividad 4 — Ordena palabras para formar oraciones / Build sentences from word chips</h3>
+    <p class="small">Ejemplo / Example (resuelto): <span class="kbd">Yo vivo en el estado de Vermont.</span></p>
+    <div id="a4Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a4Reset">Reiniciar</button>
+      <button class="primary" id="a4Check">Calificar</button>
+    </div>
+    <div class="small" id="a4Score">Correctos: 0 / 5</div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="card">
+    <h2>Informe / Report (plain text)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghostbtn" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghostbtn" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ---------- Timing & tab-away ---------- */
+var pageStart = performance.now();
+var timeAwayTotal = 0, lastHiddenAt = null;
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt = null; }
+});
+setInterval(function(){
+  var sec = Math.round((performance.now()-pageStart)/1000);
+  var t=document.getElementById("timeOnPage"); if(t) t.textContent=sec+"s";
+  var ta=document.getElementById("tabAway"); if(ta) ta.textContent=Math.round(timeAwayTotal/1000)+"s";
+}, 500);
+
+/* ---------- Utils ---------- */
+function shuffle(a){ var x=a.slice(); for(var i=x.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=x[i]; x[i]=x[j]; x[j]=t;} return x; }
+function norm(s){ return (s||"").normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' '); }
+function commons(file){ return "https://commons.wikimedia.org/wiki/Special:FilePath/"+file; }
+function flash(el, cls){ el.classList.add(cls); setTimeout(()=>el.classList.remove(cls), 600); }
+
+/* ---------- Global scoring ---------- */
+var totalChecks=0;
+var incorrectA1=0, incorrectA2=0, incorrectA3=0, incorrectA4=0;
+
+/* ---------- Activity 1: emoji + hints ---------- */
+const A1_HINTS = [
+  {key:"barrio", emoji:"🏘️", hint:"zona pequeña de una ciudad; vecinos"},
+  {key:"capital", emoji:"🏛️", hint:"ciudad principal de un país"},
+  {key:"ciudad", emoji:"🌆", hint:"lugar grande con muchos habitantes"},
+  {key:"estado", emoji:"🗺️", hint:"división política dentro de un país"},
+  {key:"pais", emoji:"🌍", hint:"territorio nacional con gobierno"},
+  {key:"pueblo", emoji:"🏡", hint:"lugar pequeño; menos habitantes"},
+];
+const WORDS = [
+  {word:"el barrio", key:"barrio"},
+  {word:"la capital", key:"capital"},
+  {word:"la ciudad", key:"ciudad"},
+  {word:"el estado", key:"estado"},
+  {word:"el país", key:"pais"},
+  {word:"el pueblo", key:"pueblo"},
+];
+function buildAct1(){
+  const tgt = document.getElementById('a1Targets');
+  const bank = document.getElementById('a1Bank');
+  tgt.innerHTML=''; bank.innerHTML='';
+  shuffle(A1_HINTS).forEach(h=>{
+    const card = document.createElement('div');
+    card.className='target'; card.dataset.expect=h.key;
+    card.innerHTML = `<div class="big">${h.emoji}</div><div class="hint">${h.hint}</div><div class="slot" data-filled="0">Coloca la palabra</div>`;
+    card.addEventListener('click', ()=>{ if(selectedChip){ placeChipA1(card); }});
+    tgt.appendChild(card);
+  });
+  let selectedChip=null;
+  function select(c){ if(selectedChip===c){ c.classList.remove('selected'); selectedChip=null; } else { if(selectedChip) selectedChip.classList.remove('selected'); selectedChip=c; c.classList.add('selected'); } }
+  shuffle(WORDS).forEach(w=>{
+    const chip = document.createElement('div'); chip.className='chip'; chip.textContent=w.word; chip.dataset.key=w.key;
+    chip.addEventListener('click', ()=> select(chip));
+    bank.appendChild(chip);
+  });
+  function placeChipA1(card){
+    const chip = selectedChip; if(!chip) return;
+    const slot = card.querySelector('.slot');
+    if(slot.getAttribute('data-filled')==='1'){ flash(card,'bad'); return; }
+    slot.textContent = chip.textContent; slot.setAttribute('data-key', chip.dataset.key); slot.setAttribute('data-filled','1');
+    chip.remove(); selectedChip=null;
+  }
+  document.getElementById('a1Check').onclick = ()=>{
+    const cards = tgt.querySelectorAll('.target'); let correct=0;
+    cards.forEach(c=>{
+      const expect = c.dataset.expect;
+      const slot = c.querySelector('.slot');
+      const got = slot.getAttribute('data-key');
+      if(got===expect){ c.classList.add('ok'); c.classList.remove('bad'); correct++; }
+      else{
+        if(slot.getAttribute('data-filled')==='1'){ incorrectA1++; }
+        c.classList.add('bad'); c.classList.remove('ok');
+        slot.textContent='Coloca la palabra'; slot.setAttribute('data-filled','0'); slot.removeAttribute('data-key');
+      }
+    });
+    totalChecks++;
+    document.getElementById('a1Score').textContent = `Correctos: ${correct} / ${cards.length}`;
+    setTimeout(()=>{ cards.forEach(c=>c.classList.remove('bad')); }, 650);
+  };
+  document.getElementById('a1Reset').onclick = buildAct1;
+}
+
+/* ---------- Activity 2: dropdown cloze with Hints ---------- */
+const A2 = [
+  {sent:"Madrid es la ___ de España.", answer:"capital", refs:[["España","Spain_location_map.svg"]], hint:"ciudad principal de un país"},
+  {sent:"Vermont es un ___ de los Estados Unidos.", answer:"estado", refs:[["EE. UU.","Blank_US_Map,_Mainland_with_no_States.svg"]], hint:"división política dentro de un país"},
+  {sent:"Cusco es una ___ histórica en Perú.", answer:"ciudad", refs:[["Perú","Blank_map_of_Peru.svg"]], hint:"lugar grande con muchos habitantes"},
+  {sent:"Mi ___ se llama Santa Lucía.", answer:"barrio", refs:[], hint:"zona pequeña dentro de una ciudad"},
+  {sent:"Canadá es un ___ muy grande.", answer:"país", refs:[["Canadá","Canada_blank_map.svg"]], hint:"territorio nacional con gobierno"},
+  {sent:"Quito es la ___ de Ecuador.", answer:"capital", refs:[["Ecuador","Ecuador_location_map.svg"]], hint:"sede del gobierno nacional"},
+  {sent:"Vivo en un ___ pequeño cerca de una ciudad.", answer:"pueblo", refs:[], hint:"lugar pequeño; <b>cerca</b> = near"},
+  {sent:"California es un ___ con muchas ciudades.", answer:"estado", refs:[["Estados Unidos","Blank_US_Map,_Mainland_with_no_States.svg"]], hint:"tiene gobernador y leyes locales"},
+];
+const OPTIONS = ["barrio","pueblo","ciudad","estado","país","capital"];
+function buildAct2(){
+  const cont = document.getElementById('a2Items');
+  cont.innerHTML='';
+  A2.forEach((it, idx)=>{
+    const q = document.createElement('div'); q.className='q';
+    const sel = `<select class="a2sel" data-idx="${idx}"><option value="">— selecciona —</option>${OPTIONS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    q.innerHTML = `<div><strong>${idx+1}.</strong> ${it.sent.replace('___', sel)} <button class="hintbtn" data-h="${idx}">Pista / Hint</button> <span class="inline-hint" id="hint-${idx}">${it.hint}</span></div>`;
+    if(it.refs && it.refs.length){
+      const ref = document.createElement('div'); ref.className='ref';
+      it.refs.forEach(([label,file])=>{
+        const img = document.createElement('img'); img.alt = label; img.src = commons(file);
+        const cap = document.createElement('span'); cap.textContent = label;
+        const wrap = document.createElement('div'); wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.alignItems='center'; wrap.style.fontSize='.8rem'; wrap.style.color='#475569';
+        wrap.appendChild(img); wrap.appendChild(cap); ref.appendChild(wrap);
+      });
+      q.appendChild(ref);
+    }
+    cont.appendChild(q);
+  });
+  // hint wiring
+  cont.querySelectorAll('.hintbtn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const i = b.getAttribute('data-h'); const span = document.getElementById('hint-'+i);
+      span.style.display = span.style.display==='inline-block' ? 'none' : 'inline-block';
+    });
+  });
+  document.getElementById('a2Check').onclick = ()=>{
+    let correct=0;
+    document.querySelectorAll('.a2sel').forEach(sel=>{
+      const i = +sel.dataset.idx;
+      const val = norm(sel.value);
+      const ok = norm(A2[i].answer)===val;
+      const q = sel.closest('.q');
+      if(ok){ correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(val) incorrectA2++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a2Score').textContent = `Correctos: ${correct} / ${A2.length}`;
+  };
+  document.getElementById('a2Reset').onclick = buildAct2;
+}
+
+/* ---------- Activity 3: dropdown concept ---------- */
+const A3 = [
+  {prompt:"Lima es la ___ de Perú.", options:["barrio","capital","pueblo"], answer:"capital"},
+  {prompt:"Springfield (en muchos estados) es una ___.", options:["ciudad","país","capital"], answer:"ciudad"},
+  {prompt:"Bolivia es un ___ en Sudamérica.", options:["estado","país","barrio"], answer:"país"},
+  {prompt:"El Bronx es un ___ de Nueva York.", options:["barrio","estado","capital"], answer:"barrio"},
+  {prompt:"Texas es un ___ de EE. UU.", options:["estado","país","pueblo"], answer:"estado"},
+  {prompt:"Tepoztlán es un ___ mexicano famoso por su mercado.", options:["pueblo","ciudad","estado"], answer:"pueblo"},
+];
+function buildAct3(){
+  const cont = document.getElementById('a3Items');
+  cont.innerHTML='';
+  A3.forEach((it, idx)=>{
+    const q = document.createElement('div');
+    q.className='q';
+    q.innerHTML = `<div><strong>${idx+1}.</strong> ${it.prompt}</div>
+                   <div class="space"></div>
+                   <select class="a3sel" data-idx="${idx}">
+                     <option value="">— selecciona —</option>
+                     ${it.options.map(o=>`<option value="${o}">${o}</option>`).join('')}
+                   </select>`;
+    cont.appendChild(q);
+  });
+  document.getElementById('a3Check').onclick = ()=>{
+    let correct=0;
+    document.querySelectorAll('.a3sel').forEach(sel=>{
+      const i = +sel.dataset.idx;
+      const val = norm(sel.value);
+      const ok = norm(A3[i].answer)===val;
+      const q = sel.closest('.q');
+      if(ok){ correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(val) incorrectA3++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a3Score').textContent = `Correctos: ${correct} / ${A3.length}`;
+  };
+  document.getElementById('a3Reset').onclick = buildAct3;
+}
+
+/* ---------- Activity 4: sentence assembly (word chips) ---------- */
+// Five tasks (one solved example shown in header text, not interactive)
+const A4 = [
+  { model:["Yo","soy","del","barrio","de","New","North","End","."], prompt:"Yo soy del barrio de New North End.", words:["Yo","soy","del","barrio","de","New","North","End","." ] },
+  { model:["¿","De","dónde","eres","?"], prompt:"¿De dónde eres?", words:["¿","De","dónde","eres","?"] },
+  { model:["Vivo","en","el","estado","de","Vermont","."], prompt:"Vivo en el estado de Vermont.", words:["Vivo","en","el","estado","de","Vermont","."] },
+  { model:["Soy","de","la","ciudad","de","Burlington","."], prompt:"Soy de la ciudad de Burlington.", words:["Soy","de","la","ciudad","de","Burlington","."] },
+  { model:["Mi","pueblo","está","cerca","de","la","capital","."], prompt:"Mi pueblo está cerca de la capital.", words:["Mi","pueblo","está","cerca","de","la","capital","."] },
+];
+function buildAct4(){
+  const cont = document.getElementById('a4Items');
+  cont.innerHTML='';
+  A4.forEach((it, idx)=>{
+    const s = document.createElement('div'); s.className='sent q'; s.dataset.idx=idx;
+    s.innerHTML = `<div><strong>${idx+1}.</strong> Ordena las palabras para formar: <em>${it.prompt}</em></div>
+                   <div class="drop" id="a4drop-${idx}" aria-label="Área de respuesta"></div>
+                   <div class="bank"><div class="chips" id="a4bank-${idx}"></div></div>`;
+    cont.appendChild(s);
+    // build chips
+    const bank = s.querySelector('#a4bank-'+idx);
+    const shuffled = shuffle(it.words);
+    shuffled.forEach(w=>{
+      const chip = document.createElement('span'); chip.className='chip'; chip.textContent=w;
+      chip.draggable = true;
+      chip.addEventListener('dragstart', (e)=>{ selectedChip=chip; chip.classList.add('selected'); e.dataTransfer.setData('text/plain', w); });
+      chip.addEventListener('click', ()=>{
+        if(chip.parentElement===bank){
+          // move to drop
+          s.querySelector('.drop').appendChild(chip);
+        }else{
+          // move back to bank
+          bank.appendChild(chip);
+        }
+        chip.classList.remove('selected'); selectedChip=null;
+      });
+      bank.appendChild(chip);
+    });
+    // drop behavior
+    const drop = s.querySelector('.drop');
+    drop.addEventListener('dragover', (e)=> e.preventDefault());
+    drop.addEventListener('drop', (e)=>{ e.preventDefault(); if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+    drop.addEventListener('click', ()=>{ if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+  });
+  document.getElementById('a4Check').onclick = ()=>{
+    let correctTotal=0;
+    A4.forEach((it, idx)=>{
+      const drop = document.getElementById('a4drop-'+idx);
+      const got = Array.from(drop.querySelectorAll('.chip')).map(c=>c.textContent);
+      const q = drop.closest('.q');
+      const ok = got.length===it.model.length && it.model.every((w,i)=> w===got[i]);
+      if(ok){ correctTotal++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(got.length>0) incorrectA4++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a4Score').textContent = `Correctos: ${correctTotal} / ${A4.length}`;
+  };
+  document.getElementById('a4Reset').onclick = buildAct4;
+}
+
+/* ---------- Report ---------- */
+function formatSeconds(s){ var m=Math.floor(s/60), r=(s%60); return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim();
+  var secs = Math.round((performance.now()-pageStart)/1000);
+  var lines = [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total checks: "+totalChecks,
+    "Incorrect A1 (match): "+incorrectA1,
+    "Incorrect A2 (dropdown cloze): "+incorrectA2,
+    "Incorrect A3 (dropdown): "+incorrectA3,
+    "Incorrect A4 (sentence build): "+incorrectA4
+  ];
+  return lines.join("\r\n");
+}
+function refreshPreview(){ var el=document.getElementById("reportPreview"); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  var txt = buildReportText();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>alert("Copied")).catch(()=>{
+      var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+    });
+  }else{
+    var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+  }
+}
+function downloadReport(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  var txt = buildReportText();
+  var blob = new Blob([txt],{type:"text/plain;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a"); a.href=url; a.download=(name||"report")+"_reporteros1_unidad1_leccion2_loslugares.txt";
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+/* ---------- Init ---------- */
+let selectedChip=null;
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildAct1();
+  buildAct2();
+  buildAct3();
+  buildAct4();
+  document.getElementById('previewBtn').addEventListener('click', refreshPreview);
+  document.getElementById('copyBtn').addEventListener('click', copyReport);
+  document.getElementById('downloadReport').addEventListener('click', downloadReport);
+  setTimeout(refreshPreview, 600);
+});
+</script>
+</body>
+</html>
