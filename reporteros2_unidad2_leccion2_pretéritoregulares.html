@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reporteros2_unidad2_leccion2_pretéritoregulares</title>
+<style>
+  :root{--bg:#f7fafc; --ink:#0f172a; --muted:#475569; --card:#fff; --accent:#2563eb; --ok:#16a34a; --bad:#dc2626; --chip:#e2e8f0; --drop:#f8fafc;}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#2563eb,#22c55e);color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1180px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:14px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3{margin:.2rem 0 .6rem;font-size:1.05rem}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;font-size:.8rem}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .grid2{display:grid;grid-template-columns:3fr 2fr;gap:12px}
+  @media(max-width:900px){ .grid2{grid-template-columns:1fr} }
+  .targets{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));gap:12px}
+  @media(max-width:860px){ .targets{grid-template-columns:repeat(2,minmax(180px,1fr))} }
+  .target{border:2px dashed #cbd5e1;background:var(--drop);border-radius:12px;padding:12px;min-height:120px;position:relative;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:center;text-align:center}
+  .slot{min-height:38px;display:flex;align-items:center;justify-content:center;border:1px dashed #cbd5e1;border-radius:8px;width:100%;padding:6px 8px;background:#fff}
+  .ok{border-color:#86efac!important;background:#f0fdf4!important}
+  .bad{border-color:#fecaca!important;background:#fff7f7!important}
+  .bank{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fff}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;max-height:260px;overflow:auto}
+  .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-weight:700;display:inline-flex;gap:6px;align-items:center;cursor:pointer;user-select:none;border:1px solid #cbd5e1}
+  .chip.selected{outline:3px solid var(--accent)}
+  .ghostbtn{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
+  .primary{background:#2563eb;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .small{font-size:.9rem;color:#334155}
+  .q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;position:relative;margin-bottom:8px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;min-width:180px;background:#fff;cursor:pointer}
+  .hintbtn{border:1px dashed #94a3b8;background:#f1f5f9;border-radius:8px;padding:4px 8px;cursor:pointer;font-weight:700}
+  .inline-hint{display:none;color:#0f766e;background:#ecfeff;border:1px solid #99f6e4;border-radius:8px;padding:4px 8px;margin-left:8px}
+  .speak{position:absolute;top:8px;right:8px;background:#e2e8f0;border:1px solid #cbd5e1;border-radius:999px;font-weight:800;padding:2px 8px;cursor:pointer}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
+  .helper{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0}
+  .helper table{width:100%;border-collapse:collapse;font-size:.95rem}
+  .helper th,.helper td{border:1px solid #e2e8f0;padding:6px;text-align:center}
+  .sent{border:2px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
+  .sent .drop{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border:1px dashed #cbd5e1;border-radius:8px;background:#fff;padding:6px}
+  .sent .bank{margin-top:6px}
+  .tipbubble{display:none;opacity:0;transition:opacity .4s ease; background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:8px;margin:8px 0}
+  .tipbubble.show{display:block;opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>reporteros2_unidad2_leccion2_pretéritoregulares</h1>
+  <div style="margin-left:auto">
+    <span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir"><b>ES:</b> Practica el <b>pretérito regular</b> con vocabulario de viajes y aventuras. <br><b>EN:</b> Practice the <b>regular preterite</b> with travel/adventure vocabulary.</p>
+    <p class="dir"><b>ACTFL “I can…” (NH–IL):</b> • say what I did • understand short diary sentences • ask/answer about past activities. <b>Standards:</b> 1.1, 1.2, 1.3, 3.1.</p>
+    <div class="row small"><span class="pill">Tiempo: <span id="timeOnPage">0s</span></span><span class="pill">Fuera de pestaña: <span id="tabAway">0s</span></span></div>
+    <div class="helper">
+      <strong>🔧 Enfoque de verbos / Verb focus:</strong>
+      <div class="small">
+        Verbos de <em>Las experiencias</em> y <em>Los viajes</em> (p. ej., <b>descansar, descubrir, disfrutar, caminar, explorar, bañarse, recorrer, viajar, regresar, partir, planificar, reservar, dejar, informarse</b>) — todos <b>regulares en pretérito</b>.<br>
+        <b>Desafío (no evaluado aquí):</b> <em>sentirse</em> (se <u>sintió</u>, se <u>sintieron</u>) y <em>elegir</em> (<u>eligió</u>, <u>eligieron</u>).
+      </div>
+    </div>
+  </section>
+
+  <!-- A0 -->
+  <section class="card" id="act0">
+    <h3>Actividad 0 — Vocabulario de aventuras</h3>
+    <p class="small">ES: Haz clic en una ficha y luego en la tarjeta correcta. EN: Click a chip, then click the matching card.</p>
+    <div class="grid2">
+      <div>
+        <div class="targets" id="a0Targets"></div>
+        <div class="row" style="justify-content:flex-end;margin-top:8px">
+          <button class="ghostbtn" id="a0Reset">Reiniciar</button>
+          <button class="primary" id="a0Check">Calificar</button>
+        </div>
+        <div class="small" id="a0Score">Correctos: 0 / 10</div>
+      </div>
+      <div>
+        <strong>Banco / Bank</strong>
+        <div class="bank"><div class="chips" id="a0Bank"></div></div>
+      </div>
+    </div>
+    <div class="tipbubble" id="tip-a0"><b>💡Tip:</b> Muchos de estos verbos son <i>regulares</i> en el pretérito.</div>
+  </section>
+
+  <!-- A1 -->
+  <section class="card" id="act1">
+    <h3>Actividad 1 — ¿Qué hiciste? (Dropdown + 🔊)</h3>
+    <button class="ghostbtn" id="tipBtn1">💡 Tip</button>
+    <div class="tipbubble" id="tip1"><b>-AR:</b> é, aste, ó, amos, aron · <b>-ER/-IR:</b> í, iste, ió, imos, ieron</div>
+    <div id="a1Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a1Reset">Reiniciar</button>
+      <button class="primary" id="a1Check">Calificar</button>
+    </div>
+    <div class="small" id="a1Score">Correctos: 0 / 15</div>
+    <details class="helper">
+      <summary><strong>🔎 Morphology helper — Pretérito regular</strong></summary>
+      <table>
+        <tr><th></th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr>
+        <tr><td>yo</td><td>hablé</td><td>comí</td><td>viví</td></tr>
+        <tr><td>tú</td><td>hablaste</td><td>comiste</td><td>viviste</td></tr>
+        <tr><td>él/ella/usted</td><td>habló</td><td>comió</td><td>vivió</td></tr>
+        <tr><td>nosotros</td><td>hablamos</td><td>comimos</td><td>vivimos</td></tr>
+        <tr><td>ellos/ellas/ustedes</td><td>hablaron</td><td>comieron</td><td>vivieron</td></tr>
+      </table>
+    </details>
+  </section>
+
+  <!-- A2 -->
+  <section class="card" id="act2">
+    <h3>Actividad 2 — Construye oraciones (pretérito)</h3>
+    <button class="ghostbtn" id="tipBtn2">💡 Tip</button>
+    <div class="tipbubble" id="tip2"><b>Fíjate</b> en la terminación de <em>yo</em> (-é / -í) y la concordancia sujeto–verbo.</div>
+    <div id="a2Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a2Reset">Reiniciar</button>
+      <button class="primary" id="a2Check">Calificar</button>
+    </div>
+    <div class="small" id="a2Score">Correctos: 0 / 5</div>
+  </section>
+
+  <!-- A3 -->
+  <section class="card" id="act3">
+    <h3>Actividad 3 — Diario de viaje (cloze + 🔊)</h3>
+    <button class="ghostbtn" id="tipBtn3">💡 Tip</button>
+    <div class="tipbubble" id="tip3">Usa el pretérito para <b>acciones puntuales</b> en el pasado: <i>ayer, la semana pasada…</i></div>
+    <div id="a3Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a3Reset">Reiniciar</button>
+      <button class="primary" id="a3Check">Calificar</button>
+    </div>
+    <div class="small" id="a3Score">Correctos: 0 / 16</div>
+  </section>
+
+  <!-- A4 -->
+  <section class="card" id="act4">
+    <h3>Actividad 4 — Escribe y comparte (chips)</h3>
+    <p class="small">Arrastra o haz clic para formar oraciones completas en el pretérito.</p>
+    <div id="a4Items"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a4Reset">Reiniciar</button>
+      <button class="primary" id="a4Check">Calificar</button>
+    </div>
+    <div class="small" id="a4Score">Correctos: 0 / 4</div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="card">
+    <h2>Informe / Report (plain text)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghostbtn" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghostbtn" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ---------- Timing & tab-away ---------- */
+var pageStart = performance.now();
+var timeAwayTotal = 0, lastHiddenAt = null;
+document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt = null; }
+});
+setInterval(function(){
+  var sec = Math.round((performance.now()-pageStart)/1000);
+  var t=document.getElementById("timeOnPage"); if(t) t.textContent=sec+"s";
+  var ta=document.getElementById("tabAway"); if(ta) ta.textContent=Math.round(timeAwayTotal/1000)+"s";
+}, 500);
+
+/* ---------- Utils ---------- */
+function shuffle(a){ var x=a.slice(); for(var i=x.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=x[i]; x[i]=x[j]; x[j]=t;} return x; }
+function speak(text){ try{ var u = new SpeechSynthesisUtterance(text); u.lang='es-ES'; speechSynthesis.speak(u);}catch(e){} }
+function flash(el, cls){ el.classList.add(cls); setTimeout(()=>el.classList.remove(cls), 600); }
+function fadeTip(id){ var el = document.getElementById(id); if(!el) return; el.classList.add('show'); setTimeout(()=>{ el.classList.remove('show'); }, 10000); }
+let selectedChip=null;
+
+/* ---------- Global scoring ---------- */
+var totalChecks=0;
+var incorrectA0=0, incorrectA1=0, incorrectA2=0, incorrectA3=0, incorrectA4=0;
+
+/* ---------- A0: vocab with icons ---------- */
+const A0_ITEMS = [
+  {icon:"🚶", label:"caminar"},
+  {icon:"🎿", label:"esquiar"},
+  {icon:"🧭", label:"explorar"},
+  {icon:"🏊", label:"bañarse"},
+  {icon:"🗺️", label:"recorrer"},
+  {icon:"😌", label:"relajarse"},
+  {icon:"🛌", label:"descansar"},
+  {icon:"🔍", label:"descubrir"},
+  {icon:"🎉", label:"disfrutar"},
+  {icon:"🏕️", label:"vivir aventuras"}
+];
+function buildA0(){
+  const tgt = document.getElementById('a0Targets');
+  const bank = document.getElementById('a0Bank');
+  tgt.innerHTML=''; bank.innerHTML='';
+  shuffle(A0_ITEMS).forEach(item=>{
+    const card = document.createElement('div');
+    card.className='target';
+    card.dataset.expect=item.label;
+    card.innerHTML = `<div style="font-size:1.8rem">${item.icon}</div><div class="slot" data-filled="0">Coloca el verbo</div>`;
+    card.addEventListener('click', ()=>{ if(selectedChip){ placeChip(card); }});
+    tgt.appendChild(card);
+  });
+  shuffle(A0_ITEMS).forEach(x=>{
+    const chip = document.createElement('div'); chip.className='chip'; chip.dataset.key=x.label; chip.textContent=x.label;
+    chip.addEventListener('click', ()=> selectChip(chip));
+    bank.appendChild(chip);
+  });
+  function selectChip(c){ if(selectedChip===c){ c.classList.remove('selected'); selectedChip=null; } else { if(selectedChip) selectedChip.classList.remove('selected'); selectedChip=c; c.classList.add('selected'); } }
+  function placeChip(card){
+    const chip = selectedChip; if(!chip) return;
+    const slot = card.querySelector('.slot');
+    if(slot.getAttribute('data-filled')==='1'){ flash(card,'bad'); return; }
+    slot.textContent = chip.textContent; slot.setAttribute('data-key', chip.dataset.key); slot.setAttribute('data-filled','1');
+    chip.remove(); selectedChip=null;
+  }
+  document.getElementById('a0Check').onclick = ()=>{
+    const cards = tgt.querySelectorAll('.target'); let correct=0;
+    cards.forEach(c=>{
+      const expect = c.dataset.expect;
+      const slot = c.querySelector('.slot');
+      const got = slot.getAttribute('data-key');
+      if(got===expect){ c.classList.add('ok'); c.classList.remove('bad'); correct++; }
+      else{
+        if(slot.getAttribute('data-filled')==='1'){ incorrectA0++; }
+        c.classList.add('bad'); c.classList.remove('ok');
+        slot.textContent='Coloca el verbo'; slot.setAttribute('data-filled','0'); slot.removeAttribute('data-key');
+      }
+    });
+    totalChecks++;
+    document.getElementById('a0Score').textContent = `Correctos: ${correct} / ${cards.length}`;
+    setTimeout(()=>{ cards.forEach(c=>c.classList.remove('bad')); }, 650);
+  };
+  document.getElementById('a0Reset').onclick = buildA0;
+  fadeTip('tip-a0');
+}
+
+/* ---------- A1: dropdown cloze ---------- */
+const A1 = [
+  {sent:"Yo ___ en la playa.", answer:"descansé", speak:"Yo descansé en la playa.", hint:"Verbo: descansar"},
+  {sent:"Nosotros ___ la montaña.", answer:"exploramos", speak:"Nosotros exploramos la montaña.", hint:"Verbo: explorar (nosotros = -amos)"},
+  {sent:"Ella ___ una catarata impresionante.", answer:"descubrió", speak:"Ella descubrió una catarata impresionante.", hint:"Verbo: descubrir (ella = -ió)"},
+  {sent:"Ellos ___ por el bosque.", answer:"caminaron", speak:"Ellos caminaron por el bosque.", hint:"Verbo: caminar (ellos = -aron)"},
+  {sent:"Yo ___ con mis amigos el fin de semana.", answer:"disfruté", speak:"Yo disfruté con mis amigos el fin de semana.", hint:"Verbo: disfrutar (yo = -é)"},
+  {sent:"Nosotros ___ en el lago.", answer:"nos bañamos", speak:"Nosotros nos bañamos en el lago.", hint:"Verbo: bañarse (nosotros)"},
+  {sent:"Ella ___ en el hotel después del viaje.", answer:"se relajó", speak:"Ella se relajó en el hotel después del viaje.", hint:"Verbo: relajarse (ella = se + -ó)"},
+  {sent:"Ellos ___ una aventura en la ciudad.", answer:"vivieron", speak:"Ellos vivieron una aventura en la ciudad.", hint:"Verbo: vivir (ellos = -ieron)"},
+  {sent:"Nosotros ___ al extranjero en julio.", answer:"viajamos", speak:"Nosotros viajamos al extranjero en julio.", hint:"Verbo: viajar (nosotros = -amos)"},
+  {sent:"Ella ___ a casa el domingo.", answer:"regresó", speak:"Ella regresó a casa el domingo.", hint:"Verbo: regresar (ella = -ó)"},
+  {sent:"Yo ___ a las seis de la mañana.", answer:"partí", speak:"Yo partí a las seis de la mañana.", hint:"Verbo: partir (yo = -í)"},
+  {sent:"Ellos ___ el hotel con tiempo.", answer:"reservaron", speak:"Ellos reservaron el hotel con tiempo.", hint:"Verbo: reservar (ellos = -aron)"},
+  {sent:"Nosotros ___ el plan del viaje.", answer:"planificamos", speak:"Nosotros planificamos el plan del viaje.", hint:"Verbo: planificar (nosotros = -amos)"},
+  {sent:"Yo ___ información antes del viaje.", answer:"me informé", speak:"Yo me informé antes del viaje.", hint:"Verbo: informarse (yo = me + -é)"},
+  {sent:"Ellos ___ una huella positiva en el parque.", answer:"dejaron", speak:"Ellos dejaron una huella positiva en el parque.", hint:"Verbo: dejar (ellos = -aron)"}
+];
+const A1_OPTIONS = ["descansé","exploramos","descubrió","caminaron","disfruté","nos bañamos","se relajó","vivieron","viajamos","regresó","partí","reservaron","planificamos","me informé","dejaron","viajé","regresaron","partió","reservé","planifiqué","nos informamos","dejé"];
+function buildA1(){
+  const cont = document.getElementById('a1Items');
+  cont.innerHTML='';
+  A1.forEach((it, idx)=>{
+    const q = document.createElement('div'); q.className='q';
+    const sel = `<select class="a1sel" data-idx="${idx}"><option value="">—</option>${A1_OPTIONS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    q.innerHTML = `<button class="speak" title="Escuchar">🔊</button><div><strong>${idx+1}.</strong> ${it.sent.replace('___', sel)} <button class="hintbtn" data-h="${idx}">Pista</button> <span class="inline-hint" id="h1-${idx}">${it.hint}</span></div>`;
+    q.querySelector('.speak').addEventListener('click', ()=> speak(it.speak));
+    cont.appendChild(q);
+  });
+  cont.querySelectorAll('.hintbtn').forEach(b=> b.addEventListener('click', ()=>{
+    const i=b.getAttribute('data-h'); const s=document.getElementById('h1-'+i);
+    s.style.display = s.style.display==='inline-block' ? 'none' : 'inline-block';
+  }));
+  document.getElementById('a1Check').onclick = ()=>{
+    let correct=0;
+    document.querySelectorAll('.a1sel').forEach(sel=>{
+      const i = +sel.dataset.idx;
+      const val = sel.value;
+      const q = sel.closest('.q');
+      if(val===A1[i].answer){ correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(val) incorrectA1++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a1Score').textContent = `Correctos: ${correct} / ${A1.length}`;
+  };
+  document.getElementById('a1Reset').onclick = buildA1;
+  document.getElementById('tipBtn1').onclick = ()=> fadeTip('tip1');
+}
+
+/* ---------- A2: sentence builder ---------- */
+const A2 = [
+  {model:["Yo","caminé","por","el","bosque","."], words:["Yo","caminé","por","el","bosque","."]},
+  {model:["Nosotros","descubrimos","un","lago","."], words:["Nosotros","descubrimos","un","lago","."]},
+  {model:["Ellos","disfrutaron","la","excursión","."], words:["Ellos","disfrutaron","la","excursión","."]},
+  {model:["Ella","se","relajó","en","el","hotel","."], words:["Ella","se","relajó","en","el","hotel","."]},
+  {model:["Nosotros","nos","bañamos","en","el","río","."], words:["Nosotros","nos","bañamos","en","el","río","."]}
+];
+function buildA2(){
+  const cont = document.getElementById('a2Items');
+  cont.innerHTML='';
+  A2.forEach((it, idx)=>{
+    const s = document.createElement('div'); s.className='sent q'; s.dataset.idx=idx;
+    s.innerHTML = `<div><strong>${idx+1}.</strong> Ordena para formar la oración.</div>
+                   <div class="drop" id="a2drop-${idx}" aria-label="Área de respuesta"></div>
+                   <div class="bank"><div class="chips" id="a2bank-${idx}"></div></div>`;
+    cont.appendChild(s);
+    const bank = s.querySelector('#a2bank-'+idx);
+    const shuffled = shuffle(it.words);
+    shuffled.forEach(w=>{
+      const chip = document.createElement('span'); chip.className='chip'; chip.textContent=w;
+      chip.draggable = true;
+      chip.addEventListener('dragstart', (e)=>{ selectedChip=chip; chip.classList.add('selected'); e.dataTransfer.setData('text/plain', w); });
+      chip.addEventListener('click', ()=>{
+        const drop = s.querySelector('.drop');
+        if(chip.parentElement===bank){ drop.appendChild(chip); }else{ bank.appendChild(chip); }
+        chip.classList.remove('selected'); selectedChip=null;
+      });
+      bank.appendChild(chip);
+    });
+    const drop = s.querySelector('.drop');
+    drop.addEventListener('dragover', (e)=> e.preventDefault());
+    drop.addEventListener('drop', (e)=>{ e.preventDefault(); if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+    drop.addEventListener('click', ()=>{ if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+  });
+  document.getElementById('a2Check').onclick = ()=>{
+    let correctTotal=0;
+    A2.forEach((it, idx)=>{
+      const drop = document.getElementById('a2drop-'+idx);
+      const got = Array.from(drop.querySelectorAll('.chip')).map(c=>c.textContent);
+      const q = drop.closest('.q');
+      const ok = got.length===it.model.length && it.model.every((w,i)=> w===got[i]);
+      if(ok){ correctTotal++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(got.length>0) incorrectA2++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a2Score').textContent = `Correctos: ${correctTotal} / ${A2.length}`;
+  };
+  document.getElementById('a2Reset').onclick = buildA2;
+  document.getElementById('tipBtn2').onclick = ()=> fadeTip('tip2');
+}
+
+/* ---------- A3: diary cloze ---------- */
+const A3 = [
+  {text:"Ayer ___ (caminar) por el bosque y ___ (descubrir) una catarata.", answers:["caminé","descubrí"], speak:"Ayer caminé por el bosque y descubrí una catarata."},
+  {text:"El verano pasado ___ (disfrutar) con mi familia y ___ (bañarse) en el lago.", answers:["disfruté","nos bañamos"], speak:"El verano pasado disfruté con mi familia y nos bañamos en el lago."},
+  {text:"En la excursión, ellos ___ (vivir) aventuras y ___ (explorar) la montaña.", answers:["vivieron","exploraron"], speak:"En la excursión, ellos vivieron aventuras y exploraron la montaña."},
+  {text:"Después del viaje, ella ___ (regresar) a casa y ___ (descansar) mucho.", answers:["regresó","descansó"], speak:"Después del viaje, ella regresó a casa y descansó mucho."},
+  {text:"Nosotros ___ (recorrer) la ciudad y ___ (descubrir) un museo.", answers:["recorrimos","descubrimos"], speak:"Nosotros recorrimos la ciudad y descubrimos un museo."},
+  {text:"El sábado por la mañana yo ___ (partir) temprano y ___ (viajar) en tren.", answers:["partí","viajé"], speak:"El sábado por la mañana yo partí temprano y viajé en tren."},
+  {text:"Antes del viaje, ellos ___ (planificar) el itinerario y ___ (reservar) el hotel.", answers:["planificaron","reservaron"], speak:"Antes del viaje, ellos planificaron el itinerario y reservaron el hotel."},
+  {text:"Yo ___ (informarse) sobre turismo responsable y ___ (dejar) una huella positiva.", answers:["me informé","dejé"], speak:"Yo me informé sobre turismo responsable y dejé una huella positiva."}
+];
+const A3_OPTIONS = ["caminé","descubrí","disfruté","nos bañamos","vivieron","exploraron","regresó","descansó","recorrimos","descubrimos","partí","viajé","planificaron","reservaron","me informé","dejé"];
+function buildA3(){
+  const cont = document.getElementById('a3Items');
+  cont.innerHTML='';
+  A3.forEach((it, idx)=>{
+    const q = document.createElement('div'); q.className='q';
+    let html = it.text;
+    it.answers.forEach(()=>{
+      const sel = `<select class="a3sel" data-idx="${idx}"><option value="">—</option>${A3_OPTIONS.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+      html = html.replace("___", sel);
+    });
+    q.innerHTML = `<button class="speak" title="Escuchar">🔊</button><div><strong>${idx+1}.</strong> ${html}</div>`;
+    q.querySelector('.speak').addEventListener('click', ()=> speak(it.speak));
+    cont.appendChild(q);
+  });
+  document.getElementById('a3Check').onclick = ()=>{
+    let correct=0,total=0;
+    document.querySelectorAll('#act3 .q').forEach((qdiv,qindex)=>{
+      const expected = A3[qindex].answers;
+      const sels = qdiv.querySelectorAll('.a3sel');
+      total += expected.length;
+      let good = 0;
+      sels.forEach((sel,s)=>{ if((sel.value||'')===expected[s]) good++; });
+      if(good===expected.length){ correct+=expected.length; qdiv.classList.add('correct'); qdiv.classList.remove('incorrect'); }
+      else{ if(Array.from(sels).some(s=>s.value)) incorrectA3++; qdiv.classList.add('incorrect'); qdiv.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a3Score').textContent = `Correctos: ${correct} / ${total}`;
+  };
+  document.getElementById('a3Reset').onclick = buildA3;
+  document.getElementById('tipBtn3').onclick = ()=> fadeTip('tip3');
+}
+
+/* ---------- A4: write & share builder ---------- */
+const A4 = [
+  {model:["Yo","viajé","a","la","montaña","y","descansé","mucho","."], words:["Yo","viajé","a","la","montaña","y","descansé","mucho","."]},
+  {model:["Nosotros","exploramos","la","playa","y","nos","bañamos","."], words:["Nosotros","exploramos","la","playa","y","nos","bañamos","."]},
+  {model:["Ella","descubrió","un","lago","y","se","relajó","."], words:["Ella","descubrió","un","lago","y","se","relajó","."]},
+  {model:["Ellos","recorrieron","la","ciudad","y","disfrutaron","la","excursión","."], words:["Ellos","recorrieron","la","ciudad","y","disfrutaron","la","excursión","."]}
+];
+function buildA4(){
+  const cont = document.getElementById('a4Items');
+  cont.innerHTML='';
+  A4.forEach((it, idx)=>{
+    const s = document.createElement('div'); s.className='sent q'; s.innerHTML = `<div><strong>${idx+1}.</strong> Ordena para escribir una experiencia.</div><div class="drop" id="a4drop-${idx}"></div><div class="bank"><div class="chips" id="a4bank-${idx}"></div></div>`;
+    cont.appendChild(s);
+    const bank = s.querySelector('#a4bank-'+idx);
+    const shuffled = shuffle(it.words);
+    shuffled.forEach(w=>{
+      const chip = document.createElement('span'); chip.className='chip'; chip.textContent=w; chip.draggable = true;
+      chip.addEventListener('dragstart', (e)=>{ selectedChip=chip; chip.classList.add('selected'); e.dataTransfer.setData('text/plain', w); });
+      chip.addEventListener('click', ()=>{ const drop = s.querySelector('.drop'); if(chip.parentElement===bank){ drop.appendChild(chip); }else{ bank.appendChild(chip); } chip.classList.remove('selected'); selectedChip=null; });
+      bank.appendChild(chip);
+    });
+    const drop = s.querySelector('.drop');
+    drop.addEventListener('dragover', (e)=> e.preventDefault());
+    drop.addEventListener('drop', (e)=>{ e.preventDefault(); if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+    drop.addEventListener('click', ()=>{ if(selectedChip){ drop.appendChild(selectedChip); selectedChip.classList.remove('selected'); selectedChip=null; } });
+  });
+  document.getElementById('a4Check').onclick = ()=>{
+    let correctTotal=0;
+    A4.forEach((it, idx)=>{
+      const drop = document.getElementById('a4drop-'+idx);
+      const got = Array.from(drop.querySelectorAll('.chip')).map(c=>c.textContent);
+      const q = drop.closest('.q');
+      const ok = got.length===it.model.length && it.model.every((w,i)=> w===got[i]);
+      if(ok){ correctTotal++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+      else{ if(got.length>0) incorrectA4++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    });
+    totalChecks++;
+    document.getElementById('a4Score').textContent = `Correctos: ${correctTotal} / ${A4.length}`;
+  };
+  document.getElementById('a4Reset').onclick = buildA4;
+}
+
+/* ---------- Report ---------- */
+function formatSeconds(s){ var m=Math.floor(s/60), r=(s%60); return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim();
+  var secs = Math.round((performance.now()-pageStart)/1000);
+  var lines = [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total checks: "+totalChecks,
+    "Incorrect A0 (vocab match): "+incorrectA0,
+    "Incorrect A1 (dropdown cloze): "+incorrectA1,
+    "Incorrect A2 (builder): "+incorrectA2,
+    "Incorrect A3 (diary cloze): "+incorrectA3,
+    "Incorrect A4 (write & share): "+incorrectA4
+  ];
+  return lines.join("\r\n");
+}
+function refreshPreview(){ var el=document.getElementById("reportPreview"); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  var txt = buildReportText();
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>alert("Copied")).catch(()=>{
+      var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+    });
+  }else{
+    var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert("Copied"); }catch(e){} document.body.removeChild(ta);
+  }
+}
+function downloadReport(){
+  var name = (document.getElementById("studentName").value || "SinNombre").trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  var txt = buildReportText();
+  var blob = new Blob([txt],{type:"text/plain;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a"); a.href=url; a.download=(name||"report")+"_reporteros2_unidad2_leccion2_pretéritoregulares.txt";
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+/* ---------- Init ---------- */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildA0(); buildA1(); buildA2(); buildA3(); buildA4();
+  document.getElementById('previewBtn').addEventListener('click', refreshPreview);
+  document.getElementById('copyBtn').addEventListener('click', copyReport);
+  document.getElementById('downloadReport').addEventListener('click', downloadReport);
+  setTimeout(refreshPreview, 600);
+});
+</script>
+</body>
+</html>
