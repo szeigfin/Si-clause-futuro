@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>reporteros1_unidad1_leccion1_elalfabeto_sounds</title>
+<title>reporteros1_unidad1_leccion1_elalfabeto_sounds_v6</title>
 <style>
   :root{
     --bg:#f8fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--ok:#16a34a;--bad:#dc2626;
@@ -44,16 +44,25 @@
 <body>
 <header>
   <span class="brand">ProfeVT</span>
-  <h1>reporteros1_unidad1_leccion1_elalfabeto_sounds</h1>
+  <h1>reporteros1_unidad1_leccion1_elalfabeto_sounds_v6</h1>
   <div style="margin-left:auto"><span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span></div>
 </header>
 
 <div class="wrap">
 
+  <!-- Audio gate (appears only if needed) -->
+  <div id="audioGate" class="card" style="display:none">
+    <strong>Audio desactivado / Audio is off.</strong>
+    <div class="small">Pulsa el botón para habilitar el audio de la página. Click the button to enable speech.</div>
+    <div style="margin-top:8px">
+      <button class="primary" id="enableAudioBtn">Enable audio</button>
+    </div>
+  </div>
+
   <section class="card">
     <h2>Instrucciones / Directions</h2>
-    <p class="dir"><b>ES:</b> Reconoce, escribe y produce <b>letras y sonidos</b> del español. Practica el <b>deletreo</b> y la <b>escritura</b> por dictado.</p>
-    <p class="dir"><b>EN:</b> Recognize, type, and produce Spanish <b>letters & sounds</b>. Practice <b>spelling</b> and <b>dictation</b>.</p>
+    <p class="dir"><b>ES:</b> Reconoce y escribe <b>letras y sonidos</b> del español. Practica el <b>deletreo</b> y la <b>escritura</b> por dictado.</p>
+    <p class="dir"><b>EN:</b> Recognize and type Spanish <b>letters & sounds</b>. Practice <b>spelling</b> and <b>dictation</b>.</p>
     <p class="dir"><b>ACTFL “I can…” (NL→NM):</b> identify letter sounds; type the letter I hear; write words that are spelled to me. <b>Standards:</b> 1.1, 1.2 (Listening), 1.3 (Speaking).</p>
     <div class="row">
       <span class="pill">Tiempo: <span id="timeOnPage">0s</span></span>
@@ -96,6 +105,7 @@
         <span class="small">Cubre <b>todas</b> las letras (incluye dígrafos).</span>
       </div>
       <div class="options" id="a1Opts"></div>
+      <div class="feedback" id="a1Fb"></div>
     </div>
     <div class="row" style="justify-content:flex-end;margin-top:8px">
       <button class="ghostbtn" id="a1Reset">Reiniciar</button>
@@ -191,12 +201,6 @@ const WORD_BANK = [
   /* básicos */
   "casa","gato","perro","calle","llave","niño","verde","playa","queso","sol","piso","clase","hola","adiós"
 ];
-
-// Derived list for short words (<= 6 letters after removing accents/spaces/punctuation)
-const SHORT_BANK = WORD_BANK.filter(w => {
-  const core = w.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-zñÑ]/g,'').toLowerCase();
-  return core.length > 0 && core.length <= 6;
-});
 /* Simple EN glosses */
 const GLOSS = {
   "lunes":"Monday","martes":"Tuesday","miércoles":"Wednesday","jueves":"Thursday","viernes":"Friday","sábado":"Saturday","domingo":"Sunday",
@@ -209,55 +213,107 @@ const GLOSS = {
   "casa":"house","gato":"cat","perro":"dog","calle":"street","llave":"key","niño":"child","verde":"green","playa":"beach","queso":"cheese","sol":"sun","piso":"floor","clase":"class","hola":"hello","adiós":"goodbye"
 };
 
+/* ---------- Robust speech bootstrap (auto-hide gate after first sound) ---------- */
+let voicesReady = null;
+let audioUnlocked = false;
 
-function getVoicesReady(){
-  return new Promise(res=>{
-    const v = speechSynthesis.getVoices();
-    if (v && v.length) return res(v);
-    speechSynthesis.onvoiceschanged = ()=>res(speechSynthesis.getVoices());
+function waitVoices() {
+  return new Promise((resolve) => {
+    try{
+      const have = speechSynthesis.getVoices();
+      if (have && have.length) return resolve(have);
+      speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
+      speechSynthesis.getVoices();
+    }catch(e){ resolve([]); }
   });
 }
-async function speakSmart(text, {rate=0.9, prefs=['es-US','es-419','es-MX','es-ES','es'], fallback=null, fallbackLang='en-US'}={}){
-  try{
-    const voices = await getVoicesReady();
-    let voice = null;
-    // prefer Latin American Spanish to avoid lisping/oddities for isolated syllables
-    for(const pref of prefs){
-      voice = voices.find(v=> (v.lang||'').toLowerCase().startsWith(pref.toLowerCase()));
-      if(voice) break;
-    }
-    const u = new SpeechSynthesisUtterance(text);
-    if(voice){ u.voice = voice; u.lang = voice.lang; }
-    else { u.lang = 'es-ES'; }
-    u.rate = rate;
-    speechSynthesis.speak(u);
-    if(fallback){
-      // schedule a quiet English "koo" backup if user still perceives mispronunciation
-      setTimeout(()=>{
-        try{
-          const u2 = new SpeechSynthesisUtterance(fallback);
-          const vv = voices.find(v=> (v.lang||'').toLowerCase().startsWith(fallbackLang.toLowerCase()));
-          if(vv){ u2.voice = vv; u2.lang = vv.lang; } else { u2.lang = fallbackLang; }
-          u2.rate = rate*0.95;
-          speechSynthesis.speak(u2);
-        }catch(e){}
-      }, 10);
-    }
-  }catch(e){}
+
+async function unlockAudio() {
+  try { if (speechSynthesis && speechSynthesis.resume) speechSynthesis.resume(); } catch(e){}
+  audioUnlocked = true;
+  const gate = document.getElementById('audioGate');
+  if (gate) gate.style.display = 'none';
 }
-function speak(text, rate=0.9, voiceHint='es-ES'){ speakSmart(text, {rate, prefs:[voiceHint,'es-US','es-419','es-MX','es-ES','es']}); }
-/* Ensure 'q' is pronounced 'cu' clearly */
-function speakLetterObj(letter){
-  if(!letter) return;
-  if(letter.key==='q'){
-    // force Spanish "cu" with LatAm voice; add English "koo" fallback
-    speakSmart('cu', {rate:0.85, prefs:['es-US','es-419','es-MX','es-ES','es'], fallback:'koo', fallbackLang:'en-US'});
-    return;
+
+async function ensureSpeechReady() {
+  if (!voicesReady) voicesReady = waitVoices();
+  const list = await voicesReady;
+  if ((!list || !list.length) || !audioUnlocked) {
+    const gate = document.getElementById('audioGate');
+    if (gate) gate.style.display = 'block';
   }
-  speak(letter.name, 0.9, 'es-US');
+  return list || [];
 }
- // force Spanish 'cu'
-  speak(letter.name, 0.9);
+
+async function pickVoice(prefs = ['es-US','es-419','es-MX','es-ES','es']) {
+  const list = await ensureSpeechReady();
+  for (const pref of prefs) {
+    const v = list.find(x => (x.lang || '').toLowerCase().startsWith(pref.toLowerCase()));
+    if (v) return v;
+  }
+  return null;
+}
+
+// Unified speak (awaits voices, handles rate) + auto-hide gate onstart
+async function speakNow(text, { rate = 0.9, prefs } = {}) {
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    const v = await pickVoice(prefs || ['es-US','es-419','es-MX','es-ES','es']);
+    if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'es-ES'; }
+    u.rate = rate;
+    u.onstart = () => {
+      audioUnlocked = true;
+      const gate = document.getElementById('audioGate');
+      if (gate) gate.style.display = 'none';
+    };
+    speechSynthesis.speak(u);
+  } catch(e) {}
+}
+
+// Force Spanish “cu” for the letter Q
+async function speakLetterObj(letter) {
+  if (!letter) return;
+  if (letter.key === 'q') { await speakNow('cu', { rate: 0.85, prefs: ['es-US','es-419','es-MX','es-ES','es'] }); }
+  else { await speakNow(letter.name, { rate: 0.9, prefs: ['es-US','es-419','es-MX','es-ES','es'] }); }
+}
+
+// Per-letter sequence (dictation), with pauses
+async function speakLettersSequence(letterNames, gapMs = 800, rate = 0.85) {
+  for (const name of letterNames) {
+    await speakNow(name, { rate, prefs: ['es-US','es-419','es-MX','es-ES','es'] });
+    await new Promise(r => setTimeout(r, gapMs));
+  }
+}
+
+// Wire the “Enable audio” button
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'enableAudioBtn') unlockAudio();
+});
+
+/* ---------- Helpers ---------- */
+const byKey = (k)=> LETTERS.find(x=>x.key===k);
+function pick(arr, n){
+  const a=arr.slice(), out=[];
+  for(let i=0;i<n && a.length;i++){
+    const j=Math.floor(Math.random()*(a.length));
+    out.push(a.splice(j,1)[0]);
+  }
+  return out;
+}
+function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[i],x[j]]; } return x; }
+function stripAccents(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function norm(s){ return stripAccents(String(s||'').trim().toLowerCase().replace(/\s+/g,' ')); }
+function makeDeck(arr){ const deck={base:arr.slice(), q:[]}; deck.next=function(){ if(this.q.length===0){ this.q=shuffle(this.base);} return this.q.pop();}; return deck; }
+function letterNameForChar(ch){
+  if(ch===' '){ return 'espacio'; }
+  if(ch.toLowerCase()==='á') return 'a con acento';
+  if(ch.toLowerCase()==='é') return 'e con acento';
+  if(ch.toLowerCase()==='í') return 'i con acento';
+  if(ch.toLowerCase()==='ó') return 'o con acento';
+  if(ch.toLowerCase()==='ú') return 'u con acento';
+  const low=ch.toLowerCase();
+  const ltr = byKey(low);
+  return ltr? ltr.name : ch;
 }
 
 /* ---------- Scoring ---------- */
@@ -287,7 +343,7 @@ function buildA0(){
 let A1Deck=null, a1Target=null, a1Correct=0, a1Total=0;
 function buildA1(){
   a1Correct=0; a1Total=0; A1Deck = makeDeck(LETTERS);
-  const optsC=document.getElementById('a1Opts');
+  const optsC=document.getElementById('a1Opts'); const fb=document.getElementById('a1Fb'); const q=document.getElementById('a1q');
   function round(){
     a1Target = A1Deck.next();
     const others = LETTERS.filter(x=>x.key!==a1Target.key);
@@ -299,25 +355,36 @@ function buildA1(){
       b.addEventListener('click', ()=>{ optsC.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); b.classList.add('sel'); });
       optsC.appendChild(b);
     });
+    fb.textContent='';
   }
   round();
   document.getElementById('a1Play').onclick = ()=> speakLetterObj(a1Target);
   document.getElementById('a1Check').onclick = ()=>{
     const sel = Array.from(document.querySelectorAll('#a1Opts .opt.sel'))[0]; if(!sel) return;
     a1Total++; totalChecks++;
-    if(sel.textContent.toLowerCase()===a1Target.key){ a1Correct++; sel.classList.add('ok'); setTimeout(()=>sel.classList.remove('ok'),600); }
-    else { inc1++; sel.classList.add('incorrect'); setTimeout(()=>sel.classList.remove('incorrect'),600); }
+    if(sel.textContent.toLowerCase()===a1Target.key){
+      a1Correct++; q.classList.add('correct'); q.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅ Bien</span>';
+    } else {
+      inc1++; q.classList.add('incorrect'); q.classList.remove('correct');
+      fb.innerHTML = '<span class="badtxt">→ Letra correcta: "<b>'+a1Target.key.toUpperCase()+'</b>"</span>';
+      setTimeout(()=>{ fb.textContent=''; }, 3000);
+    }
     document.getElementById('a1Score').textContent = `Correctos: ${a1Correct} / ${Math.max(10,a1Total)}`;
     round();
   };
   document.getElementById('a1Reset').onclick = buildA1;
 }
 
-/* ---------- A2: Dictation by spelling ---------- */
+/* ---------- A2: Dictation by spelling (<=6 letters) ---------- */
+const SHORT_BANK = WORD_BANK.filter(w => {
+  const core = w.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-zñÑ]/g,'').toLowerCase();
+  return core.length > 0 && core.length <= 6;
+});
+
 let a2Word=null, a2Correct=0, a2Total=0;
 function spellOut(word){
   let i=0; const names=[];
-  const w = word.replace(/-/g,''); 
+  const w = word.replace(/-/g,'');
   while(i<w.length){
     const two = w.slice(i,i+2).toLowerCase();
     if(two==='rr'){ names.push(byKey('rr').name); i+=2; continue; }
@@ -325,13 +392,13 @@ function spellOut(word){
     if(two==='ch'){ names.push(byKey('ch').name); i+=2; continue; }
     names.push(letterNameForChar(w[i])); i+=1;
   }
-  speakLettersSequence(names, 850, 0.85);
+  return speakLettersSequence(names, 800, 0.85);
 }
 function buildA2(){
   a2Correct=0; a2Total=0; document.getElementById('a2Input').value=''; document.getElementById('a2Feedback').textContent='';
   function newWord(){ a2Word = SHORT_BANK[Math.floor(Math.random()*SHORT_BANK.length)]; }
   newWord();
-  document.getElementById('a2Play').onclick = ()=> spellOut(a2Word);
+  document.getElementById('a2Play').onclick = async ()=> { await spellOut(a2Word); };
   document.getElementById('a2Check').onclick = ()=>{
     const val = document.getElementById('a2Input').value.trim();
     if(!val) return;
@@ -383,7 +450,7 @@ function buildReportText(){
     "Incorrect A2 (listen & choose): "+inc1,
     "Incorrect A3 (dictation by spelling): "+inc2,
     "Incorrect A4 (memory): "+inc3
-  ].join("\\r\\n");
+  ].join("\r\n");
 }
 function refreshPreview(){ const el=document.getElementById('reportPreview'); if(el) el.textContent = buildReportText(); }
 function copyReport(){
@@ -393,19 +460,26 @@ function copyReport(){
   function fallback(){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Copied'); }catch(e){} document.body.removeChild(ta); }
 }
 function downloadReport(){
-  const name=(document.getElementById('studentName').value||'SinNombre').trim().replace(/[^\\w\\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  const name=(document.getElementById('studentName').value||'SinNombre').trim().replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
   const blob=new Blob([buildReportText()],{type:"text/plain;charset=utf-8"});
-  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(name||'report')+"_reporteros1_unidad1_leccion1_elalfabeto_sounds.txt";
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(name||'report')+"_reporteros1_unidad1_leccion1_elalfabeto_sounds_v6.txt";
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
 }
 
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', ()=>{
-  buildA0(); buildA1(); buildA2(); buildA4();
+  // timing UI
   document.getElementById('previewBtn').addEventListener('click', refreshPreview);
   document.getElementById('copyBtn').addEventListener('click', copyReport);
   document.getElementById('downloadReport').addEventListener('click', downloadReport);
   setTimeout(refreshPreview, 600);
+
+  // build activities
+  buildA0(); buildA1(); buildA2(); buildA4();
+
+  // proactively show audio gate on load (helps Safari/iOS)
+  const gate = document.getElementById('audioGate');
+  if (gate) gate.style.display = 'block';
 });
 </script>
 </body>
