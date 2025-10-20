@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reporteros1_unidad1_leccion1_elalfabeto_sounds</title>
+<style>
+  :root{
+    --bg:#f8fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--ok:#16a34a;--bad:#dc2626;
+    --chip:#e2e8f0;--drop:#f8fafc;--warn:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;line-height:1.45}
+  header{padding:16px;background:linear-gradient(90deg,#0ea5e9,#22c55e);color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  header .brand{font-weight:900;letter-spacing:.3px;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+  header h1{margin:0;font-size:1.1rem}
+  .wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
+  .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.08);padding:16px;margin:12px 0;border:1px solid #e5e7eb}
+  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+  h2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3{margin:.2rem 0 .6rem;font-size:1.05rem}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.15rem .55rem;font-size:.8rem}
+  .ghostbtn{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
+  .primary{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;position:relative;margin-bottom:10px}
+  .q.correct{border-color:#86efac;background:#f0fdf4}
+  .q.incorrect{border-color:#fecaca;background:#fff7f7}
+  .options{display:grid;grid-template-columns:repeat(3,minmax(80px,1fr));gap:8px}
+  .opt{border:1px solid #cbd5e1;border-radius:12px;padding:10px;text-align:center;font-weight:800;background:#fff;cursor:pointer}
+  .opt.sel{outline:3px solid var(--accent)}
+  input[type="text"]{padding:8px;border:1px solid #cbd5e1;border-radius:10px}
+  .hide{display:none}
+  .tip{display:none;opacity:0;transition:opacity .4s ease; background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:8px;margin:8px 0}
+  .tip.show{display:block;opacity:1}
+  .speak{background:#e2e8f0;border:1px solid #cbd5e1;border-radius:999px;font-weight:800;padding:4px 10px;cursor:pointer}
+  .small{font-size:.92rem;color:var(--muted)}
+  .hr{height:1px;background:#e5e7eb;margin:8px 0}
+  .feedback{margin-top:6px;font-size:.95rem}
+  .good{color:#065f46}
+  .badtxt{color:#b91c1c}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>reporteros1_unidad1_leccion1_elalfabeto_sounds</h1>
+  <div style="margin-left:auto"><span style="font-size:.95rem">Nombre / Name: <input id="studentName" placeholder="Tu nombre…" style="max-width:220px"></span></div>
+</header>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2>Instrucciones / Directions</h2>
+    <p class="dir"><b>ES:</b> Reconoce, escribe y produce <b>letras y sonidos</b> del español. Practica el <b>deletreo</b> y la <b>escritura</b> por dictado.</p>
+    <p class="dir"><b>EN:</b> Recognize, type, and produce Spanish <b>letters & sounds</b>. Practice <b>spelling</b> and <b>dictation</b>.</p>
+    <p class="dir"><b>ACTFL “I can…” (NL→NM):</b> identify letter sounds; type the letter I hear; write words that are spelled to me. <b>Standards:</b> 1.1, 1.2 (Listening), 1.3 (Speaking).</p>
+    <div class="row">
+      <span class="pill">Tiempo: <span id="timeOnPage">0s</span></span>
+      <span class="pill">Fuera de pestaña: <span id="tabAway">0s</span></span>
+      <button class="ghostbtn" id="tipsBtn">💡 Consejos / Tips</button>
+    </div>
+    <div class="tip" id="tips">
+      <p>💡 <b>Pronunciación:</b> <em>b</em> y <em>v</em> suenan parecido; <em>h</em> es muda; <em>ñ</em> suena “ny”; <em>ll</em> y <em>y</em> suenan igual en muchos países.</p>
+      <p>💡 <b>Acentos:</b> son parte de la ortografía (ej. <em>México</em>).</p>
+      <p>💡 <b>Deletreo:</b> pausa entre letras: “eme – é – equis – i – ce – o”.</p>
+    </div>
+  </section>
+
+  <!-- A0: Type the letter you hear (sound -> letter) -->
+  <section class="card" id="a0">
+    <h3>Actividad 1 — Escribe la letra que escuchas</h3>
+    <p class="dir">ES: Pulsa 🔊 y escribe la letra (incluye <b>ñ</b>, <b>rr</b>, <b>ll</b>, <b>ch</b>). EN: Press 🔊 and type the letter.</p>
+    <div class="q" id="a0q">
+      <div class="row">
+        <button class="speak" id="a0Play">🔊 Reproducir</button>
+        <span class="small">Se pronuncia el <b>nombre</b> de la letra.</span>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input id="a0Input" type="text" placeholder="Escribe la letra…" style="width:220px">
+        <button class="primary" id="a0Check">Comprobar</button>
+        <button class="ghostbtn" id="a0Reset">Reiniciar</button>
+      </div>
+      <div class="feedback" id="a0Fb"></div>
+    </div>
+    <div class="pill" id="a0Score">Correctos: 0 / 10</div>
+  </section>
+
+  <!-- A1: Listen & choose the letter -->
+  <section class="card" id="a1">
+    <h3>Actividad 2 — Escucha y elige la letra</h3>
+    <p class="dir">ES: Pulsa 🔊. Elige la letra que escuchas. EN: Press 🔊. Choose the letter you hear.</p>
+    <div class="q" id="a1q">
+      <div class="row">
+        <button class="speak" id="a1Play">🔊 Reproducir</button>
+        <span class="small">Cubre <b>todas</b> las letras (incluye dígrafos).</span>
+      </div>
+      <div class="options" id="a1Opts"></div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a1Reset">Reiniciar</button>
+      <button class="primary" id="a1Check">Comprobar</button>
+    </div>
+    <div class="pill" id="a1Score">Correctos: 0 / 10</div>
+  </section>
+
+  <!-- A2: Dictation by spelling -->
+  <section class="card" id="a2">
+    <h3>Actividad 3 — Dictado: escribe la palabra que se deletrea</h3>
+    <p class="dir">ES: Pulsa 🔊 para oír “letra–letra…”. Escribe la palabra. EN: Press 🔊 to hear “letter–letter…”. Type the word.</p>
+    <div class="q" id="a2q">
+      <button class="speak" id="a2Play">🔊 Reproducir</button>
+      <input id="a2Input" type="text" placeholder="Escribe la palabra…" style="width:280px;margin-left:8px">
+      <div class="small" id="a2Feedback"></div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a2Reset">Reiniciar</button>
+      <button class="primary" id="a2Check">Comprobar</button>
+    </div>
+    <div class="pill" id="a2Score">Correctos: 0 / 10</div>
+  </section>
+
+  <!-- A4 (renumbered): Memory -->
+  <section class="card" id="a4">
+    <h3>Actividad 4 — Memoria: observa, desaparece, escribe</h3>
+    <p class="dir">ES: Mira la palabra 3 segundos. Luego escríbela. Después verás el <b>significado en inglés</b>. EN: Look 3 seconds, then type it. Then you’ll see the English meaning.</p>
+    <div class="q" id="a4q">
+      <div><button class="ghostbtn" id="a4Show">Mostrar palabra</button> <span class="pill" id="a4Display">—</span></div>
+      <div class="small" id="a4Gloss"></div>
+      <div class="hr"></div>
+      <input id="a4Input" type="text" placeholder="Escribe aquí…" style="width:280px">
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:8px">
+      <button class="ghostbtn" id="a4Reset">Reiniciar</button>
+      <button class="primary" id="a4Check">Comprobar</button>
+    </div>
+    <div class="pill" id="a4Score">Correctos: 0 / 10</div>
+  </section>
+
+  <!-- Report -->
+  <section class="card">
+    <h2>Informe / Report (.txt)</h2>
+    <pre id="reportPreview" class="report">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghostbtn" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghostbtn" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- Timing & tips ---------- */
+var pageStart = performance.now(), timeAwayTotal = 0, lastHiddenAt=null;
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){ lastHiddenAt = performance.now(); }
+  else if(lastHiddenAt){ timeAwayTotal += (performance.now()-lastHiddenAt); lastHiddenAt=null; }
+});
+setInterval(()=>{
+  const s = Math.round((performance.now()-pageStart)/1000);
+  const t = document.getElementById('timeOnPage'); if(t) t.textContent = s+'s';
+  const ta = document.getElementById('tabAway'); if(ta) ta.textContent = Math.round(timeAwayTotal/1000)+'s';
+}, 500);
+document.getElementById('tipsBtn').addEventListener('click', ()=>{
+  const el=document.getElementById('tips'); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'), 12000);
+});
+
+/* ---------- Data & utilities ---------- */
+const LETTERS = [
+  {key:"a", name:"a"}, {key:"b", name:"be"}, {key:"c", name:"ce"}, {key:"ch", name:"che"},
+  {key:"d", name:"de"}, {key:"e", name:"e"}, {key:"f", name:"efe"}, {key:"g", name:"ge"},
+  {key:"h", name:"hache"}, {key:"i", name:"i"}, {key:"j", name:"jota"}, {key:"k", name:"ka"},
+  {key:"l", name:"ele"}, {key:"ll", name:"elle"}, {key:"m", name:"eme"}, {key:"n", name:"ene"},
+  {key:"ñ", name:"eñe"}, {key:"o", name:"o"}, {key:"p", name:"pe"}, {key:"q", name:"cu"},
+  {key:"r", name:"erre"}, {key:"rr", name:"erre fuerte"}, {key:"s", name:"ese"}, {key:"t", name:"te"},
+  {key:"u", name:"u"}, {key:"v", name:"uve"}, {key:"w", name:"uve doble"}, {key:"x", name:"equis"},
+  {key:"y", name:"ye"}, {key:"z", name:"zeta"}
+];
+const WORD_BANK = [
+  /* días */
+  "lunes","martes","miércoles","jueves","viernes","sábado","domingo",
+  /* meses */
+  "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre",
+  /* aula */
+  "libro","mesa","silla","lápiz","bolígrafo","pluma","cuaderno","papel","mapa","reloj","mochila","puerta","ventana","pizarra",
+  /* datos personales */
+  "nombre","apellido","país","ciudad","barrio","teléfono","correo","amigos","familia",
+  /* países */
+  "México","España","Chile","Perú","Argentina","Colombia","Francia","Canadá","Italia","Brasil","Japón","China",
+  /* básicos */
+  "casa","gato","perro","calle","llave","niño","verde","playa","queso","sol","piso","clase","hola","adiós"
+];
+
+// Derived list for short words (<= 6 letters after removing accents/spaces/punctuation)
+const SHORT_BANK = WORD_BANK.filter(w => {
+  const core = w.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-zñÑ]/g,'').toLowerCase();
+  return core.length > 0 && core.length <= 6;
+});
+/* Simple EN glosses */
+const GLOSS = {
+  "lunes":"Monday","martes":"Tuesday","miércoles":"Wednesday","jueves":"Thursday","viernes":"Friday","sábado":"Saturday","domingo":"Sunday",
+  "enero":"January","febrero":"February","marzo":"March","abril":"April","mayo":"May","junio":"June","julio":"July","agosto":"August",
+  "septiembre":"September","octubre":"October","noviembre":"November","diciembre":"December",
+  "libro":"book","mesa":"table","silla":"chair","lápiz":"pencil","bolígrafo":"pen","pluma":"pen","cuaderno":"notebook","papel":"paper","mapa":"map",
+  "reloj":"clock","mochila":"backpack","puerta":"door","ventana":"window","pizarra":"board",
+  "nombre":"first name","apellido":"last name","país":"country","ciudad":"city","barrio":"neighborhood","teléfono":"phone","correo":"email","amigos":"friends","familia":"family",
+  "México":"Mexico","España":"Spain","Chile":"Chile","Perú":"Peru","Argentina":"Argentina","Colombia":"Colombia","Francia":"France","Canadá":"Canada","Italia":"Italy","Brasil":"Brazil","Japón":"Japan","China":"China",
+  "casa":"house","gato":"cat","perro":"dog","calle":"street","llave":"key","niño":"child","verde":"green","playa":"beach","queso":"cheese","sol":"sun","piso":"floor","clase":"class","hola":"hello","adiós":"goodbye"
+};
+
+
+function getVoicesReady(){
+  return new Promise(res=>{
+    const v = speechSynthesis.getVoices();
+    if (v && v.length) return res(v);
+    speechSynthesis.onvoiceschanged = ()=>res(speechSynthesis.getVoices());
+  });
+}
+async function speakSmart(text, {rate=0.9, prefs=['es-US','es-419','es-MX','es-ES','es'], fallback=null, fallbackLang='en-US'}={}){
+  try{
+    const voices = await getVoicesReady();
+    let voice = null;
+    // prefer Latin American Spanish to avoid lisping/oddities for isolated syllables
+    for(const pref of prefs){
+      voice = voices.find(v=> (v.lang||'').toLowerCase().startsWith(pref.toLowerCase()));
+      if(voice) break;
+    }
+    const u = new SpeechSynthesisUtterance(text);
+    if(voice){ u.voice = voice; u.lang = voice.lang; }
+    else { u.lang = 'es-ES'; }
+    u.rate = rate;
+    speechSynthesis.speak(u);
+    if(fallback){
+      // schedule a quiet English "koo" backup if user still perceives mispronunciation
+      setTimeout(()=>{
+        try{
+          const u2 = new SpeechSynthesisUtterance(fallback);
+          const vv = voices.find(v=> (v.lang||'').toLowerCase().startsWith(fallbackLang.toLowerCase()));
+          if(vv){ u2.voice = vv; u2.lang = vv.lang; } else { u2.lang = fallbackLang; }
+          u2.rate = rate*0.95;
+          speechSynthesis.speak(u2);
+        }catch(e){}
+      }, 10);
+    }
+  }catch(e){}
+}
+function speak(text, rate=0.9, voiceHint='es-ES'){ speakSmart(text, {rate, prefs:[voiceHint,'es-US','es-419','es-MX','es-ES','es']}); }
+/* Ensure 'q' is pronounced 'cu' clearly */
+function speakLetterObj(letter){
+  if(!letter) return;
+  if(letter.key==='q'){
+    // force Spanish "cu" with LatAm voice; add English "koo" fallback
+    speakSmart('cu', {rate:0.85, prefs:['es-US','es-419','es-MX','es-ES','es'], fallback:'koo', fallbackLang:'en-US'});
+    return;
+  }
+  speak(letter.name, 0.9, 'es-US');
+}
+ // force Spanish 'cu'
+  speak(letter.name, 0.9);
+}
+
+/* ---------- Scoring ---------- */
+let totalChecks=0, inc0=0, inc1=0, inc2=0, inc3=0;
+
+/* ---------- A0: Type the letter you hear ---------- */
+let A0Deck=null, a0Target=null, a0Correct=0, a0Total=0;
+function buildA0(){
+  a0Correct=0; a0Total=0; A0Deck = makeDeck(LETTERS);
+  const inp=document.getElementById('a0Input'); const fb=document.getElementById('a0Fb'); const q=document.getElementById('a0q');
+  function next(){ a0Target = A0Deck.next(); fb.textContent=''; inp.value=''; }
+  next();
+  document.getElementById('a0Play').onclick = ()=> speakLetterObj(a0Target);
+  document.getElementById('a0Check').onclick = ()=>{
+    const val=norm(inp.value); if(!val) return;
+    a0Total++; totalChecks++;
+    const pass = val===a0Target.key;
+    if(pass){ a0Correct++; q.classList.add('correct'); q.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅ Bien</span>'; }
+    else { inc0++; q.classList.add('incorrect'); q.classList.remove('correct'); fb.innerHTML='<span class="badtxt">→ Letra correcta: "<b>'+a0Target.key.toUpperCase()+'</b>"</span>'; setTimeout(()=>{ fb.textContent=''; }, 3000); }
+    document.getElementById('a0Score').textContent = `Correctos: ${a0Correct} / ${Math.max(10,a0Total)}`;
+    next();
+  };
+  document.getElementById('a0Reset').onclick = buildA0;
+}
+
+/* ---------- A1: Listen & choose ---------- */
+let A1Deck=null, a1Target=null, a1Correct=0, a1Total=0;
+function buildA1(){
+  a1Correct=0; a1Total=0; A1Deck = makeDeck(LETTERS);
+  const optsC=document.getElementById('a1Opts');
+  function round(){
+    a1Target = A1Deck.next();
+    const others = LETTERS.filter(x=>x.key!==a1Target.key);
+    const distract = pick(others, 2);
+    const choices = shuffle([a1Target, ...distract]);
+    optsC.innerHTML='';
+    choices.forEach(ch=>{
+      const b=document.createElement('div'); b.className='opt'; b.textContent=ch.key.toUpperCase();
+      b.addEventListener('click', ()=>{ optsC.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel')); b.classList.add('sel'); });
+      optsC.appendChild(b);
+    });
+  }
+  round();
+  document.getElementById('a1Play').onclick = ()=> speakLetterObj(a1Target);
+  document.getElementById('a1Check').onclick = ()=>{
+    const sel = Array.from(document.querySelectorAll('#a1Opts .opt.sel'))[0]; if(!sel) return;
+    a1Total++; totalChecks++;
+    if(sel.textContent.toLowerCase()===a1Target.key){ a1Correct++; sel.classList.add('ok'); setTimeout(()=>sel.classList.remove('ok'),600); }
+    else { inc1++; sel.classList.add('incorrect'); setTimeout(()=>sel.classList.remove('incorrect'),600); }
+    document.getElementById('a1Score').textContent = `Correctos: ${a1Correct} / ${Math.max(10,a1Total)}`;
+    round();
+  };
+  document.getElementById('a1Reset').onclick = buildA1;
+}
+
+/* ---------- A2: Dictation by spelling ---------- */
+let a2Word=null, a2Correct=0, a2Total=0;
+function spellOut(word){
+  let i=0; const names=[];
+  const w = word.replace(/-/g,''); 
+  while(i<w.length){
+    const two = w.slice(i,i+2).toLowerCase();
+    if(two==='rr'){ names.push(byKey('rr').name); i+=2; continue; }
+    if(two==='ll'){ names.push(byKey('ll').name); i+=2; continue; }
+    if(two==='ch'){ names.push(byKey('ch').name); i+=2; continue; }
+    names.push(letterNameForChar(w[i])); i+=1;
+  }
+  speakLettersSequence(names, 850, 0.85);
+}
+function buildA2(){
+  a2Correct=0; a2Total=0; document.getElementById('a2Input').value=''; document.getElementById('a2Feedback').textContent='';
+  function newWord(){ a2Word = SHORT_BANK[Math.floor(Math.random()*SHORT_BANK.length)]; }
+  newWord();
+  document.getElementById('a2Play').onclick = ()=> spellOut(a2Word);
+  document.getElementById('a2Check').onclick = ()=>{
+    const val = document.getElementById('a2Input').value.trim();
+    if(!val) return;
+    a2Total++; totalChecks++;
+    const pass = norm(val)===norm(a2Word);
+    const q=document.getElementById('a2q');
+    if(pass){ a2Correct++; q.classList.add('correct'); q.classList.remove('incorrect'); document.getElementById('a2Feedback').textContent='✅ ¡Bien!'; }
+    else { inc2++; q.classList.add('incorrect'); q.classList.remove('correct'); document.getElementById('a2Feedback').textContent=`Respuesta: ${a2Word}`; }
+    document.getElementById('a2Score').textContent = `Correctos: ${a2Correct} / ${Math.max(10,a2Total)}`;
+    document.getElementById('a2Input').value=''; newWord();
+  };
+  document.getElementById('a2Reset').onclick = buildA2;
+}
+
+/* ---------- A4: Memory with English gloss ---------- */
+let a4Word=null, a4Correct=0, a4Total=0, a4Timer=null;
+function buildA4(){
+  a4Correct=0; a4Total=0; document.getElementById('a4Input').value=''; document.getElementById('a4Display').textContent='—'; document.getElementById('a4Gloss').textContent='';
+  document.getElementById('a4Show').onclick = ()=>{
+    a4Word = WORD_BANK[Math.floor(Math.random()*WORD_BANK.length)];
+    const d=document.getElementById('a4Display'); const g=document.getElementById('a4Gloss');
+    d.textContent=a4Word; g.textContent='';
+    clearTimeout(a4Timer);
+    a4Timer = setTimeout(()=>{ d.textContent='—'; g.textContent = '(English: ' + (GLOSS[a4Word] || '—') + ')'; }, 3000);
+  };
+  document.getElementById('a4Check').onclick = ()=>{
+    const val = document.getElementById('a4Input').value.trim();
+    if(!val||!a4Word) return;
+    a4Total++; totalChecks++;
+    const q=document.getElementById('a4q');
+    if(norm(val)===norm(a4Word)){ a4Correct++; q.classList.add('correct'); q.classList.remove('incorrect'); }
+    else { inc3++; q.classList.add('incorrect'); q.classList.remove('correct'); }
+    document.getElementById('a4Score').textContent = `Correctos: ${a4Correct} / ${Math.max(10,a4Total)}`;
+    document.getElementById('a4Input').value='';
+  };
+  document.getElementById('a4Reset').onclick = buildA4;
+}
+
+/* ---------- Report ---------- */
+function formatSeconds(s){ const m=Math.floor(s/60), r=s%60; return m+":"+(r<10?"0":"")+r; }
+function buildReportText(){
+  const name=(document.getElementById('studentName').value||'SinNombre').trim();
+  const secs=Math.round((performance.now()-pageStart)/1000);
+  return [
+    "Student: "+name,
+    "Time in activity: "+formatSeconds(secs),
+    "Total checks: "+totalChecks,
+    "Incorrect A1 (type letter you hear): "+inc0,
+    "Incorrect A2 (listen & choose): "+inc1,
+    "Incorrect A3 (dictation by spelling): "+inc2,
+    "Incorrect A4 (memory): "+inc3
+  ].join("\\r\\n");
+}
+function refreshPreview(){ const el=document.getElementById('reportPreview'); if(el) el.textContent = buildReportText(); }
+function copyReport(){
+  const txt=buildReportText();
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(()=>alert('Copied')).catch(()=>fallback()); }
+  else fallback();
+  function fallback(){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Copied'); }catch(e){} document.body.removeChild(ta); }
+}
+function downloadReport(){
+  const name=(document.getElementById('studentName').value||'SinNombre').trim().replace(/[^\\w\\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,"");
+  const blob=new Blob([buildReportText()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(name||'report')+"_reporteros1_unidad1_leccion1_elalfabeto_sounds.txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+}
+
+/* ---------- Init ---------- */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildA0(); buildA1(); buildA2(); buildA4();
+  document.getElementById('previewBtn').addEventListener('click', refreshPreview);
+  document.getElementById('copyBtn').addEventListener('click', copyReport);
+  document.getElementById('downloadReport').addEventListener('click', downloadReport);
+  setTimeout(refreshPreview, 600);
+});
+</script>
+</body>
+</html>
