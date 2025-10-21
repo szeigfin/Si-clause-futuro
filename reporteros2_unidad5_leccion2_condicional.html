@@ -1,466 +1,66 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>reporteros2_unidad5_leccion2_condicional</title>
-<style>
-  :root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--ok:#16a34a;--bad:#dc2626;--chip:#e2e8f0}
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
-  header{padding:14px;background:linear-gradient(90deg,#0ea5e9,#22c55e);color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  header .brand{font-weight:900;background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px}
-  header h1{margin:0;font-size:1.06rem}
-  .wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
-  .card{background:var(--card);border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.06);padding:16px;margin:12px 0}
-  .dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.2rem .6rem;font-size:.8rem}
-  .small{font-size:.92rem;color:var(--muted)}
-  .kbd{font-family:ui-monospace, Menlo, Consolas, monospace;background:#f1f5f9;border:1px solid #e2e8f0;border-bottom-width:3px;padding:2px 6px;border-radius:6px}
-  .primary{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
-  .ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer}
-  .q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
-  .q.correct{border-color:#86efac;background:#f0fdf4}
-  .q.incorrect{border-color:#fecaca;background:#fff7f7}
-  .feedback{margin-top:6px;font-size:.95rem;min-height:1.2em}
-  .good{color:#065f46}.bad{color:#b91c1c}
-  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
-  .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-weight:700;cursor:grab;user-select:none;border:1px solid #cbd5e1}
-  .chip.sel{outline:3px solid #2563eb}
-  .box6{width:100%;border-collapse:separate;border-spacing:10px}
-  .box6 td{border:2px dashed #cbd5e1;border-radius:10px;min-height:58px;padding:6px 8px;vertical-align:top;background:#f8fafc;position:relative}
-  .hintPron{position:absolute;top:6px;left:8px;font-size:.8rem;color:#64748b}
-  .dropzone{min-height:46px;padding-top:16px;display:flex;gap:6px;flex-wrap:wrap}
-  .flash-bad{animation:bad .35s ease}
-  .flash-ok{animation:ok .35s ease}
-  @keyframes bad{0%{background:#fff1f2}100%{background:#f8fafc}}
-  @keyframes ok{0%{background:#ecfdf5}100%{background:#f8fafc}}
-  .grid2{display:grid;grid-template-columns:1fr;gap:12px}
-  @media(min-width:900px){ .grid2{grid-template-columns:1fr 1fr} }
-  .fade-out{animation:fade .6s ease forwards}
-  @keyframes fade{from{opacity:1}to{opacity:0}}
-  /* collapsible */
-  .collap-btn{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between}
-  .collap-body{max-height:0;overflow:hidden;transition:max-height .5s ease,padding .4s ease;padding:0 12px}
-</style>
-</head>
-<body>
-<header>
-  <span class="brand">ProfeVT</span>
-  <h1>reporteros2_unidad5_leccion2 — El condicional</h1>
-  <div style="margin-left:auto" class="small">Nombre / Name:
-    <input id="studentName" placeholder="Tu nombre…" style="max-width:240px">
-  </div>
-</header>
-
-<div class="wrap">
-
-  <!-- I CAN + ACTFL -->
-  <section class="card">
-    <h2 style="margin:.2rem 0 .6rem">Objetivos & ACTFL</h2>
-    <p class="dir"><b>I can</b> (EN): use the <b>conditional</b> to talk about hypothetical situations, give suggestions/polite advice, and express wishes.</p>
-    <p class="dir"><b>Yo puedo</b> (ES): usar el <b>condicional</b> para hipótesis, sugerencias/consejos y deseos.</p>
-    <p class="small"><b>Standards:</b> ACTFL 1.1, 1.2, 2.1, 3.1, 4.1, 5.1.</p>
-  </section>
-
-  <!-- COLLAPSIBLE WHEN/HOW -->
-  <section class="card">
-    <button id="toggleCondInfo" class="primary collap-btn">
-      📘 When do we use the conditional? / ¿Cuándo lo usamos?
-      <span id="arrowCond">▼</span>
-    </button>
-    <div id="condInfo" class="collap-body">
-      <h3>WHEN DO WE USE IT? / ¿CUÁNDO LO USAMOS?</h3>
-      <p class="dir">
-        • <b>Hypothetical situations</b> (present/future): <i>En un mundo ideal, tendríamos cuatro meses de vacaciones.</i><br>
-        • <b>Suggestions / advice</b>: <i>Yo que tú, estudiaría Periodismo o Comunicación; escribes muy bien.</i><br>
-        • <b>Wishes</b>: <i>Este verano me gustaría hacer un voluntariado en las islas Galápagos.</i>
-      </p>
-      <h3>HOW DO YOU CONJUGATE REGULAR VERBS? / ¿CÓMO SE CONJUGA?</h3>
-      <p class="dir">Infinitive + endings: <span class="kbd">-ía, -ías, -ía, -íamos, -íais, -ían</span></p>
-      <p class="small"><b>Irregular stems (ref.):</b> tener→tendr-, poder→podr-, decir→dir-, hacer→har-, querer→querr-, saber→sabr-, salir→saldr-, venir→vendr-, poner→pondr-, haber→habr-</p>
-    </div>
-  </section>
-
-  <!-- ACTIVITY 1 -->
-  <section class="card" id="a1">
-    <h3>Actividad 1 — Clasifica las terminaciones (la “caja de seis”)</h3>
-    <p class="dir">ES: Arrastra o haz clic en una ficha y colócala en la casilla correcta. EN: Drag or click a chip and place it in the correct pronoun box.</p>
-    <div class="chips" id="a1Bank"></div>
-    <table class="box6">
-      <tr>
-        <td data-pron="yo"><span class="hintPron">yo</span><div class="dropzone"></div></td>
-        <td data-pron="nosotros"><span class="hintPron">nosotros/as</span><div class="dropzone"></div></td>
-      </tr>
-      <tr>
-        <td data-pron="tu"><span class="hintPron">tú</span><div class="dropzone"></div></td>
-        <td data-pron="vosotros"><span class="hintPron">vosotros/as</span><div class="dropzone"></div></td>
-      </tr>
-      <tr>
-        <td data-pron="el"><span class="hintPron">él/ella/usted</span><div class="dropzone"></div></td>
-        <td data-pron="ellos"><span class="hintPron">ellos/ellas/ustedes</span><div class="dropzone"></div></td>
-      </tr>
-    </table>
-    <div class="row" style="justify-content:flex-end;margin-top:8px">
-      <button class="ghost" id="a1Reset">Reiniciar</button>
-      <button class="primary" id="a1Check">Comprobar</button>
-    </div>
-    <div class="pill" id="a1Score">Correctos: 0 / 6</div>
-  </section>
-
-  <!-- ACTIVITY 2 -->
-  <section class="card" id="a2">
-    <h3>Actividad 2 — Ordena: ¿regular o irregular?</h3>
-    <p class="dir">ES: Clasifica cada <b>conjugación en condicional</b> como <b>regular</b> (infinitivo + terminación) o <b>irregular</b> (raíz especial). EN: Sort each conditional form into Regular or Irregular.</p>
-    <div class="chips" id="a2Bank"></div>
-    <div class="grid2">
-      <div class="q">
-        <b>REGULARES</b>
-        <div class="dropzone" id="a2Reg"></div>
-      </div>
-      <div class="q">
-        <b>IRREGULARES (raíz)</b>
-        <div class="dropzone" id="a2Irr"></div>
-      </div>
-    </div>
-    <div class="row" style="justify-content:flex-end;margin-top:8px">
-      <button class="ghost" id="a2Reset">Reiniciar</button>
-      <button class="primary" id="a2Check">Comprobar</button>
-    </div>
-    <div class="pill" id="a2Score">Correctos: 0 / 12</div>
-  </section>
-
-  <!-- ACTIVITY 3 -->
-  <section class="card" id="a3">
-    <h3>Actividad 3 — Uso + forma en condicional</h3>
-    <p class="dir">ES: Elige el <b>uso</b> (hipotético / sugerencia / deseo) y escribe la forma correcta en condicional. EN: Choose the <b>use</b> and type the correct conditional form.</p>
-    <div id="a3List"></div>
-    <div class="row" style="justify-content:flex-end;margin-top:8px">
-      <button class="ghost" id="a3Reset">Reiniciar</button>
-      <button class="primary" id="a3Check">Comprobar</button>
-    </div>
-    <div class="pill" id="a3Score">Correctos: 0 / 8</div>
-  </section>
-
-  <!-- ACTIVITY 4 -->
-  <section class="card" id="a4">
-    <h3>Actividad 4 — Construye la oración en condicional</h3>
-    <p class="dir">ES: Haz clic o arrastra fichas para formar una oración lógica en condicional. EN: Click or drag chips to build a logical conditional sentence.</p>
-    <div class="q">
-      <div class="chips" id="a4Bank"></div>
-      <div class="dropzone" id="a4Drop"></div>
-      <div class="feedback" id="a4Fb"></div>
-      <div class="row" style="justify-content:flex-end">
-        <button class="ghost" id="a4Reset">Reiniciar</button>
-        <button class="primary" id="a4Check">Comprobar</button>
-      </div>
-      <div class="small" id="a4Hint" style="margin-top:6px;color:#2563eb"></div>
-      <div class="pill" id="a4Score">Correctos: 0 / 5</div>
-    </div>
-  </section>
-
-  <!-- ACTIVITY 5 -->
-  <section class="card" id="a5">
-    <h3>Actividad 5 — Caza-errores (condicional)</h3>
-    <p class="dir">ES: Haz clic en la palabra incorrecta. EN: Click the wrong word.</p>
-    <div id="a5Items"></div>
-    <div class="row" style="justify-content:flex-end;margin-top:8px">
-      <button class="ghost" id="a5Reset">Reiniciar</button>
-      <button class="primary" id="a5Check">Comprobar</button>
-    </div>
-    <div class="pill" id="a5Score">Correctos: 0 / 6</div>
-  </section>
-
-  <!-- REPORT -->
-  <section class="card">
-    <h2>Informe / Report (.txt)</h2>
-    <pre id="reportPreview">— Pulsa “Actualizar vista previa” —</pre>
-    <div class="row" style="justify-content:flex-end">
-      <button class="ghost" id="previewBtn">Actualizar vista previa</button>
-      <button class="ghost" id="copyBtn">Copiar</button>
-      <button class="primary" id="downloadReport">Descargar (.txt)</button>
-    </div>
-  </section>
-
-</div>
-
 <script>
-/* ===== helpers ===== */
-function stripAccents(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-function norm(s){ return stripAccents(String(s||'').trim().toLowerCase().replace(/\s+/g,' ')); }
-function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
-function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
-
-/* ===== collapsible ===== */
-const btn=document.getElementById('toggleCondInfo');
-const info=document.getElementById('condInfo');
-const arrow=document.getElementById('arrowCond');
-btn.addEventListener('click',()=>{
-  if(info.style.maxHeight==='0px' || !info.style.maxHeight){
-    info.style.maxHeight=info.scrollHeight+'px';
-    info.style.padding='12px';
-    arrow.textContent='▲';
-  }else{
-    info.style.maxHeight='0';
-    info.style.padding='0 12px';
-    arrow.textContent='▼';
-  }
-});
-
-/* timing */
-let pageStart=performance.now(), timeAwayTotal=0, lastHidden=null, totalChecks=0;
-document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ lastHidden=performance.now(); } else if(lastHidden){ timeAwayTotal += performance.now()-lastHidden; lastHidden=null; }});
-
-/* ====== ACT 1: Box of six ====== */
-const ENDINGS=["-ía","-ías","-ía","-íamos","-íais","-ían"];
-const PRON2END={yo:"-ía",tu:"-ías",el:"-ía",nosotros:"-íamos",vosotros:"-íais",ellos:"-ían"};
-
-function buildA1(){
-  const bank=document.getElementById('a1Bank'); bank.innerHTML='';
-  shuffle(ENDINGS).forEach(end=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=end; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', end); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
-    bank.appendChild(chip);
-  });
-  document.querySelectorAll('#a1 .box6 td').forEach(td=>{
-    const dz=td.querySelector('.dropzone'); dz.innerHTML='';
-    dz.addEventListener('dragover',e=>e.preventDefault());
-    dz.addEventListener('drop',e=>{ e.preventDefault(); placeEnding(td, e.dataTransfer.getData('text/plain')); });
-    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a1 .chip.sel'); if(sel){ placeEnding(td, sel.textContent); }});
-  });
-  document.getElementById('a1Score').textContent='Correctos: 0 / 6';
-}
-function placeEnding(td, ending){
-  const dz=td.querySelector('.dropzone'); dz.innerHTML='';
-  const span=document.createElement('span'); span.className='chip'; span.textContent=ending;
-  span.addEventListener('click',()=>{ // remove & return to bank
-    span.remove(); const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=ending;
-    c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-    c.draggable=true;
-    c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ending); c.classList.add('sel'); });
-    c.addEventListener('dragend',()=> c.classList.remove('sel'));
-    bank.appendChild(c);
-  });
-  dz.appendChild(span);
-}
-document.getElementById('a1Check').addEventListener('click',()=>{
-  totalChecks++;
-  let score=0;
-  document.querySelectorAll('#a1 .box6 td').forEach(td=>{
-    const need=PRON2END[td.dataset.pron];
-    const got=(td.querySelector('.dropzone').textContent||'').trim();
-    if(got===need){ td.classList.add('flash-ok'); setTimeout(()=>td.classList.remove('flash-ok'),350); score++; }
-    else { td.classList.add('flash-bad'); setTimeout(()=>td.classList.remove('flash-bad'),350);
-      const txt=(td.querySelector('.dropzone').textContent||'').trim();
-      if(txt){
-        td.querySelector('.dropzone').innerHTML='';
-        const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt;
-        c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-        c.draggable=true;
-        c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
-        c.addEventListener('dragend',()=> c.classList.remove('sel'));
-        bank.appendChild(c);
-      }
-    }
-  });
-  document.getElementById('a1Score').textContent=`Correctos: ${score} / 6`;
-});
-document.getElementById('a1Reset').addEventListener('click', buildA1);
-
-/* ====== ACT 2: Regular vs Irregular sort ====== */
-const A2_REG=["viajaría","estudiarías","viviríamos","cuidarían","protestaríais","limpiaría"];
-const A2_IRR=["tendría","harías","podrían","diríamos","querríais","vendrían"];
-function buildA2(){
-  const bank=document.getElementById('a2Bank'); bank.innerHTML='';
-  const all=shuffle(A2_REG.concat(A2_IRR));
-  all.forEach(f=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=f; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', f); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
-    bank.appendChild(chip);
-  });
-  ["a2Reg","a2Irr"].forEach(id=>{
-    const dz=document.getElementById(id); dz.innerHTML='';
-    dz.addEventListener('dragover',e=>e.preventDefault());
-    dz.addEventListener('drop',e=>{ e.preventDefault(); placeA2(dz, e.dataTransfer.getData('text/plain')); });
-    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a2 .chip.sel'); if(sel){ placeA2(dz, sel.textContent); }});
-  });
-  document.getElementById('a2Score').textContent='Correctos: 0 / 12';
-}
-function placeA2(dz, txt){
-  const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt;
-  chip.addEventListener('click',()=>{ chip.remove(); const bank=document.getElementById('a2Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt; c.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); }); c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); }); c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c); });
-  dz.appendChild(chip);
-}
-document.getElementById('a2Check').addEventListener('click',()=>{
-  totalChecks++;
-  const regSel=Array.from(document.querySelectorAll('#a2Reg .chip')).map(c=>c.textContent);
-  const irrSel=Array.from(document.querySelectorAll('#a2Irr .chip')).map(c=>c.textContent);
-  let right=0;
-  A2_REG.forEach(x=>{ if(regSel.includes(x)) right++; });
-  A2_IRR.forEach(x=>{ if(irrSel.includes(x)) right++; });
-  document.getElementById('a2Score').textContent=`Correctos: ${right} / 12`;
-});
-document.getElementById('a2Reset').addEventListener('click', buildA2);
-
-/* ====== ACT 3: Use + Completion ====== */
-const A3_ITEMS=[
-  {prompt:"En un mundo ideal, nosotros ______ (viajar) más.", use:"hipotético", ans:"viajaríamos"},
-  {prompt:"Yo que tú, ______ (probar) energía solar.", use:"sugerencia", ans:"probarías"},
-  {prompt:"Este verano me ______ (gustar) hacer un voluntariado.", use:"deseo", ans:"gustaría"},
-  {prompt:"Con más tiempo libre, ellos ______ (diseñar) soluciones nuevas.", use:"hipotético", ans:"diseñarían"},
-  {prompt:"Yo que tú, ______ (poder) informarte en la web del municipio.", use:"sugerencia", ans:"podrías"},
-  {prompt:"Me ______ (encantar) trabajar como voluntario.", use:"deseo", ans:"encantaría"},
-  {prompt:"La ciudad ______ (ser) más sostenible con paneles solares.", use:"hipotético", ans:"sería"},
-  {prompt:"Yo que tú, ______ (estudiar) informática aplicada al medioambiente.", use:"sugerencia", ans:"estudiarías"}
+// ====== ACT 5 (new): Dropdown — choose the correct conditional ======
+const A5_ITEMS_NEW = [
+  { prompt:"Yo ___ (ahorrar) electricidad para ayudar al planeta.", options:["ahorraría","ahorrarías","ahorrarían"], correct:"ahorraría" },
+  { prompt:"Ellos ___ (construir) parques el año que viene.", options:["construiría","construiríamos","construirían"], correct:"construirían" },
+  { prompt:"Nosotros ___ (poder) reciclar más en el barrio.", options:["podrías","podríamos","podrían"], correct:"podríamos" },
+  { prompt:"Tú ___ (proteger) el bosque con más voluntarios.", options:["protegerías","protegerían","protegería"], correct:"protegerías" },
+  { prompt:"La ciudad ___ (pagar) menos con energía solar.", options:["pagaría","pagarías","pagaríamos"], correct:"pagaría" },
+  { prompt:"Los ingenieros ___ (decir) que es sostenible.", options:["diría","dirías","dirían"], correct:"dirían" },
+  { prompt:"Nosotros ___ (instalar) paneles solares en la escuela.", options:["instalaríamos","instalaríais","instalarían"], correct:"instalaríamos" },
+  { prompt:"¿Tú ___ (explicar) el plan de energía renovable?", options:["explicaría","explicarías","explicarían"], correct:"explicarías" }
 ];
-const A3_USES=["hipotético","sugerencia","deseo"];
-function buildA3(){
-  const c=document.getElementById('a3List'); c.innerHTML='';
-  shuffle(A3_ITEMS).forEach((it,idx)=>{
-    const row=document.createElement('div'); row.className='q';
-    row.innerHTML = `<div>${idx+1}) ${it.prompt}</div>
-      <div class="small" style="margin:6px 0">
-        Uso / Use:
-        <select class="a3use">${A3_USES.map(x=>`<option>${x}</option>`).join('')}</select>
-        &nbsp;|&nbsp;
-        Forma: <input type="text" class="a3in" placeholder="condicional">
+
+function buildA5(){
+  const c = document.getElementById('a5List');
+  c.innerHTML = '';
+  // Randomize item order and option order for each item
+  const items = A5_ITEMS_NEW.slice();
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  items.forEach((it, idx) => {
+    const opts = it.options.slice().sort(()=>Math.random()-0.5);
+    const row = document.createElement('div');
+    row.className = 'q';
+    row.dataset.correct = it.correct;
+    row.innerHTML = `
+      <div>${idx+1}) ${it.prompt}</div>
+      <div class="small" style="margin-top:6px">
+        <select class="a5sel">${opts.map(o=>`<option>${o}</option>`).join('')}</select>
       </div>
-      <div class="feedback small"></div>`;
-    row.dataset.use=it.use; row.dataset.ans=it.ans;
+      <div class="feedback small"></div>
+    `;
     c.appendChild(row);
   });
+  document.getElementById('a5Score').textContent = 'Correctos: 0 / ' + A5_ITEMS_NEW.length;
 }
-document.getElementById('a3Check').addEventListener('click',()=>{
-  totalChecks++;
-  let score=0;
-  document.querySelectorAll('#a3List .q').forEach(row=>{
-    const use=row.querySelector('.a3use').value;
-    const inp=row.querySelector('.a3in').value;
-    const fb=row.querySelector('.feedback');
-    const ok=(use===row.dataset.use)&&(norm(inp)===norm(row.dataset.ans));
-    if(ok){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅</span>'; }
-    else{ row.classList.add('incorrect'); row.classList.remove('correct'); fb.innerHTML=`<span class="bad">→ Uso: ${row.dataset.use} | Forma: ${row.dataset.ans}</span>`; setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; },650); },3000); }
-  });
-  document.getElementById('a3Score').textContent=`Correctos: ${score} / ${document.querySelectorAll('#a3List .q').length}`;
-});
-document.getElementById('a3Reset').addEventListener('click', buildA3);
 
-/* ====== ACT 4: Build the sentence ====== */
-const A4_MODELS=[
-  ["Nosotros","instalaríamos","paneles","solares","en","la","escuela."],
-  ["La","ciudad","invertiría","en","transporte","limpio."],
-  ["¿Podrías","explicarme","el","plan","de","energía","renovable?"],
-  ["Me","encantaría","trabajar","como","voluntario.",""],
-  ["Ellos","protegerían","el","medioambiente","con","reciclaje."]
-];
-function buildA4(){
-  const bank=document.getElementById('a4Bank'), drop=document.getElementById('a4Drop'), hint=document.getElementById('a4Hint');
-  bank.innerHTML=''; drop.innerHTML=''; document.getElementById('a4Fb').textContent='';
-  const model=pick(A4_MODELS).filter(Boolean);
-  hint.textContent='Pista / Hint: '+model.join(' ');
-  shuffle(model).forEach(w=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=w; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', w); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a4 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
-    bank.appendChild(chip);
+document.getElementById('a5Check').addEventListener('click', () => {
+  // Reuse the global totalChecks if present
+  try { totalChecks++; } catch(e){}
+  let score = 0;
+  document.querySelectorAll('#a5List .q').forEach(row => {
+    const sel = row.querySelector('.a5sel').value;
+    const fb = row.querySelector('.feedback');
+    if (sel === row.dataset.correct) {
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.innerHTML = '<span class="good">✅</span>';
+      score++;
+    } else {
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.innerHTML = `<span class="bad">→ ${row.dataset.correct}</span>`;
+      // Fade out feedback after 3s
+      setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; }, 650); }, 3000);
+    }
   });
-  drop.addEventListener('dragover',e=>e.preventDefault());
-  drop.addEventListener('drop',e=>{ e.preventDefault(); addToDrop(e.dataTransfer.getData('text/plain')); });
-  drop.addEventListener('click',()=>{ const sel=document.querySelector('#a4 .chip.sel'); if(sel){ addToDrop(sel.textContent); }});
-  function addToDrop(word){
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=word;
-    chip.addEventListener('click',()=>chip.remove());
-    drop.appendChild(chip);
-  }
-}
-document.getElementById('a4Check').addEventListener('click',()=>{
-  totalChecks++;
-  const target=document.getElementById('a4Hint').textContent.replace(/^Pista \/ Hint:\s*/,'').trim();
-  const got=Array.from(document.querySelectorAll('#a4Drop .chip')).map(c=>c.textContent).join(' ').trim();
-  const fb=document.getElementById('a4Fb');
-  if(norm(got)===norm(target)){ fb.innerHTML='<span class="good">✅ Correcto</span>'; const sc=document.getElementById('a4Score'); const n=parseInt(sc.textContent.match(/\d+/)[0])+1; sc.textContent=`Correctos: ${n} / 5`; buildA4(); }
-  else{ fb.innerHTML='<span class="bad">→ '+target+'</span>'; setTimeout(()=>{ fb.textContent=''; },3000); }
+  document.getElementById('a5Score').textContent = `Correctos: ${score} / ${A5_ITEMS_NEW.length}`;
 });
-document.getElementById('a4Reset').addEventListener('click', buildA4);
 
-/* ====== ACT 5: Error hunt ====== */
-const A5_ITEMS=[
-  {sent:"Yo ahorrarías electricidad para ayudar al planeta.", bad:"ahorrarías", fix:"ahorraría"},
-  {sent:"Ellos construiría parques el año que viene.", bad:"construiría", fix:"construirían"},
-  {sent:"Nosotros podrías reciclar más en el barrio.", bad:"podrías", fix:"podríamos"},
-  {sent:"Tú protegerían el bosque con más voluntarios.", bad:"protegerían", fix:"protegerías"},
-  {sent:"La ciudad pagaríamos menos con energía solar.", bad:"pagaríamos", fix:"pagaría"},
-  {sent:"Los ingenieros dirías que es sostenible.", bad:"dirías", fix:"dirían"}
-];
-function buildA5(){
-  const c=document.getElementById('a5Items'); c.innerHTML='';
-  A5_ITEMS.forEach((it,idx)=>{
-    const div=document.createElement('div'); div.className='q';
-    div.innerHTML = `${idx+1}) ${it.sent.replace(it.bad, '<span class="chip" data-bad="1">'+it.bad+'</span>')}
-                     <div class="feedback small"></div>`;
-    c.appendChild(div);
-  });
-}
-document.getElementById('a5').addEventListener('click',(e)=>{ const t=e.target; if(t.dataset && t.dataset.bad==='1'){ t.classList.toggle('sel'); t.classList.toggle('clicked'); }});
-document.getElementById('a5Check').addEventListener('click',()=>{
-  totalChecks++;
-  let score=0;
-  document.querySelectorAll('#a5Items .q').forEach((row,i)=>{
-    const clicked=row.querySelector('[data-bad].clicked');
-    const fb=row.querySelector('.feedback');
-    if(clicked){ score++; row.classList.add('correct'); row.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅ '+A5_ITEMS[i].fix+'</span>'; }
-    else{ row.classList.add('incorrect'); row.classList.remove('correct'); fb.innerHTML='<span class="bad">→ '+A5_ITEMS[i].fix+'</span>'; setTimeout(()=>{ fb.textContent=''; },3000); }
-  });
-  document.getElementById('a5Score').textContent=`Correctos: ${score} / ${A5_ITEMS.length}`;
-});
 document.getElementById('a5Reset').addEventListener('click', buildA5);
 
-/* ====== REPORT (.txt) ====== */
-function pad2(n){ return n<10?'0'+n:n; }
-function formatSeconds(s){ const m=Math.floor(s/60), r=s%60; return m+':'+pad2(r); }
-function buildReport(){
-  const name=(document.getElementById('studentName').value||'SinNombre').trim();
-  const secs=Math.round((performance.now()-pageStart)/1000);
-  const a1=document.getElementById('a1Score').textContent;
-  const a2=document.getElementById('a2Score').textContent;
-  const a3=document.getElementById('a3Score').textContent;
-  const a4=document.getElementById('a4Score').textContent;
-  const a5=document.getElementById('a5Score').textContent;
-  return [
-    'Student: '+name,
-    'Time in activity: '+formatSeconds(secs),
-    'Total checks: '+totalChecks,
-    'A1 Endings sort: '+a1,
-    'A2 Regular vs. Irregular: '+a2,
-    'A3 Use + Form: '+a3,
-    'A4 Build: '+a4,
-    'A5 Error hunt: '+a5,
-    'Tab-away seconds: '+Math.round(timeAwayTotal/1000)
-  ].join('\r\n');
-}
-document.getElementById('previewBtn').addEventListener('click',()=>{ document.getElementById('reportPreview').textContent=buildReport(); });
-document.getElementById('copyBtn').addEventListener('click',()=>{
-  const t=buildReport();
-  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t); alert('Copiado / Copied'); }
-  else{ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Copiado / Copied'); }
-});
-document.getElementById('downloadReport').addEventListener('click',()=>{
-  const name=(document.getElementById('studentName').value||'report').replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,'');
-  const blob=new Blob([buildReport()],{type:'text/plain;charset=utf-8'});
-  const url=URL.createObjectURL(blob); const a=document.createElement('a');
-  a.href=url; a.download=(name||'report')+'_condicional.txt';
-  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
-});
-
-/* ====== INIT ====== */
-function initAll(){ buildA1(); buildA2(); buildA3(); buildA4(); buildA5(); }
-initAll();
+// If your initAll() already calls buildA5(), this is not needed here.
+// Otherwise, call buildA5() once at load time:
+try { if (typeof initAll === 'undefined') buildA5(); } catch(e){}
 </script>
-</body>
-</html>
