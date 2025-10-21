@@ -42,16 +42,21 @@
   @keyframes fade{from{opacity:1}to{opacity:0}}
   .collap-btn{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between}
   .collap-body{max-height:0;overflow:hidden;transition:max-height .5s ease,padding .4s ease;padding:0 12px}
-  .match-wrap{display:grid;grid-template-columns:1fr;gap:12px}
-  @media(min-width:900px){ .match-wrap{grid-template-columns:1fr 1fr} }
-  .match-col{border:1px solid #e5e7eb;border-radius:12px;padding:10px}
+
+  /* A2/A4 helpers */
+  .dropzone.a4 {min-height:56px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc}
+  .chip.dragging{opacity:.6}
+
+  /* A5 table layout */
+  .a5-table{width:100%;border-collapse:separate;border-spacing:8px}
+  .a5-table td{vertical-align:top}
+  .a5-left{width:48%;border:1px solid #e5e7eb;border-radius:12px;background:#fff;padding:10px}
+  .a5-right{width:52%;border:1px solid #e5e7eb;border-radius:12px;background:#fff;padding:10px}
   .slot{min-height:44px;border:2px dashed #cbd5e1;border-radius:10px;background:#f8fafc;padding:6px;display:flex;gap:6px;flex-wrap:wrap}
   .half{padding:6px;border:1px solid #cbd5e1;border-radius:10px;background:#eef2ff;cursor:grab;user-select:none}
   .highlight{outline:3px solid #16a34a}
   .shake{animation:shake .35s}
   @keyframes shake { 10%, 90% {transform: translateX(-1px);} 20%, 80% {transform: translateX(2px);} 30%, 50%, 70% {transform: translateX(-4px);} 40%, 60% {transform: translateX(4px);} }
-  .dropzone.a4 {min-height:56px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc}
-  .chip.dragging{opacity:.6}
 </style>
 </head>
 <body>
@@ -169,29 +174,26 @@
     </div>
   </section>
 
-  <!-- ACTIVITY 5 (matching) -->
+  <!-- ACTIVITY 5 -->
   <section class="card" id="a5">
-    <h3>Actividad 5 — Empareja: <em>Si…</em> + resultado (condicional)</h3>
-    <p class="dir">ES: Arrastra o haz clic en una mitad de oración (<em>Si…</em>) y colócala junto a su resultado en condicional. EN: Drag/click a “Si…” half and place it with its conditional result.</p>
-    <div class="match-wrap">
-      <div class="match-col">
-        <b>Si… (causa)</b>
-        <div id="a5Left" class="chips"></div>
-        <div class="row" style="margin-top:6px">
-          <button class="ghost" id="a5Shuffle">Mezclar</button>
-          <button class="ghost" id="a5HintBtn">Pista</button>
-        </div>
+    <h3>Actividad 5 — “Si…” a la izquierda + resultado en condicional a la derecha</h3>
+    <p class="dir">ES: Observa la cláusula con <b>si</b> (izquierda). Arrastra o haz clic en la cláusula correcta en condicional (desde el banco) y colócala en el <b>espacio de la derecha</b>. EN: See the <b>si</b>-clause on the left; drag/click the right conditional result into the right-side space.</p>
+
+    <table class="a5-table">
+      <tbody id="a5Rows"></tbody>
+    </table>
+
+    <div class="q" style="margin-top:10px">
+      <b>Banco de respuestas (condicional)</b>
+      <div id="a5Bank" class="chips"></div>
+      <div class="row" style="justify-content:flex-end;margin-top:6px">
+        <button class="ghost" id="a5Shuffle">Mezclar</button>
+        <button class="ghost" id="a5HintBtn">Pista</button>
+        <button class="ghost" id="a5Reset">Reiniciar</button>
+        <button class="primary" id="a5Check">Comprobar</button>
       </div>
-      <div class="match-col">
-        <b>Resultado (condicional)</b>
-        <div id="a5Right" class="q"></div>
-      </div>
+      <div class="pill" id="a5Score">Correctos: 0 / 6</div>
     </div>
-    <div class="row" style="justify-content:flex-end;margin-top:8px">
-      <button class="ghost" id="a5Reset">Reiniciar</button>
-      <button class="primary" id="a5Check">Comprobar</button>
-    </div>
-    <div class="pill" id="a5Score">Correctos: 0 / 6</div>
   </section>
 
   <!-- COLLAPSIBLE: Si + Past Subjunctive + Conditional -->
@@ -201,27 +203,36 @@
       <span id="arrowSiImp">▼</span>
     </button>
     <div id="siImpInfo" class="collap-body">
-      <h3>Relación de tiempos (significado)</h3>
+      <h3>Relación de tiempos (significado claro)</h3>
       <p class="dir">
-        <b>Estructura:</b> <i>Si + imperfecto de subjuntivo</i>, <i>condicional</i>.<br>
-        <b>Valor:</b> la cláusula con <i>si</i> describe una situación <u>no real / contraria a la realidad</u> en el presente.  
-        Con el <b>condicional</b> en la segunda parte, decimos que si la primera parte <u>fuera verdad</u>, la segunda <u>podría cumplirse</u> (sería posible).<br>
-        Ej.: <b>Si</b> <i>tuviéramos</i> más recursos, <b>trabajaríamos</b> con energía solar.
+        <b>Estructura / Pattern:</b> <i>Si + imperfecto de subjuntivo</i>, <i>condicional</i>.<br>
+        <b>Idea central / Core meaning:</b> La cláusula con <i>si</i> describe una situación
+        <u>no real / contraria a la realidad</u> en el presente. Con el <b>condicional</b> decimos lo que
+        <u>podría / pasaría</u> <i>si eso fuera verdad</i>.<br>
+        <span class="small">Now it isn’t true → (hypothesis) → If it <i>were</i> true, the second part <i>would/could</i> be true.</span>
       </p>
 
-      <h3>Cómo formar el <i>imperfecto de subjuntivo</i></h3>
+      <h3>Ejemplos con interpretación</h3>
       <p class="dir">
-        1) Toma la forma de <b>ellos</b> en pretérito: <i>tuvieron, fueron, pudieron, hicieron…</i><br>
-        2) Quita <b>-ron</b>: <i>tuvie-, fue-, pudie-, hicie-</i>…<br>
-        3) Añade terminaciones: <span class="kbd">-ra, -ras, -ra, -ramos, -rais, -ran</span> (acento en la sílaba anterior a <i>-ramos</i>).<br>
-        Ej.: <i>tuviera/tuvieran</i>, <i>fuera/fueran</i>, <i>pudiera/pudieran</i>, <i>hiciera</i>, <i>viniera</i>.
+        • Si <i>tuviéramos</i> paneles solares, <b>pagaríamos</b> menos por la luz.<br>
+        <span class="small">We don’t have them → If we had them, we would pay less.</span><br><br>
+        • Si <i>pudieras</i> venir mañana, <b>terminaríamos</b> el proyecto.<br>
+        <span class="small">You can’t/aren’t coming now → If you could, we would finish it.</span>
       </p>
 
-      <h3>Más ejemplos</h3>
+      <h3>Cómo formar el <i>imperfecto de subjuntivo</i> (rápido)</h3>
       <p class="dir">
-        • <b>Si</b> <i>fuera</i> más barato, <b>viajaríamos</b> en tren.<br>
-        • <b>Si</b> <i>pudiéramos</i> instalar paneles, <b>ahorraríamos</b> energía.<br>
-        • <b>Si</b> <i>hubiera</i> menos contaminación, <b>disfrutaríamos</b> más la ciudad.
+        1) Ellos en pretérito: <i>tuvieron, fueron, pudieron, hicieron, vinieron…</i><br>
+        2) Quita <b>-ron</b>: <i>tuvie-, fue-, pudie-, hicie-, vinie-</i>…<br>
+        3) Añade: <span class="kbd">-ra, -ras, -ra, -ramos, -rais, -ran</span> (acento antes de <i>-ramos</i>).<br>
+        <span class="small">Ej.: <i>tuviera/tuvieran, fuera/fueran, pudiera/pudieran, hiciera, viniera…</i></span>
+      </p>
+
+      <h3>Evita estos errores comunes</h3>
+      <p class="dir">
+        ❌ <i>Si tendría</i> tiempo, <i>viajaría</i>… → ✅ <b>Si <i>tuviera</i></b> tiempo, <b><i>viajaría</i></b>…<br>
+        ❌ Mezclar presente con condicional para lo irreal.<br>
+        ✅ Real/posible: <i>Si tengo</i> tiempo, <i>voy/iré</i>… (no subjuntivo, no condicional).
       </p>
     </div>
   </section>
@@ -257,7 +268,6 @@ function sayForChip(txt){
   const s = String(txt).trim();
   return s.startsWith('-') ? s.slice(1) : s;
 }
-
 function speakEs(text){
   if(!('speechSynthesis' in window)) return;
   const toSay = sayForChip(text);
@@ -501,7 +511,7 @@ function getDropInsertTarget(container, x, y){
 }
 document.getElementById('a4Reset').addEventListener('click', buildA4);
 
-/* ====== ACT 5 ====== */
+/* ====== ACT 5 (Si left, drop space right) ====== */
 const A5_PAIRS=[
   ["Si tuviera más tiempo,","viajaría por Sudamérica."],
   ["Si hiciera sol,","iríamos a la playa."],
@@ -510,35 +520,46 @@ const A5_PAIRS=[
   ["Si tuviéramos un buen plan,","protegeríamos el ecosistema."],
   ["Si pudieran elegir,","estudiarían energía sostenible."]
 ];
-let A5_leftOrder=[], A5_rightOrder=[];
-function renderA5(){
-  const left=document.getElementById('a5Left');
-  const right=document.getElementById('a5Right');
-  left.innerHTML=''; right.innerHTML='';
-  A5_rightOrder.forEach((idx,i)=>{
-    const [si,res]=A5_PAIRS[idx];
-    const q=document.createElement('div'); q.className='q'; q.dataset.index=idx; q.dataset.res=res;
-    q.innerHTML=`<div><b>${i+1})</b> ${si}</div>
-                 <div class="slot" data-slot="${i}"></div>
-                 <div class="feedback small"></div>`;
-    right.appendChild(q);
+
+let A5_order=[];
+function buildA5Rows(){
+  const tbody=document.getElementById('a5Rows'); tbody.innerHTML='';
+  A5_order = shuffle(A5_PAIRS.map((_,i)=>i));
+  A5_order.forEach((idx,i)=>{
+    const [si,res] = A5_PAIRS[idx];
+    const tr=document.createElement('tr');
+    const tdL=document.createElement('td'); tdL.className='a5-left';
+    tdL.innerHTML = `<b>${i+1})</b> ${si}`;
+    const tdR=document.createElement('td'); tdR.className='a5-right';
+    tdR.innerHTML = `<div class="slot" data-index="${idx}"></div><div class="feedback small"></div>`;
+    tr.appendChild(tdL); tr.appendChild(tdR);
+    tbody.appendChild(tr);
   });
-  A5_leftOrder.forEach(idx=>{
-    const res=A5_PAIRS[idx][1];
-    const chip=mkChip(res,'#a5'); chip.classList.replace('chip','half');
-    chip.addEventListener('click',()=>{ 
-      const slot = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half'));
-      if(slot){ placeA5(slot, res, chip); }
-    });
-    left.appendChild(chip);
-  });
-  document.querySelectorAll('#a5 .slot').forEach(s=>{
+
+  document.querySelectorAll('#a5Rows .slot').forEach(s=>{
     s.addEventListener('dragover',e=>e.preventDefault());
-    s.addEventListener('drop',e=>{ e.preventDefault(); const txt=e.dataTransfer.getData('text/plain'); const src=document.querySelector('#a5Left .half.sel'); placeA5(s, txt, src); });
-    s.addEventListener('click',()=>{ document.querySelectorAll('#a5 .slot').forEach(x=>x.classList.remove('sel')); s.classList.add('sel'); });
+    s.addEventListener('drop',e=>{
+      e.preventDefault();
+      const txt=e.dataTransfer.getData('text/plain');
+      const src=document.querySelector('#a5Bank .half.sel');
+      placeA5(s, txt, src);
+    });
+    s.addEventListener('click',()=>{ document.querySelectorAll('#a5Rows .slot').forEach(x=>x.classList.remove('sel')); s.classList.add('sel'); });
   });
-  document.getElementById('a5Score').textContent='Correctos: 0 / '+A5_PAIRS.length;
 }
+
+function buildA5Bank(){
+  const bank=document.getElementById('a5Bank'); bank.innerHTML='';
+  shuffle(A5_PAIRS.map(p=>p[1])).forEach(res=>{
+    const chip=mkChip(res,'#a5'); chip.classList.replace('chip','half');
+    chip.addEventListener('click',()=>{
+      const target = document.querySelector('#a5Rows .slot.sel') || Array.from(document.querySelectorAll('#a5Rows .slot')).find(s=>!s.querySelector('.half'));
+      if(target){ placeA5(target, res, chip); }
+    });
+    bank.appendChild(chip);
+  });
+}
+
 function placeA5(slot, txt, sourceChip){
   const exist=slot.querySelector('.half');
   if(exist){ returnToBank(exist.textContent); exist.remove(); }
@@ -547,48 +568,44 @@ function placeA5(slot, txt, sourceChip){
   slot.appendChild(chip);
   if(sourceChip && sourceChip.remove) sourceChip.remove();
 }
+
 function returnToBank(txt){
   const back=mkChip(txt,'#a5'); back.classList.replace('chip','half');
-  back.addEventListener('click',()=>{ 
-    const slot = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half'));
-    if(slot){ placeA5(slot, txt, back); }
+  back.addEventListener('click',()=>{
+    const target = document.querySelector('#a5Rows .slot.sel') || Array.from(document.querySelectorAll('#a5Rows .slot')).find(s=>!s.querySelector('.half'));
+    if(target){ placeA5(target, txt, back); }
   });
-  document.getElementById('a5Left').appendChild(back);
+  document.getElementById('a5Bank').appendChild(back);
 }
-function buildA5(shuffleBoth=true){
-  if(shuffleBoth){
-    A5_leftOrder = shuffle(A5_PAIRS.map((_,i)=>i));
-    A5_rightOrder = shuffle(A5_PAIRS.map((_,i)=>i));
-  }else{
-    if(!A5_leftOrder.length) A5_leftOrder=A5_PAIRS.map((_,i)=>i);
-    if(!A5_rightOrder.length) A5_rightOrder=A5_PAIRS.map((_,i)=>i);
-  }
-  renderA5();
-}
-document.getElementById('a5Check').addEventListener('click',()=>{
+
+function checkA5(){
   totalChecks++;
   let score=0;
-  document.querySelectorAll('#a5Right .q').forEach(q=>{
-    const expected=q.dataset.res;
-    const got=(q.querySelector('.slot .half')||{}).textContent||'';
-    const fb=q.querySelector('.feedback');
-    if(norm(got)===norm(expected)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅</span>'; }
-    else{ q.classList.add('incorrect'); q.classList.remove('correct'); fb.innerHTML=`<span class="bad">→ ${expected}</span>`; setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; },650); },3000); }
+  document.querySelectorAll('#a5Rows tr').forEach((tr, i)=>{
+    const slot=tr.querySelector('.slot');
+    const idx=slot.dataset.index;
+    const expected=A5_PAIRS[idx][1];
+    const got=(slot.querySelector('.half')||{}).textContent||'';
+    const fb=tr.querySelector('.feedback');
+    if(norm(got)===norm(expected)){ score++; tr.classList.add('correct'); tr.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅</span>'; }
+    else{ tr.classList.add('incorrect'); tr.classList.remove('correct'); fb.innerHTML=`<span class="bad">→ ${expected}</span>`; setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; },650); },3000); }
   });
   document.getElementById('a5Score').textContent=`Correctos: ${score} / ${A5_PAIRS.length}`;
-});
-document.getElementById('a5Reset').addEventListener('click',()=>buildA5(true));
-document.getElementById('a5Shuffle').addEventListener('click',()=>buildA5(true));
+}
+
+document.getElementById('a5Shuffle').addEventListener('click',()=>{ buildA5Rows(); buildA5Bank(); });
 document.getElementById('a5HintBtn').addEventListener('click',()=>{
-  const slots = Array.from(document.querySelectorAll('#a5Right .q'));
-  const target = slots.find(q=>!q.querySelector('.slot .half')) || slots[0];
-  if(!target) return;
-  const res = target.dataset.res;
-  const chip = Array.from(document.querySelectorAll('#a5Left .half')).find(h=>norm(h.textContent)===norm(res));
+  const row = Array.from(document.querySelectorAll('#a5Rows tr')).find(r=>!r.querySelector('.slot .half')) || document.querySelector('#a5Rows tr');
+  if(!row) return;
+  const idx=row.querySelector('.slot').dataset.index;
+  const res=A5_PAIRS[idx][1];
+  const chip = Array.from(document.querySelectorAll('#a5Bank .half')).find(h=>norm(h.textContent)===norm(res));
   if(chip){ chip.classList.add('highlight'); setTimeout(()=>chip.classList.remove('highlight'),1200); }
-  const wrongs = Array.from(document.querySelectorAll('#a5Left .half')).filter(h=>norm(h.textContent)!==norm(res));
+  const wrongs = Array.from(document.querySelectorAll('#a5Bank .half')).filter(h=>norm(h.textContent)!==norm(res));
   shuffle(wrongs).slice(0,2).forEach(el=>{ el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),400); });
 });
+document.getElementById('a5Reset').addEventListener('click',()=>{ buildA5Rows(); buildA5Bank(); });
+document.getElementById('a5Check').addEventListener('click', checkA5);
 
 /* ====== REPORT (.txt) ====== */
 function pad2(n){ return n<10?'0'+n:n; }
@@ -609,7 +626,7 @@ function buildReport(){
     'A2 Regular vs. Irregular: '+a2,
     'A3 Use + Form: '+a3,
     'A4 Build (order): '+a4,
-    'A5 Si-match: '+a5,
+    'A5 Si→Cond match: '+a5,
     'Tab-away seconds: '+Math.round(timeAwayTotal/1000)
   ].join('\r\n');
 }
@@ -628,7 +645,10 @@ document.getElementById('downloadReport').addEventListener('click',()=>{
 });
 
 /* ====== INIT ====== */
-function initAll(){ buildA1(); buildA2(); buildA3(); buildA4(); buildA5(true); }
+function initAll(){
+  buildA1(); buildA2(); buildA3(); buildA4();
+  buildA5Rows(); buildA5Bank();
+}
 initAll();
 </script>
 </body>
