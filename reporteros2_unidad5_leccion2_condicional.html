@@ -40,15 +40,16 @@
   @media(min-width:900px){ .grid2{grid-template-columns:1fr 1fr} }
   .fade-out{animation:fade .6s ease forwards}
   @keyframes fade{from{opacity:1}to{opacity:0}}
-  /* collapsible */
   .collap-btn{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between}
   .collap-body{max-height:0;overflow:hidden;transition:max-height .5s ease,padding .4s ease;padding:0 12px}
-  /* A5 matching */
   .match-wrap{display:grid;grid-template-columns:1fr;gap:12px}
   @media(min-width:900px){ .match-wrap{grid-template-columns:1fr 1fr} }
   .match-col{border:1px solid #e5e7eb;border-radius:12px;padding:10px}
   .slot{min-height:44px;border:2px dashed #cbd5e1;border-radius:10px;background:#f8fafc;padding:6px;display:flex;gap:6px;flex-wrap:wrap}
   .half{padding:6px;border:1px solid #cbd5e1;border-radius:10px;background:#eef2ff;cursor:grab;user-select:none}
+  .highlight{outline:3px solid #16a34a}
+  .shake{animation:shake .35s}
+  @keyframes shake { 10%, 90% {transform: translateX(-1px);} 20%, 80% {transform: translateX(2px);} 30%, 50%, 70% {transform: translateX(-4px);} 40%, 60% {transform: translateX(4px);} }
 </style>
 </head>
 <body>
@@ -166,7 +167,7 @@
     </div>
   </section>
 
-  <!-- ACTIVITY 5 (NEW) -->
+  <!-- ACTIVITY 5 -->
   <section class="card" id="a5">
     <h3>Actividad 5 — Empareja: <em>Si…</em> + resultado (condicional)</h3>
     <p class="dir">ES: Arrastra o haz clic en una mitad de oración (Si…) y colócala junto a su resultado en condicional. EN: Drag or click a “Si…” half and place it with its conditional result.</p>
@@ -174,6 +175,10 @@
       <div class="match-col">
         <b>Si… (causa)</b>
         <div id="a5Left" class="chips"></div>
+        <div class="row" style="margin-top:6px">
+          <button class="ghost" id="a5Shuffle">Mezclar</button>
+          <button class="ghost" id="a5HintBtn">Pista</button>
+        </div>
       </div>
       <div class="match-col">
         <b>Resultado (condicional)</b>
@@ -201,13 +206,11 @@
 </div>
 
 <script>
-/* ===== helpers ===== */
 function stripAccents(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function norm(s){ return stripAccents(String(s||'').trim().toLowerCase().replace(/\s+/g,' ')); }
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
 
-/* ===== collapsible ===== */
 const btn=document.getElementById('toggleCondInfo');
 const info=document.getElementById('condInfo');
 const arrow=document.getElementById('arrowCond');
@@ -223,11 +226,9 @@ btn.addEventListener('click',()=>{
   }
 });
 
-/* timing */
 let pageStart=performance.now(), timeAwayTotal=0, lastHidden=null, totalChecks=0;
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ lastHidden=performance.now(); } else if(lastHidden){ timeAwayTotal += performance.now()-lastHidden; lastHidden=null; }});
 
-/* ====== ACT 1: Box of six ====== */
 const ENDINGS=["-ía","-ías","-ía","-íamos","-íais","-ían"];
 const PRON2END={yo:"-ía",tu:"-ías",el:"-ía",nosotros:"-íamos",vosotros:"-íais",ellos:"-ían"};
 
@@ -251,13 +252,10 @@ function buildA1(){
 function placeEnding(td, ending){
   const dz=td.querySelector('.dropzone'); dz.innerHTML='';
   const span=document.createElement('span'); span.className='chip'; span.textContent=ending;
-  span.addEventListener('click',()=>{ // remove & return to bank
-    span.remove(); const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=ending;
+  span.addEventListener('click',()=>{ span.remove(); const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=ending;
     c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-    c.draggable=true;
-    c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ending); c.classList.add('sel'); });
-    c.addEventListener('dragend',()=> c.classList.remove('sel'));
-    bank.appendChild(c);
+    c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ending); c.classList.add('sel'); });
+    c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
   });
   dz.appendChild(span);
 }
@@ -274,10 +272,8 @@ document.getElementById('a1Check').addEventListener('click',()=>{
         td.querySelector('.dropzone').innerHTML='';
         const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt;
         c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-        c.draggable=true;
-        c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
-        c.addEventListener('dragend',()=> c.classList.remove('sel'));
-        bank.appendChild(c);
+        c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
+        c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
       }
     }
   });
@@ -285,7 +281,6 @@ document.getElementById('a1Check').addEventListener('click',()=>{
 });
 document.getElementById('a1Reset').addEventListener('click', buildA1);
 
-/* ====== ACT 2: Regular vs Irregular sort ====== */
 const A2_REG=["viajaría","estudiarías","viviríamos","cuidarían","protestaríais","limpiaría"];
 const A2_IRR=["tendría","harías","podrían","diríamos","querríais","vendrían"];
 function buildA2(){
@@ -308,7 +303,11 @@ function buildA2(){
 }
 function placeA2(dz, txt){
   const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt;
-  chip.addEventListener('click',()=>{ chip.remove(); const bank=document.getElementById('a2Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt; c.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); }); c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); }); c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c); });
+  chip.addEventListener('click',()=>{ chip.remove(); const bank=document.getElementById('a2Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt;
+    c.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
+    c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
+    c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
+  });
   dz.appendChild(chip);
 }
 document.getElementById('a2Check').addEventListener('click',()=>{
@@ -322,7 +321,6 @@ document.getElementById('a2Check').addEventListener('click',()=>{
 });
 document.getElementById('a2Reset').addEventListener('click', buildA2);
 
-/* ====== ACT 3: Use + Completion ====== */
 const A3_ITEMS=[
   {prompt:"En un mundo ideal, nosotros ______ (viajar) más.", use:"hipotético", ans:"viajaríamos"},
   {prompt:"Yo que tú, ______ (probar) energía solar.", use:"sugerencia", ans:"probarías"},
@@ -365,7 +363,6 @@ document.getElementById('a3Check').addEventListener('click',()=>{
 });
 document.getElementById('a3Reset').addEventListener('click', buildA3);
 
-/* ====== ACT 4: Build the sentence ====== */
 const A4_MODELS=[
   ["Nosotros","instalaríamos","paneles","solares","en","la","escuela."],
   ["La","ciudad","invertiría","en","transporte","limpio."],
@@ -404,8 +401,7 @@ document.getElementById('a4Check').addEventListener('click',()=>{
 });
 document.getElementById('a4Reset').addEventListener('click', buildA4);
 
-/* ====== ACT 5 (NEW): Si… + resultado matching ====== */
-const A5_PAIRS = [
+const A5_PAIRS=[
   ["Si tuviera más tiempo,","viajaría por Sudamérica."],
   ["Si hiciera sol,","iríamos a la playa."],
   ["Si fueras voluntario/a,","ayudarías al medioambiente."],
@@ -413,68 +409,58 @@ const A5_PAIRS = [
   ["Si tuviéramos un buen plan,","protegeríamos el ecosistema."],
   ["Si pudieran elegir,","estudiarían energía sostenible."]
 ];
-// left chips are Si-clauses; right shows 6 slots. Students place the matching right-half next to each slot.
-function buildA5(){
+let A5_leftOrder=[], A5_rightOrder=[];
+function renderA5(){
   const left=document.getElementById('a5Left');
   const right=document.getElementById('a5Right');
   left.innerHTML=''; right.innerHTML='';
-  // build right column as slots with their prompts (Si…)
-  const shuffledPairs = shuffle(A5_PAIRS);
-  shuffledPairs.forEach((p,i)=>{
-    const q=document.createElement('div'); q.className='q'; q.dataset.si=p[0]; q.dataset.res=p[1];
-    q.innerHTML=`<div><b>${i+1})</b> ${p[0]}</div>
+  A5_rightOrder.forEach((idx,i)=>{
+    const [si,res]=A5_PAIRS[idx];
+    const q=document.createElement('div'); q.className='q'; q.dataset.index=idx; q.dataset.res=res;
+    q.innerHTML=`<div><b>${i+1})</b> ${si}</div>
                  <div class="slot" data-slot="${i}"></div>
                  <div class="feedback small"></div>`;
     right.appendChild(q);
   });
-  // build left bank with the results (conditional halves) as draggable chips
-  const results = shuffle(A5_PAIRS.map(x=>x[1]));
-  results.forEach(txt=>{
-    const chip=document.createElement('span'); chip.className='half'; chip.textContent=txt; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); chip.classList.add('sel'); });
+  A5_leftOrder.forEach(idx=>{
+    const res=A5_PAIRS[idx][1];
+    const chip=document.createElement('span'); chip.className='half'; chip.textContent=res; chip.draggable=true;
+    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', res); chip.classList.add('sel'); });
     chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ // click-> place to the first empty slot (or selected slot)
-      const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half'));
-      if(target){ placeA5(target, txt, chip); }
-    });
+    chip.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, res, chip); }});
     left.appendChild(chip);
   });
-  // make slots droppable and clickable to “arm” them
   document.querySelectorAll('#a5 .slot').forEach(s=>{
     s.addEventListener('dragover',e=>e.preventDefault());
-    s.addEventListener('drop',e=>{
-      e.preventDefault();
-      const txt=e.dataTransfer.getData('text/plain');
-      const source=document.querySelector(`#a5Left .half.sel, #a5Right .half.sel`);
-      placeA5(s, txt, source);
-    });
+    s.addEventListener('drop',e=>{ e.preventDefault(); const txt=e.dataTransfer.getData('text/plain'); const src=document.querySelector('#a5Left .half.sel'); placeA5(s, txt, src); });
     s.addEventListener('click',()=>{ document.querySelectorAll('#a5 .slot').forEach(x=>x.classList.remove('sel')); s.classList.add('sel'); });
   });
   document.getElementById('a5Score').textContent='Correctos: 0 / '+A5_PAIRS.length;
 }
 function placeA5(slot, txt, sourceChip){
-  // one chip per slot; remove existing back to bank
   const exist=slot.querySelector('.half');
-  if(exist){
-    // return old to bank
-    const back=document.createElement('span'); back.className='half'; back.textContent=exist.textContent; back.draggable=true;
-    back.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', back.textContent); back.classList.add('sel'); });
-    back.addEventListener('dragend',()=> back.classList.remove('sel'));
-    back.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, back.textContent, back); }});
-    document.getElementById('a5Left').appendChild(back);
-    exist.remove();
-  }
+  if(exist){ returnToBank(exist.textContent); exist.remove(); }
   const chip=document.createElement('span'); chip.className='half'; chip.textContent=txt;
-  chip.addEventListener('click',()=>{ // remove and return to bank
-    chip.remove();
-    const back=document.createElement('span'); back.className='half'; back.textContent=txt; back.draggable=true;
-    back.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); back.classList.add('sel'); });
-    back.addEventListener('dragend',()=> back.classList.remove('sel'));
-    back.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, txt, back); }});
-    document.getElementById('a5Left').appendChild(back);
-  });
+  chip.addEventListener('click',()=>{ chip.remove(); returnToBank(txt); });
   slot.appendChild(chip);
   if(sourceChip && sourceChip.remove) sourceChip.remove();
+}
+function returnToBank(txt){
+  const back=document.createElement('span'); back.className='half'; back.textContent=txt; back.draggable=true;
+  back.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); back.classList.add('sel'); });
+  back.addEventListener('dragend',()=> back.classList.remove('sel'));
+  back.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, txt, back); }});
+  document.getElementById('a5Left').appendChild(back);
+}
+function buildA5(shuffleBoth=true){
+  if(shuffleBoth){
+    A5_leftOrder = shuffle(A5_PAIRS.map((_,i)=>i));
+    A5_rightOrder = shuffle(A5_PAIRS.map((_,i)=>i));
+  }else{
+    if(!A5_leftOrder.length) A5_leftOrder=A5_PAIRS.map((_,i)=>i);
+    if(!A5_rightOrder.length) A5_rightOrder=A5_PAIRS.map((_,i)=>i);
+  }
+  renderA5();
 }
 document.getElementById('a5Check').addEventListener('click',()=>{
   totalChecks++;
@@ -484,13 +470,29 @@ document.getElementById('a5Check').addEventListener('click',()=>{
     const got=(q.querySelector('.slot .half')||{}).textContent||'';
     const fb=q.querySelector('.feedback');
     if(norm(got)===norm(expected)){ score++; q.classList.add('correct'); q.classList.remove('incorrect'); fb.innerHTML='<span class="good">✅</span>'; }
-    else{ q.classList.add('incorrect'); q.classList.remove('correct'); fb.innerHTML='<span class="bad">→ '+expected+'</span>'; setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; },650); },3000); }
+    else{ q.classList.add('incorrect'); q.classList.remove('correct'); fb.innerHTML=`<span class="bad">→ ${expected}</span>`; setTimeout(()=>{ fb.classList.add('fade-out'); setTimeout(()=>{ fb.classList.remove('fade-out'); fb.textContent=''; },650); },3000); }
   });
   document.getElementById('a5Score').textContent=`Correctos: ${score} / ${A5_PAIRS.length}`;
 });
-document.getElementById('a5Reset').addEventListener('click', buildA5);
+document.getElementById('a5Reset').addEventListener('click',()=>buildA5(true));
+document.getElementById('a5Shuffle').addEventListener('click',()=>buildA5(true));
+document.getElementById('a5HintBtn').addEventListener('click',()=>{
+  const slots = Array.from(document.querySelectorAll('#a5Right .q'));
+  const target = slots.find(q=>!q.querySelector('.slot .half')) || slots[0];
+  if(!target) return;
+  const res = target.dataset.res;
+  const chip = Array.from(document.querySelectorAll('#a5Left .half')).find(h=>norm(h.textContent)===norm(res));
+  if(chip){
+    chip.classList.add('highlight');
+    setTimeout(()=>chip.classList.remove('highlight'),1200);
+  }
+  const wrongs = Array.from(document.querySelectorAll('#a5Left .half')).filter(h=>norm(h.textContent)!==norm(res));
+  shuffle(wrongs).slice(0,2).forEach(el=>{
+    el.classList.add('shake');
+    setTimeout(()=>el.classList.remove('shake'),400);
+  });
+});
 
-/* ====== REPORT (.txt) ====== */
 function pad2(n){ return n<10?'0'+n:n; }
 function formatSeconds(s){ const m=Math.floor(s/60), r=s%60; return m+':'+pad2(r); }
 function buildReport(){
@@ -527,8 +529,7 @@ document.getElementById('downloadReport').addEventListener('click',()=>{
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
 });
 
-/* ====== INIT ====== */
-function initAll(){ buildA1(); buildA2(); buildA3(); buildA4(); buildA5(); }
+function initAll(){ buildA1(); buildA2(); buildA3(); buildA4(); buildA5(true); }
 initAll();
 </script>
 </body>
