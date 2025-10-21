@@ -50,6 +50,9 @@
   .highlight{outline:3px solid #16a34a}
   .shake{animation:shake .35s}
   @keyframes shake { 10%, 90% {transform: translateX(-1px);} 20%, 80% {transform: translateX(2px);} 30%, 50%, 70% {transform: translateX(-4px);} 40%, 60% {transform: translateX(4px);} }
+  /* A4 reorder helpers */
+  .dropzone.a4 {min-height:56px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc}
+  .chip.dragging{opacity:.6}
 </style>
 </head>
 <body>
@@ -150,13 +153,13 @@
     <div class="pill" id="a3Score">Correctos: 0 / 8</div>
   </section>
 
-  <!-- ACTIVITY 4 -->
+  <!-- ACTIVITY 4 (reorder-enabled) -->
   <section class="card" id="a4">
-    <h3>Actividad 4 — Construye la oración en condicional</h3>
-    <p class="dir">ES: Haz clic o arrastra fichas para formar una oración lógica en condicional. EN: Click or drag chips to build a logical conditional sentence.</p>
+    <h3>Actividad 4 — Construye la oración en condicional (reordena)</h3>
+    <p class="dir">ES: Haz clic o arrastra fichas para formar la oración. Reordena las fichas <b>arrastrándolas dentro</b> del cuadro de respuesta. EN: Click or drag to build; <b>drag within the box</b> to reorder.</p>
     <div class="q">
       <div class="chips" id="a4Bank"></div>
-      <div class="dropzone" id="a4Drop"></div>
+      <div class="dropzone a4" id="a4Drop" aria-label="Área de respuesta"></div>
       <div class="feedback" id="a4Fb"></div>
       <div class="row" style="justify-content:flex-end">
         <button class="ghost" id="a4Reset">Reiniciar</button>
@@ -167,7 +170,7 @@
     </div>
   </section>
 
-  <!-- ACTIVITY 5 -->
+  <!-- ACTIVITY 5 (matching) -->
   <section class="card" id="a5">
     <h3>Actividad 5 — Empareja: <em>Si…</em> + resultado (condicional)</h3>
     <p class="dir">ES: Arrastra o haz clic en una mitad de oración (Si…) y colócala junto a su resultado en condicional. EN: Drag or click a “Si…” half and place it with its conditional result.</p>
@@ -192,6 +195,29 @@
     <div class="pill" id="a5Score">Correctos: 0 / 6</div>
   </section>
 
+  <!-- COLLAPSIBLE: Si + Past Subjunctive + Conditional -->
+  <section class="card">
+    <button id="toggleSiImp" class="primary collap-btn">
+      🔎 Si + imperfecto de subjuntivo + condicional — ¿Cómo funciona?
+      <span id="arrowSiImp">▼</span>
+    </button>
+    <div id="siImpInfo" class="collap-body">
+      <h3>Relación de tiempos</h3>
+      <p class="dir">
+        <b>Estructura:</b> <i>Si + imperfecto de subjuntivo</i>, <i>condicional</i>.<br>
+        Ej.: <b>Si</b> <i>tuviéramos</i> más recursos, <b>trabajaríamos</b> con energía solar.
+      </p>
+      <h3>Formación del <i>imperfecto de subjuntivo</i></h3>
+      <p class="dir">
+        1) Toma la forma de <b>ellos</b> en pretérito: p. ej., <i>tuvieron</i>, <i>fueron</i>, <i>pudieron</i>.<br>
+        2) Quita <b>-ron</b> → <i>tuvie-</i>, <i>fue-</i>, <i>pudie-</i>.<br>
+        3) Añade terminaciones: <span class="kbd">-ra, -ras, -ra, -ramos, -rais, -ran</span> (acento en la sílaba anterior a <i>-ramos</i>).<br>
+        Ejemplos: <i>tuviera/tuvieran</i>, <i>fuera/fueran</i>, <i>pudiera/pudieran</i>, <i>hiciera</i>, <i>viniera</i>.
+      </p>
+      <p class="small">Usa esta estructura para hipótesis menos probables o contrarias a la realidad en el presente.</p>
+    </div>
+  </section>
+
   <!-- REPORT -->
   <section class="card">
     <h2>Informe / Report (.txt)</h2>
@@ -206,57 +232,86 @@
 </div>
 
 <script>
+/* ---------- TTS (Spanish voice) ---------- */
+let ES_VOICE=null;
+function pickEsVoice(){
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  ES_VOICE = voices.find(v=>/^(es-|es_)/i.test(v.lang)) ||
+             voices.find(v=>/spanish/i.test(v.name)) || null;
+}
+if('speechSynthesis' in window){
+  pickEsVoice();
+  window.speechSynthesis.onvoiceschanged = pickEsVoice;
+}
+function speakEs(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(String(text));
+  if(ES_VOICE){ u.voice = ES_VOICE; u.lang = ES_VOICE.lang; } else { u.lang = 'es-ES'; }
+  u.rate = 1.0; u.pitch = 1.0;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+/* ---------- helpers ---------- */
 function stripAccents(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 function norm(s){ return stripAccents(String(s||'').trim().toLowerCase().replace(/\s+/g,' ')); }
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
 
+/* ---------- collapsibles ---------- */
 const btn=document.getElementById('toggleCondInfo');
 const info=document.getElementById('condInfo');
 const arrow=document.getElementById('arrowCond');
 btn.addEventListener('click',()=>{
   if(info.style.maxHeight==='0px' || !info.style.maxHeight){
-    info.style.maxHeight=info.scrollHeight+'px';
-    info.style.padding='12px';
-    arrow.textContent='▲';
-  }else{
-    info.style.maxHeight='0';
-    info.style.padding='0 12px';
-    arrow.textContent='▼';
-  }
+    info.style.maxHeight=info.scrollHeight+'px'; info.style.padding='12px'; arrow.textContent='▲';
+  }else{ info.style.maxHeight='0'; info.style.padding='0 12px'; arrow.textContent='▼'; }
 });
 
+const btnSi=document.getElementById('toggleSiImp');
+const infoSi=document.getElementById('siImpInfo');
+const arrowSi=document.getElementById('arrowSiImp');
+btnSi.addEventListener('click',()=>{
+  if(infoSi.style.maxHeight==='0px' || !infoSi.style.maxHeight){
+    infoSi.style.maxHeight=infoSi.scrollHeight+'px'; infoSi.style.padding='12px'; arrowSi.textContent='▲';
+  }else{ infoSi.style.maxHeight='0'; infoSi.style.padding='0 12px'; arrowSi.textContent='▼'; }
+});
+
+/* timing for report */
 let pageStart=performance.now(), timeAwayTotal=0, lastHidden=null, totalChecks=0;
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ lastHidden=performance.now(); } else if(lastHidden){ timeAwayTotal += performance.now()-lastHidden; lastHidden=null; }});
 
+/* ====== ACT 1 ====== */
 const ENDINGS=["-ía","-ías","-ía","-íamos","-íais","-ían"];
 const PRON2END={yo:"-ía",tu:"-ías",el:"-ía",nosotros:"-íamos",vosotros:"-íais",ellos:"-ían"};
 
+function mkChip(txt, scopeSel){
+  const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt; chip.draggable=true;
+  chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); chip.classList.add('sel','dragging'); });
+  chip.addEventListener('dragend',()=> chip.classList.remove('sel','dragging'));
+  chip.addEventListener('click',()=>{ 
+    document.querySelectorAll(scopeSel+' .chip').forEach(c=>c.classList.remove('sel')); 
+    chip.classList.add('sel'); 
+    speakEs(txt);
+  });
+  return chip;
+}
+
 function buildA1(){
   const bank=document.getElementById('a1Bank'); bank.innerHTML='';
-  shuffle(ENDINGS).forEach(end=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=end; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', end); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
-    bank.appendChild(chip);
-  });
+  shuffle(ENDINGS).forEach(end=> bank.appendChild(mkChip(end, '#a1')));
   document.querySelectorAll('#a1 .box6 td').forEach(td=>{
     const dz=td.querySelector('.dropzone'); dz.innerHTML='';
     dz.addEventListener('dragover',e=>e.preventDefault());
     dz.addEventListener('drop',e=>{ e.preventDefault(); placeEnding(td, e.dataTransfer.getData('text/plain')); });
-    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a1 .chip.sel'); if(sel){ placeEnding(td, sel.textContent); }});
+    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a1 .chip.sel'); if(sel){ placeEnding(td, sel.textContent); sel.remove(); }});
   });
   document.getElementById('a1Score').textContent='Correctos: 0 / 6';
 }
 function placeEnding(td, ending){
   const dz=td.querySelector('.dropzone'); dz.innerHTML='';
-  const span=document.createElement('span'); span.className='chip'; span.textContent=ending;
-  span.addEventListener('click',()=>{ span.remove(); const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=ending;
-    c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-    c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', ending); c.classList.add('sel'); });
-    c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
-  });
+  const span=mkChip(ending,'#a1');
+  span.addEventListener('click',()=>{ const txt=span.textContent; span.remove(); document.getElementById('a1Bank').appendChild(mkChip(txt,'#a1')); });
   dz.appendChild(span);
 }
 document.getElementById('a1Check').addEventListener('click',()=>{
@@ -268,59 +323,43 @@ document.getElementById('a1Check').addEventListener('click',()=>{
     if(got===need){ td.classList.add('flash-ok'); setTimeout(()=>td.classList.remove('flash-ok'),350); score++; }
     else { td.classList.add('flash-bad'); setTimeout(()=>td.classList.remove('flash-bad'),350);
       const txt=(td.querySelector('.dropzone').textContent||'').trim();
-      if(txt){
-        td.querySelector('.dropzone').innerHTML='';
-        const bank=document.getElementById('a1Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt;
-        c.addEventListener('click',()=>{ document.querySelectorAll('#a1 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-        c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
-        c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
-      }
+      if(txt){ td.querySelector('.dropzone').innerHTML=''; document.getElementById('a1Bank').appendChild(mkChip(txt,'#a1')); }
     }
   });
   document.getElementById('a1Score').textContent=`Correctos: ${score} / 6`;
 });
 document.getElementById('a1Reset').addEventListener('click', buildA1);
 
+/* ====== ACT 2 ====== */
 const A2_REG=["viajaría","estudiarías","viviríamos","cuidarían","protestaríais","limpiaría"];
 const A2_IRR=["tendría","harías","podrían","diríamos","querríais","vendrían"];
 function buildA2(){
   const bank=document.getElementById('a2Bank'); bank.innerHTML='';
   const all=shuffle(A2_REG.concat(A2_IRR));
-  all.forEach(f=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=f; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', f); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
-    bank.appendChild(chip);
-  });
+  all.forEach(f=> bank.appendChild(mkChip(f,'#a2')));
   ["a2Reg","a2Irr"].forEach(id=>{
     const dz=document.getElementById(id); dz.innerHTML='';
     dz.addEventListener('dragover',e=>e.preventDefault());
     dz.addEventListener('drop',e=>{ e.preventDefault(); placeA2(dz, e.dataTransfer.getData('text/plain')); });
-    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a2 .chip.sel'); if(sel){ placeA2(dz, sel.textContent); }});
+    dz.addEventListener('click',()=>{ const sel=document.querySelector('#a2 .chip.sel'); if(sel){ placeA2(dz, sel.textContent); sel.remove(); }});
   });
   document.getElementById('a2Score').textContent='Correctos: 0 / 12';
 }
 function placeA2(dz, txt){
-  const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt;
-  chip.addEventListener('click',()=>{ chip.remove(); const bank=document.getElementById('a2Bank'); const c=document.createElement('span'); c.className='chip'; c.textContent=txt;
-    c.addEventListener('click',()=>{ document.querySelectorAll('#a2 .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); });
-    c.draggable=true; c.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); c.classList.add('sel'); });
-    c.addEventListener('dragend',()=> c.classList.remove('sel')); bank.appendChild(c);
-  });
+  const chip=mkChip(txt,'#a2');
+  chip.addEventListener('click',()=>{ chip.remove(); document.getElementById('a2Bank').appendChild(mkChip(txt,'#a2')); });
   dz.appendChild(chip);
 }
 document.getElementById('a2Check').addEventListener('click',()=>{
   totalChecks++;
   const regSel=Array.from(document.querySelectorAll('#a2Reg .chip')).map(c=>c.textContent);
   const irrSel=Array.from(document.querySelectorAll('#a2Irr .chip')).map(c=>c.textContent);
-  let right=0;
-  A2_REG.forEach(x=>{ if(regSel.includes(x)) right++; });
-  A2_IRR.forEach(x=>{ if(irrSel.includes(x)) right++; });
+  let right=0; A2_REG.forEach(x=>{ if(regSel.includes(x)) right++; }); A2_IRR.forEach(x=>{ if(irrSel.includes(x)) right++; });
   document.getElementById('a2Score').textContent=`Correctos: ${right} / 12`;
 });
 document.getElementById('a2Reset').addEventListener('click', buildA2);
 
+/* ====== ACT 3 ====== */
 const A3_ITEMS=[
   {prompt:"En un mundo ideal, nosotros ______ (viajar) más.", use:"hipotético", ans:"viajaríamos"},
   {prompt:"Yo que tú, ______ (probar) energía solar.", use:"sugerencia", ans:"probarías"},
@@ -363,44 +402,70 @@ document.getElementById('a3Check').addEventListener('click',()=>{
 });
 document.getElementById('a3Reset').addEventListener('click', buildA3);
 
+/* ====== ACT 4 (reorder-enabled) ====== */
 const A4_MODELS=[
   ["Nosotros","instalaríamos","paneles","solares","en","la","escuela."],
   ["La","ciudad","invertiría","en","transporte","limpio."],
   ["¿Podrías","explicarme","el","plan","de","energía","renovable?"],
-  ["Me","encantaría","trabajar","como","voluntario.",""],
+  ["Me","encantaría","trabajar","como","voluntario."],
   ["Ellos","protegerían","el","medioambiente","con","reciclaje."]
 ];
+let a4Answer=[], a4Target=[];
 function buildA4(){
   const bank=document.getElementById('a4Bank'), drop=document.getElementById('a4Drop'), hint=document.getElementById('a4Hint');
   bank.innerHTML=''; drop.innerHTML=''; document.getElementById('a4Fb').textContent='';
-  const model=pick(A4_MODELS).filter(Boolean);
-  hint.textContent='Pista / Hint: '+model.join(' ');
+  const model=pick(A4_MODELS).slice(); a4Target=model.slice();
+  hint.textContent='Pista / Hint: '+a4Target.join(' ');
   shuffle(model).forEach(w=>{
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=w; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', w); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ document.querySelectorAll('#a4 .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
+    const chip=mkChip(w,'#a4');
+    chip.addEventListener('click',()=>{ moveChipToDrop(chip, drop); });
     bank.appendChild(chip);
   });
-  drop.addEventListener('dragover',e=>e.preventDefault());
-  drop.addEventListener('drop',e=>{ e.preventDefault(); addToDrop(e.dataTransfer.getData('text/plain')); });
-  drop.addEventListener('click',()=>{ const sel=document.querySelector('#a4 .chip.sel'); if(sel){ addToDrop(sel.textContent); }});
-  function addToDrop(word){
-    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=word;
-    chip.addEventListener('click',()=>chip.remove());
-    drop.appendChild(chip);
-  }
+
+  drop.addEventListener('dragover',e=>{
+    e.preventDefault();
+    const dragging = document.querySelector('#a4 .chip.dragging');
+    if(!dragging) return;
+    const afterEl = getDropInsertTarget(drop, e.clientX, e.clientY);
+    if(afterEl==null){ drop.appendChild(dragging); }
+    else { drop.insertBefore(dragging, afterEl); }
+  });
+  drop.addEventListener('drop',e=>{ e.preventDefault(); });
+}
+function moveChipToDrop(chip, drop){
+  speakEs(chip.textContent);
+  chip.remove();
+  const inDrop = mkChip(chip.textContent,'#a4');
+  inDrop.addEventListener('click',()=>{ // remove from drop back to bank
+    const txt=inDrop.textContent;
+    inDrop.remove();
+    document.getElementById('a4Bank').appendChild(mkChip(txt,'#a4'));
+  });
+  drop.appendChild(inDrop);
+}
+function getDropInsertTarget(container, x, y){
+  const chips=[...container.querySelectorAll('.chip:not(.dragging)')];
+  return chips.find(ch=>{
+    const r=ch.getBoundingClientRect();
+    return y>r.top && y<r.bottom && x<r.left + r.width/2;
+  }) || null;
 }
 document.getElementById('a4Check').addEventListener('click',()=>{
   totalChecks++;
-  const target=document.getElementById('a4Hint').textContent.replace(/^Pista \/ Hint:\s*/,'').trim();
-  const got=Array.from(document.querySelectorAll('#a4Drop .chip')).map(c=>c.textContent).join(' ').trim();
+  const got=[...document.querySelectorAll('#a4Drop .chip')].map(c=>c.textContent);
+  const target=document.getElementById('a4Hint').textContent.replace(/^Pista \/ Hint:\s*/,'').trim().split(' ');
   const fb=document.getElementById('a4Fb');
-  if(norm(got)===norm(target)){ fb.innerHTML='<span class="good">✅ Correcto</span>'; const sc=document.getElementById('a4Score'); const n=parseInt(sc.textContent.match(/\d+/)[0])+1; sc.textContent=`Correctos: ${n} / 5`; buildA4(); }
-  else{ fb.innerHTML='<span class="bad">→ '+target+'</span>'; setTimeout(()=>{ fb.textContent=''; },3000); }
+  if(got.length===target.length && got.every((w,i)=>norm(w)===norm(target[i]))){
+    fb.innerHTML='<span class="good">✅ Correcto</span>';
+    const sc=document.getElementById('a4Score'); const n=parseInt(sc.textContent.match(/\d+/)[0])+1; sc.textContent=`Correctos: ${n} / 5`; buildA4();
+  }else{
+    fb.innerHTML='<span class="bad">→ '+target.join(' ')+'</span>';
+    setTimeout(()=>{ fb.textContent=''; },3000);
+  }
 });
 document.getElementById('a4Reset').addEventListener('click', buildA4);
 
+/* ====== ACT 5 ====== */
 const A5_PAIRS=[
   ["Si tuviera más tiempo,","viajaría por Sudamérica."],
   ["Si hiciera sol,","iríamos a la playa."],
@@ -424,10 +489,11 @@ function renderA5(){
   });
   A5_leftOrder.forEach(idx=>{
     const res=A5_PAIRS[idx][1];
-    const chip=document.createElement('span'); chip.className='half'; chip.textContent=res; chip.draggable=true;
-    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', res); chip.classList.add('sel'); });
-    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
-    chip.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, res, chip); }});
+    const chip=mkChip(res,'#a5'); chip.classList.replace('chip','half');
+    chip.addEventListener('click',()=>{ 
+      const slot = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half'));
+      if(slot){ placeA5(slot, res, chip); }
+    });
     left.appendChild(chip);
   });
   document.querySelectorAll('#a5 .slot').forEach(s=>{
@@ -440,16 +506,17 @@ function renderA5(){
 function placeA5(slot, txt, sourceChip){
   const exist=slot.querySelector('.half');
   if(exist){ returnToBank(exist.textContent); exist.remove(); }
-  const chip=document.createElement('span'); chip.className='half'; chip.textContent=txt;
+  const chip=mkChip(txt,'#a5'); chip.classList.replace('chip','half');
   chip.addEventListener('click',()=>{ chip.remove(); returnToBank(txt); });
   slot.appendChild(chip);
   if(sourceChip && sourceChip.remove) sourceChip.remove();
 }
 function returnToBank(txt){
-  const back=document.createElement('span'); back.className='half'; back.textContent=txt; back.draggable=true;
-  back.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); back.classList.add('sel'); });
-  back.addEventListener('dragend',()=> back.classList.remove('sel'));
-  back.addEventListener('click',()=>{ const target = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half')); if(target){ placeA5(target, txt, back); }});
+  const back=mkChip(txt,'#a5'); back.classList.replace('chip','half');
+  back.addEventListener('click',()=>{ 
+    const slot = document.querySelector('#a5 .slot.sel') || Array.from(document.querySelectorAll('#a5 .slot')).find(s=>!s.querySelector('.half'));
+    if(slot){ placeA5(slot, txt, back); }
+  });
   document.getElementById('a5Left').appendChild(back);
 }
 function buildA5(shuffleBoth=true){
@@ -482,17 +549,12 @@ document.getElementById('a5HintBtn').addEventListener('click',()=>{
   if(!target) return;
   const res = target.dataset.res;
   const chip = Array.from(document.querySelectorAll('#a5Left .half')).find(h=>norm(h.textContent)===norm(res));
-  if(chip){
-    chip.classList.add('highlight');
-    setTimeout(()=>chip.classList.remove('highlight'),1200);
-  }
+  if(chip){ chip.classList.add('highlight'); setTimeout(()=>chip.classList.remove('highlight'),1200); }
   const wrongs = Array.from(document.querySelectorAll('#a5Left .half')).filter(h=>norm(h.textContent)!==norm(res));
-  shuffle(wrongs).slice(0,2).forEach(el=>{
-    el.classList.add('shake');
-    setTimeout(()=>el.classList.remove('shake'),400);
-  });
+  shuffle(wrongs).slice(0,2).forEach(el=>{ el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),400); });
 });
 
+/* ====== REPORT (.txt) ====== */
 function pad2(n){ return n<10?'0'+n:n; }
 function formatSeconds(s){ const m=Math.floor(s/60), r=s%60; return m+':'+pad2(r); }
 function buildReport(){
@@ -510,7 +572,7 @@ function buildReport(){
     'A1 Endings sort: '+a1,
     'A2 Regular vs. Irregular: '+a2,
     'A3 Use + Form: '+a3,
-    'A4 Build: '+a4,
+    'A4 Build (order): '+a4,
     'A5 Si-match: '+a5,
     'Tab-away seconds: '+Math.round(timeAwayTotal/1000)
   ].join('\r\n');
@@ -529,6 +591,7 @@ document.getElementById('downloadReport').addEventListener('click',()=>{
   document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
 });
 
+/* ====== INIT ====== */
 function initAll(){ buildA1(); buildA2(); buildA3(); buildA4(); buildA5(true); }
 initAll();
 </script>
