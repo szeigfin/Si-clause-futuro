@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 1 • U1L1 • Días de la semana — Interactivo (v7)</title>
+<style>
+  :root{ --bg:#f8fafc; --ink:#0f172a; --muted:#475569; --accent:#2563eb;
+    --ok:#16a34a; --bad:#dc2626; --card:#ffffff; --chip:#eef2ff;
+    --chip-border:#c7d2fe; --drop:#e2e8f0; }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.45}
+  header.site{padding:18px 20px;background:#e0f2fe;border-bottom:2px solid #bae6fd}
+  header.site h1{margin:0;font-size:1.2rem}
+  header.site p{margin:.2rem 0 0;color:#0c4a6e}
+  main{max-width:1100px;margin:0 auto;padding:18px}
+  section{background:var(--card);border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 8px rgba(15,23,42,.06);margin-bottom:16px}
+  section > header{padding:14px 18px}
+  section > header h2{margin:0;font-size:1.05rem}
+  .biling{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .biling > div{padding:6px 10px;background:#f1f5f9;border-radius:8px;font-size:.92rem}
+  .pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;font-size:.75rem;margin-left:6px}
+  .content{padding:0 18px 18px}
+  .bank{display:flex;flex-wrap:wrap;gap:10px;padding:10px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fafc;min-height:56px}
+  .chip{user-select:none;cursor:grab;background:var(--chip);border:1px solid var(--chip-border);padding:6px 12px;border-radius:999px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+  .chip .icon{font-size:1.1rem}
+  .chip:focus{outline:2px solid var(--accent)}
+  .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+  .day{background:var(--drop);border-radius:12px;min-height:120px;padding:8px;border:2px dashed #cbd5e1;display:flex;flex-direction:column;gap:6px}
+  .day h4{margin:0;font-size:.95rem;color:#334155;display:flex;align-items:center;justify-content:space-between}
+  .day .meta{display:flex;gap:8px;align-items:center;color:#475569;font-size:.9rem}
+  .day .meta .icon{font-size:1.15rem}
+  .speak{font-size:.85rem;border:none;background:#c7d2fe;color:#111827;padding:2px 8px;border-radius:8px;cursor:pointer}
+  .dropzone{flex:1;min-height:42px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .day.correct{border-color:#86efac;background:#ecfdf5}
+  .day.wrong{border-color:#fecaca;background:#fef2f2}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  button{border:none;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+  button.secondary{background:#e2e8f0;color:#0f172a;font-weight:600}
+  button.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .primary{background:var(--accent); color:#fff;}
+  .score{font-weight:800}
+  .pairgrid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width: 900px){ .pairgrid{grid-template-columns:1fr 1fr;} }
+  .pair-left, .pair-right{display:grid;gap:12px}
+  .card{border:1px solid #e5e7eb;border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;background:#f9fafb}
+  .card .big{font-size:2rem}
+  .target{border:2px dashed #cbd5e1;border-radius:999px;min-height:38px;display:inline-flex;align-items:center;justify-content:center;background:#f1f5f9;padding:4px 10px;text-align:center;min-width:120px}
+  .target.correct{border-color:#86efac;background:#ecfdf5}
+  .target.wrong{border-color:#fecaca;background:#fef2f2}
+  .grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width: 800px){ .grid{ grid-template-columns: 1fr 1fr; } }
+  .sentence{min-height:52px;border:1px dashed #cbd5e1;border-radius:10px;padding:8px;display:flex;gap:8px;flex-wrap:wrap;background:#f8fafc}
+  .small{font-size:.85rem;color:#475569}
+  .good{color:var(--ok)} .bad{color:var(--bad)}
+  .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:#111827;color:#e5e7eb;padding:1px 6px;border-radius:6px}
+  .accentpad{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .accentpad button{background:#e2e8f0;color:#111827;border:none;padding:6px 10px;border-radius:8px;cursor:pointer}
+  .switch{display:flex;gap:8px;align-items:center}
+  .hint{font-size:.85rem;color:#0f766e;background:#ccfbf1;border:1px solid #99f6e4;border-radius:8px;padding:6px 10px;margin-top:6px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .date-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width: 800px){ .date-grid{grid-template-columns:1fr 1fr;} }
+  .slot{border:2px dashed #cbd5e1;border-radius:10px;min-height:48px;display:flex;align-items:center;gap:8px;padding:8px;background:#f8fafc}
+  .preview{padding:10px;border-radius:10px;background:#eef2ff;border:1px solid #c7d2fe;font-weight:700}
+  .listen-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .listen-cell{border:1px solid #e5e7eb;border-radius:10px;padding:10px;background:#f8fafc;text-align:center;cursor:pointer}
+  .listen-cell.correct{outline:3px solid #86efac;background:#ecfdf5}
+  .listen-cell.wrong{outline:3px solid #fecaca;background:#fef2f2}
+  .fade-correct{color:#dc2626;font-weight:800;opacity:1;transition:opacity 1.2s ease-in;}
+  .fade-correct.fade-out{opacity:0;}
+  .tts-warn{font-size:.85rem;color:#b45309;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:6px 10px;margin-top:6px}
+  .err{color:#b91c1c;font-weight:700}
+  .note{font-size:.85rem;color:#475569;margin-top:6px}
+  .translation{margin-top:8px; font-size:.95rem; color:#0f172a; background:#f1f5f9; border:1px solid #e2e8f0; padding:8px 10px; border-radius:8px}
+</style>
+</head>
+<body>
+<header class="site">
+  <h1>Reporteros 1 • U1L1 • Días de la semana — Página Interactiva (v7)</h1>
+  <p>Act 3 now plays a random sentence to build; check reveals translation if correct. Other improvements retained.</p>
+</header>
+
+<main>
+  <section>
+    <header><h2>Opciones / Options</h2></header>
+    <div class="content">
+      <div class="controls">
+        <label class="switch"><input id="weekStart" type="checkbox" /> Week starts on <strong>Sunday</strong> (unchecked = Monday)</label>
+        <button class="secondary" id="enableAudio">Enable audio</button>
+        <button class="secondary" id="speakAll">🔊 Say all days</button>
+        <button class="secondary" id="shuffleAll">Shuffle all</button>
+        <button class="ghost" id="resetAll">Reset all</button>
+      </div>
+      <div id="ttsMsg" class="tts-warn" hidden><strong>Audio note:</strong> click “Enable audio” once; use HTTPS; Safari/iOS requires that first click.</div>
+      <div id="errMsg" class="tts-warn" hidden></div>
+    </div>
+  </section>
+
+  <section id="act1">
+    <header>
+      <h2>Actividad 1: Ordena los días en el calendario</h2>
+      <div class="hint">Headers show <strong>English only</strong> + origin icon. Chips (in Spanish) speak when clicked or dropped.</div>
+    </header>
+    <div class="content">
+      <div class="bank" id="bank1"></div>
+      <div class="calendar" id="calendar"></div>
+      <div class="toolbar">
+        <button onclick="gradeAct1()">Grade / Calificar</button>
+        <button class="secondary" onclick="resetAct1()">Reset</button>
+        <div id="res1"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="act2">
+    <header>
+      <h2>Actividad 2: Días ↔ cuerpos celestes</h2>
+    </header>
+    <div class="content pairgrid">
+      <div class="pair-left" id="celestialTargets"></div>
+      <div class="pair-right">
+        <div class="small">Chips (días):</div>
+        <div class="bank" id="bank2" aria-label="Days bank (draggable)"></div>
+        <div class="small">Drop the correct day here / Suelta aquí el día correspondiente</div>
+        <div class="toolbar">
+          <button onclick="gradeAct2()">Grade / Calificar</button>
+          <button class="secondary" onclick="resetAct2()">Reset</button>
+          <div id="res2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="act3">
+    <header>
+      <h2>Actividad 3: Construye oraciones</h2>
+      <div class="hint">1) Haz clic en 🔊 para escuchar una oración. 2) Arrastra palabras para construirla. 3) Pulsa Check para confirmar.</div>
+    </header>
+    <div class="content grid">
+      <div>
+        <div class="sentence" id="sentence"></div>
+        <div class="bank" id="wordbank"></div>
+        <div class="toolbar" style="gap:12px;align-items:flex-start">
+          <button onclick="checkSentence()">Check / Revisar</button>
+          <button class="secondary" onclick="resetSentence()">Reset</button>
+          <button class="primary" id="readSentenceBtn">🔊 Leer oración</button>
+        </div>
+        <div class="note">Haz clic para escuchar una oración. Luego constrúyela con las fichas.</div>
+        <div id="res3" class="small"></div>
+        <div id="translation3" class="translation" hidden></div>
+      </div>
+      <div>
+        <div class="small">Consejo: Empieza con <span class="kbd">El/Los</span> + día.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="act4">
+    <header><h2>Actividad 4: Mini-quiz</h2></header>
+    <div class="content">
+      <ol id="quizlist"></ol>
+      <div class="toolbar">
+        <button onclick="gradeQuiz()">Grade / Calificar</button>
+        <button class="secondary" onclick="resetQuiz()">Reset</button>
+        <div id="res4"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="act5">
+    <header><h2>Actividad 5: Constructor de fechas</h2></header>
+    <div class="content date-grid">
+      <div>
+        <div class="small">Slots / Espacios:</div>
+        <div class="slot" id="slot-day" data-accept="day">[día]</div>
+        <div class="slot" id="slot-num" data-accept="num">[número]</div>
+        <div class="slot" id="slot-month" data-accept="month">[mes]</div>
+        <div class="toolbar">
+          <button onclick="gradeDate()">Grade / Calificar</button>
+          <button class="secondary" onclick="resetDate()">Reset</button>
+          <button class="secondary" id="readDateBtn">🔊 Leer fecha</button>
+          <div id="res5"></div>
+        </div>
+      </div>
+      <div>
+        <div class="small">Chips / Fichas:</div>
+        <div class="bank" id="bank5"></div>
+        <div class="preview" id="previewDate">Es ___, ___ de ___.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="act6">
+    <header><h2>Actividad 6: Escucha y haz clic</h2></header>
+    <div class="content">
+      <div class="toolbar">
+        <button id="playPrompt">🔊 Escuchar / Listen</button>
+        <button class="secondary" onclick="nextListening()">Next / Siguiente</button>
+        <div id="res6"></div>
+      </div>
+      <div class="listen-grid" id="listenGrid"></div>
+    </div>
+  </section>
+
+  <section id="act7">
+    <header><h2>Actividad 7: Dictado de palabras</h2></header>
+    <div class="content">
+      <div class="toolbar">
+        <button id="sayWord">🔊 Pronunciar / Say word</button>
+        <input id="dictInput" type="text" placeholder="escribe aquí / type here" style="min-width:260px" />
+        <button onclick="checkDictation()">Check / Revisar</button>
+        <button class="secondary" onclick="resetDictation()">Reset</button>
+        <div id="res7"></div>
+      </div>
+      <div id="dictFeedback" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+'use strict';
+var $ = function(s){ return document.querySelector(s); };
+var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var uid = (function(){ var i=0; return function(){ i+=1; return 'id'+i; }; })();
+function showError(msg){ var el=$('#errMsg'); if(!el) return; el.innerHTML='<span class="err">⚠︎</span> '+msg; el.hidden=false; }
+
+/* ===== TTS ===== */
+var ttsReady=false, ttsVoice=null;
+function hasSpeech(){ return typeof window!=='undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window; }
+function ensureTTSReady(){
+  if(!hasSpeech()){ showError('Your browser does not support Speech Synthesis.'); return Promise.resolve(false); }
+  if(ttsReady) return Promise.resolve(true);
+  return new Promise(function(resolve){
+    try{
+      var tryLoad=function(){
+        var voices=window.speechSynthesis.getVoices()||[];
+        if(voices.length){ ttsVoice=voices.find(function(v){return /^es(-|_|$)/i.test(v.lang);})||voices[0]; ttsReady=true; var tip=$('#ttsMsg'); if(tip) tip.hidden=true; resolve(true); }
+        else setTimeout(tryLoad,150);
+      };
+      window.speechSynthesis.cancel(); tryLoad(); window.speechSynthesis.onvoiceschanged=tryLoad;
+    }catch(e){ showError('TTS init error: '+e); resolve(false); }
+  });
+}
+function speak(text, langHint){ if(langHint===void 0) langHint='es-ES'; if(!hasSpeech()){ showError('Speech not supported.'); return; } ensureTTSReady().then(function(ok){ if(!ok) return; var u=new SpeechSynthesisUtterance(String(text)); u.lang=(ttsVoice&&ttsVoice.lang)||langHint; if(ttsVoice) u.voice=ttsVoice; try{window.speechSynthesis.cancel();}catch(_){ } try{window.speechSynthesis.speak(u);}catch(e){ showError('Speak error: '+e); } }); }
+
+/* ===== Day & Month Data (icons) ===== */
+var dayMeta = {
+  "lunes":     {en:"Monday",    icon:"🌕"},
+  "martes":    {en:"Tuesday",   icon:"🔴"},
+  "miércoles": {en:"Wednesday", icon:"☿"},
+  "jueves":    {en:"Thursday",  icon:"♃"},
+  "viernes":   {en:"Friday",    icon:"♀"},
+  "sábado":    {en:"Saturday",  icon:"🪐"},
+  "domingo":   {en:"Sunday",    icon:"☀️"}
+};
+var months = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+/* ===== Helpers ===== */
+function addDragHandlers(el){ el.addEventListener('dragstart', function(e){ e.dataTransfer.setData('text/plain', el.id); setTimeout(function(){ el.style.opacity=.5; },0); }); el.addEventListener('dragend', function(){ el.style.opacity=1; }); }
+function makeDropZone(zone, onDropCb){
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault();
+    var id=e.dataTransfer.getData('text/plain');
+    var chip=document.getElementById(id);
+    if(chip){ zone.appendChild(chip); if(onDropCb) onDropCb(chip); }
+  });
+}
+function wireChipSpeech(container){
+  container.addEventListener('click', function(e){
+    var chip = e.target.closest && e.target.closest('.chip');
+    if(chip){
+      var raw = chip.getAttribute('data-day') || chip.getAttribute('data-word') || chip.textContent || '';
+      var say = raw.replace(/\(.*?\)/g,'').trim();
+      speak(say,'es-ES');
+    }
+  });
+}
+
+/* ===== Act 1 ===== */
+function buildCalendar(){
+  var sundayStart = $('#weekStart') && $('#weekStart').checked;
+  var order = sundayStart ? ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"]
+                          : ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
+  var cal = $('#calendar'); cal.innerHTML="";
+  order.forEach(function(name){
+    var meta = dayMeta[name];
+    var col=document.createElement('div'); col.className='day'; col.setAttribute('data-accepts', name);
+    var h=document.createElement('h4');
+    var left=document.createElement('div'); left.className='meta';
+    var ic=document.createElement('span'); ic.className='icon'; ic.textContent=meta.icon;
+    var en=document.createElement('span'); en.textContent = meta.en; // English only
+    left.appendChild(ic); left.appendChild(en);
+    var b=document.createElement('button'); b.className='speak'; b.textContent='🔊'; b.addEventListener('click', function(){ speak(name); });
+    h.appendChild(left); h.appendChild(b);
+    var dz=document.createElement('div'); dz.className='dropzone'; makeDropZone(dz, function(chip){ var n=chip.getAttribute('data-day'); if(n) speak(n); });
+    col.appendChild(h); col.appendChild(dz); cal.appendChild(col);
+  });
+}
+function renderBank1(){
+  var bank=$('#bank1'); bank.innerHTML="";
+  Object.keys(dayMeta).sort(function(){return Math.random()-0.5;}).forEach(function(n){
+    var chip=document.createElement('div'); chip.className='chip'; chip.draggable=true; chip.id=uid(); chip.setAttribute('data-day',n);
+    var i=document.createElement('span'); i.className='icon'; i.textContent=dayMeta[n].icon;
+    var t=document.createElement('span'); t.textContent=n.charAt(0).toUpperCase()+n.slice(1);
+    chip.appendChild(i); chip.appendChild(t); addDragHandlers(chip); bank.appendChild(chip);
+  });
+  makeDropZone(bank, function(chip){ var n=chip.getAttribute('data-day'); if(n) speak(n); });
+  wireChipSpeech(bank);
+}
+function gradeAct1(){
+  var cols = $$('.day'); var correct=0;
+  cols.forEach(function(col){
+    var accept = col.getAttribute('data-accepts');
+    var placed = Array.prototype.slice.call(col.querySelectorAll('.chip')).map(function(c){ return c.getAttribute('data-day'); });
+    if(placed.indexOf(accept)!==-1){ correct++; col.classList.add('correct'); col.classList.remove('wrong'); }
+    else { col.classList.add('wrong'); col.classList.remove('correct'); }
+  });
+  $('#res1').innerHTML = 'Score: <span class="score '+(correct===7?'good':'bad')+'">'+correct+'/7</span>';
+}
+function resetAct1(){ buildCalendar(); renderBank1(); $$('.day').forEach(function(d){ d.classList.remove('correct','wrong'); }); }
+
+/* ===== Act 2 ===== */
+var celestialTargetsData = [
+  { id:"luna",    label:"🌕 Luna / Moon",        expects:"lunes" },
+  { id:"marte",   label:"🔴 Marte / Mars",       expects:"martes" },
+  { id:"mercurio",label:"☿ Mercurio / Mercury", expects:"miércoles" },
+  { id:"jupiter", label:"♃ Júpiter / Jupiter",   expects:"jueves" },
+  { id:"venus",   label:"♀ Venus",               expects:"viernes" },
+  { id:"saturno", label:"🪐 Saturno / Saturn",   expects:"sábado" },
+  { id:"sol",     label:"☀️ Sol / Sun",          expects:"domingo" },
+];
+function renderAct2(){
+  var bank=$('#bank2'); bank.innerHTML="";
+  Object.keys(dayMeta).sort(function(){return Math.random()-0.5;}).forEach(function(name){
+    var chip=document.createElement('div'); chip.className='chip'; chip.draggable=true; chip.id=uid();
+    chip.setAttribute('data-day', name);
+    var i=document.createElement('span'); i.className='icon'; i.textContent=dayMeta[name].icon;
+    var t=document.createElement('span'); t.textContent=name.charAt(0).toUpperCase()+name.slice(1);
+    chip.appendChild(i); chip.appendChild(t); addDragHandlers(chip); bank.appendChild(chip);
+  });
+  makeDropZone(bank, function(chip){ var n=chip.getAttribute('data-day'); if(n) speak(n); });
+  wireChipSpeech(bank);
+
+  var cont=$('#celestialTargets'); cont.innerHTML="";
+  celestialTargetsData.slice().sort(function(){return Math.random()-0.5;}).forEach(function(t){
+    var wrap=document.createElement('div'); wrap.className='card';
+    var icon=document.createElement('span'); icon.className='big'; icon.textContent=t.label.split(' ')[0];
+    var meta=document.createElement('div'); meta.innerHTML='<strong>'+t.label+'</strong><div class="small">Drop the correct day here / Suelta aquí el día correspondiente</div>';
+    var target=document.createElement('div'); target.className='target'; target.setAttribute('data-expects', t.expects);
+    makeDropZone(target, function(chip){ var n=chip.getAttribute('data-day'); if(n) speak(n); });
+    wrap.appendChild(icon); wrap.appendChild(meta); wrap.appendChild(target); cont.appendChild(wrap);
+  });
+  $('#res2').textContent="";
+}
+function gradeAct2(){
+  var correct=0;
+  $$('#celestialTargets .target').forEach(function(t){
+    var chip=t.querySelector('.chip');
+    if(chip && chip.getAttribute('data-day')===t.getAttribute('data-expects')){ correct++; t.classList.add('correct'); t.classList.remove('wrong'); }
+    else { t.classList.add('wrong'); t.classList.remove('correct'); }
+  });
+  $('#res2').innerHTML='Score: <span class="score '+(correct===7?'good':'bad')+'">'+correct+'/7</span>';
+}
+function resetAct2(){ renderAct2(); }
+
+/* ===== Act 3 (NEW: listen-then-build) ===== */
+var act3Target = null; // hidden Spanish target sentence
+var act3English = null; // English translation for reveal
+
+// Ready-made Spanish 1 targets and English gloss
+var act3Prompts = [
+  {es:"Tengo español el lunes.", en:"I have Spanish on Monday."},
+  {es:"Tengo matemáticas el martes.", en:"I have Math on Tuesday."},
+  {es:"El jueves es un buen día.", en:"Thursday is a good day."},
+  {es:"Estudio español lunes, miércoles y viernes.", en:"I study Spanish on Monday, Wednesday, and Friday."},
+  {es:"Los martes practico fútbol.", en:"On Tuesdays I practice soccer."},
+  {es:"Los sábados veo una película.", en:"On Saturdays I watch a movie."},
+  {es:"Ceno con mi familia los domingos.", en:"I have dinner with my family on Sundays."}
+];
+
+// tokenization helpers
+function tokenizeSpanish(s){
+  return s
+    .replace(/\s*,\s*/g,' , ')
+    .replace(/\s*y\s*/g,' y ')
+    .replace(/([.?!])/g,' $1 ')
+    .trim()
+    .split(/\s+/);
+}
+function normalizeSentence(arr){
+  var text=arr.join(' ').replace(/\s+([.,!?:;])/g,'$1');
+  if(!text) return '';
+  var out=text.charAt(0).toUpperCase()+text.slice(1);
+  if(!/[.!?]$/.test(out)) out+='.';
+  return out;
+}
+function arraysEqual(a,b){
+  if(a.length!==b.length) return false;
+  for(var i=0;i<a.length;i++){ if(a[i]!==b[i]) return false; }
+  return true;
+}
+
+// Build a wordbank consisting of target tokens + distractors
+function buildAct3WordbankFor(targetEs){
+  var wb=$('#wordbank'), s=$('#sentence'); wb.innerHTML=""; s.innerHTML="";
+  var tokens = tokenizeSpanish(targetEs);
+
+  // Base distractor pool
+  var distractors = ["El","Los","tengo","tienes","tenemos","estudio","estudia","estudian","practico","practica","veo","ves","vemos",
+    "español","matemáticas","ciencias","historia","arte","música","inglés","biología","química",
+    "lunes","martes","miércoles","jueves","viernes","sábado","domingo","y",",",".","con","mi","familia","un","buen","día","los","el"
+  ];
+
+  // Ensure all tokens are in pool
+  tokens.forEach(function(t){ if(distractors.indexOf(t)===-1) distractors.push(t); });
+
+  // Pick a subset: include ALL target tokens + ~10 random distractors
+  var pool = tokens.slice();
+  var extra = distractors.filter(function(d){ return tokens.indexOf(d)===-1; }).sort(function(){return Math.random()-0.5;}).slice(0,10);
+  pool = pool.concat(extra);
+
+  // Create chips
+  pool.sort(function(){return Math.random()-0.5;}).forEach(function(w){
+    var chip=document.createElement('div'); chip.className='chip'; chip.draggable=true; chip.id=uid();
+    chip.setAttribute('data-word', w); chip.textContent=w;
+    addDragHandlers(chip); wb.appendChild(chip);
+  });
+
+  // Drop zones speak on drop; bank speaks on drop
+  makeDropZone(wb, function(chip){ speak(chip.textContent); });
+  makeDropZone(s, function(chip){ speak(chip.textContent); });
+  wireChipSpeech(wb);
+  wireChipSpeech(s);
+
+  // Reset UI feedback
+  $('#res3').textContent='';
+  var box=$('#translation3'); box.hidden=true; box.textContent='';
+}
+
+function playAct3Prompt(){
+  // choose or repeat target
+  if(!act3Target){
+    var pick = act3Prompts[Math.floor(Math.random()*act3Prompts.length)];
+    act3Target = pick.es;
+    act3English = pick.en;
+    buildAct3WordbankFor(act3Target);
+  }
+  speak(act3Target,'es-ES');
+}
+
+function resetSentence(){
+  act3Target = null; act3English = null;
+  $('#sentence').innerHTML=""; $('#wordbank').innerHTML="";
+  $('#res3').textContent=''; var box=$('#translation3'); box.hidden=true; box.textContent='';
+}
+
+function checkSentence(){
+  if(!act3Target){
+    $('#res3').innerHTML='<span class="bad">Primero escucha la oración con 🔊 y luego constrúyela.</span>';
+    return;
+  }
+  var s=$('#sentence');
+  var arr=[].slice.call(s.querySelectorAll('.chip')).map(function(c){return c.textContent;});
+  var student = normalizeSentence(arr);
+  var target = act3Target;
+  // Compare token-by-token after normalization
+  var stuTokens = tokenizeSpanish(student);
+  var tgtTokens = tokenizeSpanish(target);
+  var correct = arraysEqual(stuTokens, tgtTokens);
+
+  if(correct){
+    $('#res3').innerHTML = '<span class="good">¡Correcto! “'+student+'”</span>';
+    var box=$('#translation3'); box.hidden=false; box.textContent = act3English;
+    // Speak the student's correct sentence
+    speak(student,'es-ES');
+  } else {
+    $('#res3').innerHTML = '<span class="bad">Aún no coincide. Revisa el orden, comas y artículos.</span>';
+  }
+}
+
+/* ===== Act 4 ===== */
+var quiz = [
+  { q:"¿Qué día viene después (comes after) de martes?", a:["miércoles"] },
+  { q:"Escribe el primer día de la semana (versión escolar en España).", a:["lunes"] },
+  { q:"¿Qué día NO tiene origen en un planeta? (escribe uno)", a:["sábado","domingo"] },
+  { q:"Completa con acento: miercoles → _____", a:["miércoles"] },
+  { q:"“Friday” en español es…", a:["viernes"] },
+];
+function renderQuiz(){
+  var ol=$('#quizlist'); ol.innerHTML="";
+  quiz.forEach(function(item,i){
+    var li=document.createElement('li');
+    var label=document.createElement('label'); label.textContent=item.q;
+    var input=document.createElement('input'); input.type='text'; input.id='q'+i; input.placeholder='tu respuesta / your answer';
+    input.style.marginTop='4px'; input.style.minWidth='240px';
+    li.appendChild(label); li.appendChild(document.createElement('br')); li.appendChild(input);
+    ol.appendChild(li);
+  });
+  $('#res4').textContent="";
+}
+function gradeQuiz(){
+  var correct=0;
+  quiz.forEach(function(item,i){
+    var val=($('#q'+i).value||"").trim().toLowerCase().replace(/\s+/g,' ');
+    if(item.a.some(function(ans){ return ans.toLowerCase()===val; })) correct++;
+  });
+  $('#res4').innerHTML='Score: <span class="score '+(correct===quiz.length?'good':'bad')+'">'+correct+'/'+quiz.length+'</span>';
+}
+
+/* ===== Numbers (1–31) ===== */
+var numWords = {
+  1:"uno",2:"dos",3:"tres",4:"cuatro",5:"cinco",6:"seis",7:"siete",8:"ocho",9:"nueve",10:"diez",
+  11:"once",12:"doce",13:"trece",14:"catorce",15:"quince",16:"dieciséis",17:"diecisiete",18:"dieciocho",19:"diecinueve",20:"veinte",
+  21:"veintiuno",22:"veintidós",23:"veintitrés",24:"veinticuatro",25:"veinticinco",26:"veintiséis",27:"veintisiete",28:"veintiocho",29:"veintinueve",
+  30:"treinta",31:"treinta y uno"
+};
+
+/* ===== Act 5 ===== */
+function renderDate(){
+  var bank=$('#bank5'); bank.innerHTML="";
+  var list = [];
+  Object.keys(dayMeta).forEach(function(n){ list.push({label:n, type:'day'}); });
+  for(var i=1;i<=31;i++) list.push({label:String(i), type:'num'});
+  months.forEach(function(m){ list.push({label:m, type:'month'}); });
+  list.sort(function(){return Math.random()-0.5;}).slice(0,24).forEach(function(item){
+    var chip=document.createElement('div'); chip.className='chip'; chip.draggable=true; chip.id=uid(); chip.setAttribute('data-type', item.type);
+    if(item.type==='day'){ var ic=document.createElement('span'); ic.className='icon'; ic.textContent=dayMeta[item.label].icon; chip.appendChild(ic); }
+    var t=document.createElement('span'); t.textContent=item.label; chip.appendChild(t);
+    addDragHandlers(chip); bank.appendChild(chip);
+  });
+  ['slot-day','slot-num','slot-month'].forEach(function(id){
+    var slot=document.getElementById(id); var accept=slot.getAttribute('data-accept');
+    slot.innerHTML = accept==='day' ? '[día]' : (accept==='num' ? '[número]' : '[mes]');
+    makeDropZone(slot, function(chip){ speak(chip.textContent.replace(/\(.*?\)/g,'')); updatePreviewDate(); });
+  });
+  makeDropZone(bank, function(chip){ speak(chip.textContent.replace(/\(.*?\)/g,'')); });
+  wireChipSpeech(bank);
+  updatePreviewDate();
+  $('#res5').textContent="";
+}
+function updatePreviewDate(){
+  var d = (document.querySelector('#slot-day .chip')||{}).textContent || '___';
+  var n = (document.querySelector('#slot-num .chip')||{}).textContent || '___';
+  var m = (document.querySelector('#slot-month .chip')||{}).textContent || '___';
+  $('#previewDate').textContent = 'Es '+d+', '+n+' de '+m+'.';
+}
+function naturalDateSpeech(){
+  var dChip = document.querySelector('#slot-day .chip');
+  var nChip = document.querySelector('#slot-num .chip');
+  var mChip = document.querySelector('#slot-month .chip');
+  if(nChip && mChip){
+    var n = parseInt(nChip.textContent,10); var m = mChip.textContent;
+    var dayTxt = dChip ? (dChip.textContent + ', ') : '';
+    var numTxt = numWords[n] || String(n);
+    return 'Es ' + dayTxt + 'el ' + numTxt + ' de ' + m + '.';
+  }
+  var rn = Math.floor(Math.random()*31)+1;
+  var rm = months[Math.floor(Math.random()*months.length)];
+  return 'Es el ' + (numWords[rn]||String(rn)) + ' de ' + rm + '.';
+}
+function speakDateNow(){ var text = naturalDateSpeech(); speak(text,'es-ES'); }
+function gradeDate(){
+  var nChip = document.querySelector('#slot-num .chip');
+  var mChip = document.querySelector('#slot-month .chip');
+  var ok = !!(nChip && mChip);
+  $('#res5').innerHTML = ok ? '<span class="good">¡Genial! '+naturalDateSpeech()+'</span>' : '<span class="bad">Coloca al menos el número y el mes.</span>';
+}
+function resetDate(){ renderDate(); }
+
+/* ===== Act 6 & 7 ===== */
+var currentListeningDay=null, dictWord=null;
+function renderListening(){
+  var grid=$('#listenGrid'); grid.innerHTML="";
+  Object.keys(dayMeta).forEach(function(n){
+    var cell=document.createElement('div'); cell.className='listen-cell'; cell.textContent=n.charAt(0).toUpperCase()+n.slice(1);
+    cell.addEventListener('click', function(){
+      if(!currentListeningDay) return;
+      if(n===currentListeningDay){ cell.classList.add('correct'); $('#res6').innerHTML='<span class="good">¡Correcto!</span>'; }
+      else { cell.classList.add('wrong'); $('#res6').innerHTML='<span class="bad">No… intenta otra vez.</span>'; }
+    });
+    grid.appendChild(cell);
+  });
+  $('#res6').textContent="";
+}
+function playPrompt(){ var keys=Object.keys(dayMeta); currentListeningDay=keys[Math.floor(Math.random()*keys.length)]; speak(currentListeningDay,'es-ES'); $$('#act6 .listen-cell').forEach(function(c){ c.classList.remove('correct','wrong'); }); }
+function nextListening(){ currentListeningDay=null; $('#res6').textContent=""; $$('#act6 .listen-cell').forEach(function(c){ c.classList.remove('correct','wrong'); }); }
+
+function newDictationWord(){ var keys=Object.keys(dayMeta); dictWord=keys[Math.floor(Math.random()*keys.length)]; speak(dictWord,'es-ES'); $('#dictInput').value=""; $('#res7').textContent=""; }
+function checkDictation(){
+  var val = ($('#dictInput').value||"").toLowerCase().replace(/\s+/g,' ').trim();
+  if(!dictWord) return;
+  if(val===dictWord){ $('#res7').innerHTML='<span class="good">¡Bien!</span>'; }
+  else { var fb=document.createElement('div'); fb.className='fade-correct'; fb.textContent='Correcto: '+dictWord; $('#dictFeedback').appendChild(fb); setTimeout(function(){ fb.classList.add('fade-out'); },50); setTimeout(function(){ if(fb&&fb.parentNode){ fb.parentNode.removeChild(fb);} },1400); $('#res7').innerHTML='<span class="bad">Inténtalo de nuevo.</span>'; }
+}
+function resetDictation(){ $('#dictInput').value=""; $('#res7').textContent=""; $('#dictFeedback').innerHTML=""; dictWord=null; }
+
+/* ===== Init ===== */
+document.addEventListener('DOMContentLoaded', function(){
+  buildCalendar(); renderBank1(); renderAct2(); renderQuiz(); renderDate(); renderListening();
+
+  // Controls
+  var weekStart=$('#weekStart'); if(weekStart){ weekStart.addEventListener('change', buildCalendar); }
+  $('#enableAudio').addEventListener('click', function(){ var tip=$('#ttsMsg'); if(tip) tip.hidden=false; ensureTTSReady().then(function(ok){ if(ok){ try{ var u=new SpeechSynthesisUtterance('.'); u.volume=0; window.speechSynthesis.speak(u); setTimeout(function(){ try{window.speechSynthesis.cancel();}catch(_e){}; },50);}catch(_){ } if(tip) tip.hidden=true; speak('Audio habilitado.','es-ES'); } }); });
+  $('#speakAll').addEventListener('click', function(){ Object.keys(dayMeta).forEach(function(d,i){ setTimeout(function(){ speak(d,'es-ES'); }, i*650); }); });
+  $('#shuffleAll').addEventListener('click', function(){ renderBank1(); renderAct2(); renderQuiz(); renderDate(); renderListening(); resetSentence(); });
+  $('#resetAll').addEventListener('click', function(){ buildCalendar(); renderBank1(); renderAct2(); renderQuiz(); renderDate(); renderListening(); resetSentence(); ['#res1','#res2','#res3','#res4','#res5','#res6','#res7'].forEach(function(sel){ var el=$(sel); if(el) el.textContent=""; }); });
+
+  // Act 3
+  $('#readSentenceBtn').addEventListener('click', function(){ playAct3Prompt(); });
+
+  // Activity buttons for 6/7
+  document.addEventListener('click', function(e){
+    if(e.target && e.target.id==='playPrompt') playPrompt();
+    if(e.target && e.target.id==='sayWord') newDictationWord();
+  });
+
+  // Delegated fallback for Read Date button (robust binding)
+  document.addEventListener('click', function(e){
+    if(e.target && e.target.id==='readDateBtn'){
+      ensureTTSReady().then(function(){ speakDateNow(); });
+    }
+  });
+
+});
+})(); // IIFE
+</script>
+</body>
+</html>
