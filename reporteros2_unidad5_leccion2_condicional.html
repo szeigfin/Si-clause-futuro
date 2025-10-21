@@ -153,10 +153,10 @@
     <div class="pill" id="a3Score">Correctos: 0 / 8</div>
   </section>
 
-  <!-- ACTIVITY 4 (reorder-enabled) -->
+  <!-- ACTIVITY 4 -->
   <section class="card" id="a4">
     <h3>Actividad 4 — Construye la oración en condicional (reordena)</h3>
-    <p class="dir">ES: Haz clic o arrastra fichas para formar la oración. Reordena las fichas <b>arrastrándolas dentro</b> del cuadro de respuesta. EN: Click or drag to build; <b>drag within the box</b> to reorder.</p>
+    <p class="dir">ES: Haz clic o arrastra fichas para formar la oración. Reordena arrastrando <b>dentro</b> del cuadro de respuesta. EN: Click/drag to build; drag <b>within</b> the box to reorder.</p>
     <div class="q">
       <div class="chips" id="a4Bank"></div>
       <div class="dropzone a4" id="a4Drop" aria-label="Área de respuesta"></div>
@@ -173,7 +173,7 @@
   <!-- ACTIVITY 5 (matching) -->
   <section class="card" id="a5">
     <h3>Actividad 5 — Empareja: <em>Si…</em> + resultado (condicional)</h3>
-    <p class="dir">ES: Arrastra o haz clic en una mitad de oración (Si…) y colócala junto a su resultado en condicional. EN: Drag or click a “Si…” half and place it with its conditional result.</p>
+    <p class="dir">ES: Arrastra o haz clic en una mitad de oración (<em>Si…</em>) y colócala junto a su resultado en condicional. EN: Drag/click a “Si…” half and place it with its conditional result.</p>
     <div class="match-wrap">
       <div class="match-col">
         <b>Si… (causa)</b>
@@ -209,7 +209,7 @@
       </p>
       <h3>Formación del <i>imperfecto de subjuntivo</i></h3>
       <p class="dir">
-        1) Toma la forma de <b>ellos</b> en pretérito: p. ej., <i>tuvieron</i>, <i>fueron</i>, <i>pudieron</i>.<br>
+        1) Toma la forma de <b>ellos</b> en pretérito (p. ej., <i>tuvieron</i>, <i>fueron</i>, <i>pudieron</i>).<br>
         2) Quita <b>-ron</b> → <i>tuvie-</i>, <i>fue-</i>, <i>pudie-</i>.<br>
         3) Añade terminaciones: <span class="kbd">-ra, -ras, -ra, -ramos, -rais, -ran</span> (acento en la sílaba anterior a <i>-ramos</i>).<br>
         Ejemplos: <i>tuviera/tuvieran</i>, <i>fuera/fueran</i>, <i>pudiera/pudieran</i>, <i>hiciera</i>, <i>viniera</i>.
@@ -267,7 +267,6 @@ btn.addEventListener('click',()=>{
     info.style.maxHeight=info.scrollHeight+'px'; info.style.padding='12px'; arrow.textContent='▲';
   }else{ info.style.maxHeight='0'; info.style.padding='0 12px'; arrow.textContent='▼'; }
 });
-
 const btnSi=document.getElementById('toggleSiImp');
 const infoSi=document.getElementById('siImpInfo');
 const arrowSi=document.getElementById('arrowSiImp');
@@ -285,15 +284,34 @@ document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ lastHid
 const ENDINGS=["-ía","-ías","-ía","-íamos","-íais","-ían"];
 const PRON2END={yo:"-ía",tu:"-ías",el:"-ía",nosotros:"-íamos",vosotros:"-íais",ellos:"-ían"};
 
+/* ---------- Chip factory: speaks on click AND on drag ---------- */
 function mkChip(txt, scopeSel){
-  const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt; chip.draggable=true;
-  chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); chip.classList.add('sel','dragging'); });
-  chip.addEventListener('dragend',()=> chip.classList.remove('sel','dragging'));
-  chip.addEventListener('click',()=>{ 
-    document.querySelectorAll(scopeSel+' .chip').forEach(c=>c.classList.remove('sel')); 
-    chip.classList.add('sel'); 
+  const chip=document.createElement('span');
+  chip.className='chip';
+  chip.textContent=txt;
+  chip.draggable=true;
+
+  // Speak when clicked
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll(scopeSel+' .chip').forEach(c=>c.classList.remove('sel'));
+    chip.classList.add('sel');
     speakEs(txt);
   });
+
+  // Speak on drag start
+  chip.addEventListener('dragstart',e=>{
+    e.dataTransfer.setData('text/plain', txt);
+    chip.classList.add('sel','dragging');
+    speakEs(txt);
+  });
+  chip.addEventListener('dragend',()=> chip.classList.remove('sel','dragging'));
+
+  // Keyboard: Enter/Space to speak
+  chip.tabIndex=0;
+  chip.addEventListener('keydown',e=>{
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); speakEs(txt); }
+  });
+
   return chip;
 }
 
@@ -402,7 +420,7 @@ document.getElementById('a3Check').addEventListener('click',()=>{
 });
 document.getElementById('a3Reset').addEventListener('click', buildA3);
 
-/* ====== ACT 4 (reorder-enabled) ====== */
+/* ====== ACT 4 (build & reorder) ====== */
 const A4_MODELS=[
   ["Nosotros","instalaríamos","paneles","solares","en","la","escuela."],
   ["La","ciudad","invertiría","en","transporte","limpio."],
@@ -410,18 +428,18 @@ const A4_MODELS=[
   ["Me","encantaría","trabajar","como","voluntario."],
   ["Ellos","protegerían","el","medioambiente","con","reciclaje."]
 ];
-let a4Answer=[], a4Target=[];
 function buildA4(){
   const bank=document.getElementById('a4Bank'), drop=document.getElementById('a4Drop'), hint=document.getElementById('a4Hint');
   bank.innerHTML=''; drop.innerHTML=''; document.getElementById('a4Fb').textContent='';
-  const model=pick(A4_MODELS).slice(); a4Target=model.slice();
-  hint.textContent='Pista / Hint: '+a4Target.join(' ');
+  const model=pick(A4_MODELS).slice(); const target=model.slice();
+  hint.textContent='Pista / Hint: '+target.join(' ');
   shuffle(model).forEach(w=>{
     const chip=mkChip(w,'#a4');
     chip.addEventListener('click',()=>{ moveChipToDrop(chip, drop); });
     bank.appendChild(chip);
   });
 
+  // reorder inside drop zone
   drop.addEventListener('dragover',e=>{
     e.preventDefault();
     const dragging = document.querySelector('#a4 .chip.dragging');
@@ -431,12 +449,27 @@ function buildA4(){
     else { drop.insertBefore(dragging, afterEl); }
   });
   drop.addEventListener('drop',e=>{ e.preventDefault(); });
+
+  // check button
+  document.getElementById('a4Check').onclick=()=>{
+    totalChecks++;
+    const got=[...document.querySelectorAll('#a4Drop .chip')].map(c=>c.textContent);
+    const fb=document.getElementById('a4Fb');
+    if(got.length===target.length && got.every((w,i)=>norm(w)===norm(target[i]))){
+      fb.innerHTML='<span class="good">✅ Correcto</span>';
+      const sc=document.getElementById('a4Score'); const n=parseInt(sc.textContent.match(/\d+/)[0])+1; sc.textContent=`Correctos: ${n} / 5`;
+      buildA4();
+    }else{
+      fb.innerHTML='<span class="bad">→ '+target.join(' ')+'</span>';
+      setTimeout(()=>{ fb.textContent=''; },3000);
+    }
+  };
 }
 function moveChipToDrop(chip, drop){
   speakEs(chip.textContent);
   chip.remove();
   const inDrop = mkChip(chip.textContent,'#a4');
-  inDrop.addEventListener('click',()=>{ // remove from drop back to bank
+  inDrop.addEventListener('click',()=>{ // remove back to bank
     const txt=inDrop.textContent;
     inDrop.remove();
     document.getElementById('a4Bank').appendChild(mkChip(txt,'#a4'));
@@ -450,19 +483,6 @@ function getDropInsertTarget(container, x, y){
     return y>r.top && y<r.bottom && x<r.left + r.width/2;
   }) || null;
 }
-document.getElementById('a4Check').addEventListener('click',()=>{
-  totalChecks++;
-  const got=[...document.querySelectorAll('#a4Drop .chip')].map(c=>c.textContent);
-  const target=document.getElementById('a4Hint').textContent.replace(/^Pista \/ Hint:\s*/,'').trim().split(' ');
-  const fb=document.getElementById('a4Fb');
-  if(got.length===target.length && got.every((w,i)=>norm(w)===norm(target[i]))){
-    fb.innerHTML='<span class="good">✅ Correcto</span>';
-    const sc=document.getElementById('a4Score'); const n=parseInt(sc.textContent.match(/\d+/)[0])+1; sc.textContent=`Correctos: ${n} / 5`; buildA4();
-  }else{
-    fb.innerHTML='<span class="bad">→ '+target.join(' ')+'</span>';
-    setTimeout(()=>{ fb.textContent=''; },3000);
-  }
-});
 document.getElementById('a4Reset').addEventListener('click', buildA4);
 
 /* ====== ACT 5 ====== */
