@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>reporteros1_unidad1_leccion1_losnumeros_0a31</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--accent:#0ea5e9;--ok:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Helvetica,Arial,sans-serif}
+header{padding:14px;background:linear-gradient(90deg,#0ea5e9,#22c55e);color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+header .brand{font-weight:900;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.05rem}
+.wrap{max-width:1100px;margin:18px auto;padding:0 12px 48px}
+.card{background:var(--card);border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 6px 20px rgba(2,6,23,.06);padding:14px;margin:12px 0}
+.dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.2rem .6rem;font-size:.8rem}
+button{cursor:pointer} .primary{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800}
+.ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:700}
+.speak{background:#e2e8f0;border:1px solid #cbd5e1;border-radius:999px;font-weight:800;padding:5px 10px}
+.q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
+.q.correct{border-color:#86efac;background:#f0fdf4}.q.incorrect{border-color:#fecaca;background:#fff7f7}
+input[type=text]{padding:8px;border:1px solid #cbd5e1;border-radius:10px}
+.options{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:8px;margin-top:8px}
+.opt{border:1px solid #cbd5e1;border-radius:12px;padding:10px;text-align:center;font-weight:800;background:#fff;cursor:pointer}
+.opt.sel{outline:3px solid var(--accent)} .small{font-size:.92rem;color:var(--muted)}
+.feedback{margin-top:6px;font-size:.95rem}.good{color:#065f46}.bad{color:#b91c1c}
+.tip{display:none;opacity:0;transition:opacity .3s ease;background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:8px;margin:8px 0}
+.tip.show{display:block;opacity:1}
+</style></head><body>
+<header><span class=brand>ProfeVT</span><h1>reporteros1_unidad1_leccion1_losnumeros_0a31</h1>
+<div style="margin-left:auto"><span class=small>Nombre / Name: <input id=studentName placeholder="Tu nombre…" style="max-width:220px"></span></div></header>
+<div class=wrap>
+
+<div class=card id=audioGate><strong>Audio desactivado / Audio is off.</strong>
+<div class=small>Pulsa para habilitar el audio. Click to enable speech.</div>
+<div style=margin-top:8px><button class=primary id=enableAudioBtn>Enable audio</button> <button class=ghost id=testAudioBtn>🔊 Test</button></div></div>
+
+<section class=card><h2 style="margin:.2rem 0 .6rem">Instrucciones / Directions & ACTFL</h2>
+<p class=dir><b>ES:</b> Practica los números <b>0–31</b> con audio. <b>EN:</b> Practice numbers 0–31 with listening and writing.</p>
+<p class=dir><b>I can</b> understand and say numbers 0–31; write numbers I hear (dates, ages, phone digits). <b>Standards:</b> ACTFL 1.1, 1.2, 1.3.</p>
+<div class=row><span class=pill>Tiempo: <span id=timeOnPage>0s</span></span><span class=pill>Fuera de pestaña: <span id=tabAway>0s</span></span>
+<button class=ghost id=tipsBtn>💡 Consejos / Tips</button></div>
+<div class=tip id=tips><p>💡 <b>Acentos:</b> dieciséis, veintidós, veintitrés, veintiséis.</p></div></section>
+
+<section class=card id=act1><h3>Actividad 1 — Escucha y <u>elige la palabra</u></h3>
+<p class=dir>ES: Pulsa 🔊 y elige la forma escrita correcta. EN: Press 🔊 and choose the correct written form. <button class=ghost id=a1HintBtn>💡 Pista (dígitos)</button></p>
+<div class=q id=a1q><div class=row><button class=speak id=a1Play>🔊 Reproducir</button><span class=small>Cubre 0–31.</span></div>
+<div id=a1Hint class=small style="margin-top:6px;display:none"></div><div class=options id=a1Opts></div><div class=feedback id=a1Fb></div>
+<div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a1Reset>Reiniciar</button><button class=primary id=a1Check>Comprobar</button></div>
+<div class=pill id=a1Score>Correctos: 0 / 10</div></div></section>
+
+<section class=card id=act2><h3>Actividad 2 — Escucha y <u>escribe el número (dígitos)</u></h3>
+<p class=dir>ES: Pulsa 🔊 y escribe el número en dígitos (o palabra). EN: Press 🔊 and type the number (digits OK).</p>
+<div class=q id=a2q><button class=speak id=a2Play>🔊 Reproducir</button><input id=a2Input type=text placeholder="Escribe aquí…" style="margin-left:8px;width:220px">
+<div class=feedback id=a2Fb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a2Reset>Reiniciar</button><button class=primary id=a2Check>Comprobar</button></div>
+<div class=pill id=a2Score>Correctos: 0 / 10</div></div></section>
+
+<section class=card id=bonus><h3>Bonus — ¿Qué número falta?</h3>
+<p class=dir>ES: Oye una secuencia; haz clic en el faltante. EN: Hear a short sequence; click the missing number.</p>
+<div class=q id=bq><div class=row><button class=speak id=bPlay>🔊 Reproducir</button><button class=ghost id=bFast>⏩ Modo rápido</button></div>
+<div id=bSeq class=small style="margin-top:6px"></div><div class=options id=bOpts style="grid-template-columns:repeat(5,minmax(80px,1fr))"></div>
+<div class=feedback id=bFb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=bReset>Reiniciar</button><button class=primary id=bCheck>Comprobar</button></div>
+<div class=pill id=bScore>Correctos: 0 / 10</div></div></section>
+
+<section class=card id=act3><h3>Actividad 3 — Escribe el número <u>en palabras</u></h3>
+<p class=dir>ES: Verás 17 → escribe <i>diecisiete</i>. EN: You’ll see 17 → type the word. <button class=ghost id=a3Tip>💡 Acentos</button></p>
+<div class=q id=a3q><div class=row><span>Número:</span><span class=pill id=a3Num>—</span></div><input id=a3Input type=text placeholder=palabra… style="margin-top:6px;width:260px">
+<div class=feedback id=a3Fb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a3Reset>Reiniciar</button><button class=primary id=a3Check>Comprobar</button></div>
+<div class=pill id=a3Score>Correctos: 0 / 10</div></div><div class=tip id=a3TipBox>dieciséis, veintidós, veintitrés, veintiséis llevan acento.</div></section>
+
+<section class=card id=act4><h3>Actividad 4 — Dictado de <u>fechas</u> (día del mes)</h3>
+<p class=dir>ES: Audio “el quince de agosto” → escribe <b>15</b>.</p>
+<div class=q id=a4q><button class=speak id=a4Play>🔊 Reproducir</button><input id=a4Input type=text placeholder="día (1–31)…" style="margin-left:8px;width:160px">
+<div class=feedback id=a4Fb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a4Reset>Reiniciar</button><button class=primary id=a4Check>Comprobar</button></div>
+<div class=pill id=a4Score>Correctos: 0 / 10</div></div></section>
+
+<section class=card id=act5><h3>Actividad 5 — “Tengo X años”</h3>
+<p class=dir>ES: “Tengo catorce años.” → escribe <b>14</b>.</p>
+<div class=q id=a5q><button class=speak id=a5Play>🔊 Reproducir</button><input id=a5Input type=text placeholder=edad… style="margin-left:8px;width:140px">
+<div class=feedback id=a5Fb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a5Reset>Reiniciar</button><button class=primary id=a5Check>Comprobar</button></div>
+<div class=pill id=a5Score>Correctos: 0 / 10</div></div></section>
+
+<section class=card id=act6><h3>Actividad 6 — ¿Cuál es tu número de teléfono?</h3>
+<p class=dir>ES: Pulsa el botón. Voz: “Mi número de teléfono es: 3 – 0 – …” → escribe los dígitos.</p>
+<div class=q id=a6q><div class=row><button class=primary id=a6Ask>¿Cuál es tu número de teléfono?</button><button class=ghost id=a6Repeat>Repetir</button></div>
+<input id=a6Input type=text placeholder="Escribe solo dígitos…" style="margin-top:8px;width:260px">
+<div class=feedback id=a6Fb></div><div class=row style="justify-content:flex-end;margin-top:6px"><button class=ghost id=a6Reset>Reiniciar</button><button class=primary id=a6Check>Comprobar</button></div>
+<div class=pill id=a6Score>Correctos: 0 / 5</div></div></section>
+
+<section class=card><h2>Informe / Report (.txt)</h2>
+<pre id=reportPreview>— Pulsa “Actualizar vista previa” —</pre>
+<div class=row style="justify-content:flex-end"><button class=ghost id=previewBtn>Actualizar vista previa</button><button class=ghost id=copyBtn>Copiar</button><button class=primary id=downloadReport>Descargar (.txt)</button></div>
+</section>
+
+</div>
+<script>
+let pageStart=performance.now(),timeAwayTotal=0,lastHidden=null;
+document.addEventListener('visibilitychange',()=>{if(document.hidden){lastHidden=performance.now()}else if(lastHidden){timeAwayTotal+=performance.now()-lastHidden;lastHidden=null}});
+setInterval(()=>{const s=Math.round((performance.now()-pageStart)/1000);document.getElementById('timeOnPage').textContent=s+'s';document.getElementById('tabAway').textContent=Math.round(timeAwayTotal/1000)+'s'},500);
+document.getElementById('tipsBtn').addEventListener('click',()=>{const el=document.getElementById('tips');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),12000)});
+
+const NUM_WORD={0:'cero',1:'uno',2:'dos',3:'tres',4:'cuatro',5:'cinco',6:'seis',7:'siete',8:'ocho',9:'nueve',10:'diez',11:'once',12:'doce',13:'trece',14:'catorce',15:'quince',16:'dieciséis',17:'diecisiete',18:'dieciocho',19:'diecinueve',20:'veinte',21:'veintiuno',22:'veintidós',23:'veintitrés',24:'veinticuatro',25:'veinticinco',26:'veintiséis',27:'veintisiete',28:'veintiocho',29:'veintinueve',30:'treinta',31:'treinta y uno'};
+const WORD_NUM=Object.fromEntries(Object.entries(NUM_WORD).map(([k,v])=>[v,k]));
+const MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function stripAccents(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function norm(s){return stripAccents(String(s||'').trim().toLowerCase().replace(/\s+/g,' '))}
+function digitsOnly(s){return String(s||'').replace(/\D/g,'')}
+function pickInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+
+let audioUnlocked=false,voicesReady=null;
+function waitVoices(){return new Promise(res=>{try{const v=speechSynthesis.getVoices();if(v&&v.length)return res(v);speechSynthesis.onvoiceschanged=()=>res(speechSynthesis.getVoices());speechSynthesis.getVoices()}catch(e){res([])}})}
+async function ensureSpeech(){if(!voicesReady)voicesReady=waitVoices();const v=await voicesReady;const gate=document.getElementById('audioGate');if((!v||!v.length)||!audioUnlocked){gate.style.display='block'}return v||[]}
+async function pickVoice(prefs=['es-US','es-419','es-MX','es-ES','es']){const list=await ensureSpeech();for(const p of prefs){const v=list.find(x=>(x.lang||'').toLowerCase().startsWith(p.toLowerCase()));if(v)return v}return null}
+async function speakNow(text,{rate=.95}={}){try{const u=new SpeechSynthesisUtterance(text);const v=await pickVoice();if(v){u.voice=v;u.lang=v.lang}else{u.lang='es-ES'}u.rate=rate;u.onstart=()=>{audioUnlocked=true;document.getElementById('audioGate').style.display='none'};speechSynthesis.speak(u)}catch(e){}}
+document.getElementById('enableAudioBtn').addEventListener('click',()=>{try{speechSynthesis.resume()}catch(e){} audioUnlocked=true;document.getElementById('audioGate').style.display='none'});
+document.getElementById('testAudioBtn').addEventListener('click',()=>speakNow('Audio habilitado'));
+
+let totalChecks=0;const INC={a1:0,a2:0,bonus:0,a3:0,a4:0,a5:0,a6:0};const CORR={a1:0,a2:0,bonus:0,a3:0,a4:0,a5:0,a6:0};const TOTAL={a1:0,a2:0,bonus:0,a3:0,a4:0,a5:0,a6:0};
+
+/* A1 */
+let a1Target=null;
+function newA1(){const n=pickInt(0,31);a1Target=n;const wrongs=[];while(wrongs.length<2){const w=pickInt(0,31);if(w!==n&&!wrongs.includes(w))wrongs.push(w)}const choices=shuffle([n,...wrongs]);const c=document.getElementById('a1Opts');c.innerHTML='';choices.forEach(v=>{const d=document.createElement('div');d.className='opt';d.textContent=NUM_WORD[v];d.onclick=()=>{c.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));d.classList.add('sel')};c.appendChild(d)});document.getElementById('a1Fb').textContent='';document.getElementById('a1Hint').style.display='none'}
+document.getElementById('a1Play').onclick=()=>speakNow(NUM_WORD[a1Target]);
+document.getElementById('a1HintBtn').onclick=()=>{const h=document.getElementById('a1Hint');h.textContent='Pista / Hint: '+a1Target;h.style.display='block'};
+document.getElementById('a1Check').onclick=()=>{const sel=[...document.querySelectorAll('#a1Opts .opt.sel')][0];if(!sel)return;TOTAL.a1++;totalChecks++;const q=document.getElementById('a1q');if(norm(sel.textContent)===norm(NUM_WORD[a1Target])){CORR.a1++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a1Fb').innerHTML='<span class=good>✅ Correcto</span>'}else{INC.a1++;q.classList.add('incorrect');q.classList.remove('correct');document.getElementById('a1Fb').innerHTML='<span class=bad>→ '+NUM_WORD[a1Target]+'</span>';setTimeout(()=>{document.getElementById('a1Fb').textContent=''},3000)}document.getElementById('a1Score').textContent=`Correctos: ${CORR.a1} / ${TOTAL.a1}`;newA1()}
+document.getElementById('a1Reset').onclick=()=>{INC.a1=CORR.a1=TOTAL.a1=0;document.getElementById('a1Score').textContent='Correctos: 0 / 10';newA1()};
+
+/* A2 */
+let a2Target=null,a2Miss=0;
+function newA2(){a2Target=pickInt(0,31);a2Miss=0;document.getElementById('a2Input').value='';document.getElementById('a2Fb').textContent=''}
+document.getElementById('a2Play').onclick=()=>speakNow(NUM_WORD[a2Target]);
+document.getElementById('a2Check').onclick=()=>{const raw=document.getElementById('a2Input').value;if(!raw)return;TOTAL.a2++;totalChecks++;const q=document.getElementById('a2q');const isDigits=/^\d+$/.test(raw.trim());const val=isDigits?parseInt(raw,10):(WORD_NUM[Object.keys(WORD_NUM).find(w=>norm(w)===norm(raw))]||NaN);if(val===a2Target){CORR.a2++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a2Fb').innerHTML='<span class=good>✅ Correcto</span>';newA2()}else{INC.a2++;a2Miss++;q.classList.add('incorrect');q.classList.remove('correct');if(a2Miss>=2){document.getElementById('a2Fb').innerHTML='<span class=bad>→ '+a2Target+' ('+NUM_WORD[a2Target]+')</span>';setTimeout(()=>{document.getElementById('a2Fb').textContent=''},3000);newA2()}else{document.getElementById('a2Fb').innerHTML='<span class=bad>Intenta otra vez…</span>'}}document.getElementById('a2Score').textContent=`Correctos: ${CORR.a2} / ${TOTAL.a2}`}
+document.getElementById('a2Reset').onclick=()=>{INC.a2=CORR.a2=TOTAL.a2=0;document.getElementById('a2Score').textContent='Correctos: 0 / 10';newA2()};
+
+/* BONUS */
+let bSeq=null,bMissing=null,bChosen=null,bFast=false;
+function newBonus(){const start=pickInt(0,28);bSeq=[start,start+1,start+2,start+3];bMissing=pick([1,2]);document.getElementById('bSeq').textContent='Secuencia: '+bSeq.map((n,i)=>i===bMissing?'__':n).join(', ');const opts=shuffle([bSeq[bMissing],pickInt(0,31),pickInt(0,31),pickInt(0,31),pickInt(0,31)]);const c=document.getElementById('bOpts');c.innerHTML='';opts.forEach(x=>{const d=document.createElement('div');d.className='opt';d.textContent=x;d.onclick=()=>{c.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));d.classList.add('sel');bChosen=x};c.appendChild(d)});document.getElementById('bFb').textContent=''}
+document.getElementById('bPlay').onclick=async()=>{const gap=bFast?350:650;for(let i=0;i<bSeq.length;i++){const n=bSeq[i];if(i===bMissing){await speakNow('—')}else{await speakNow(NUM_WORD[n])}await new Promise(r=>setTimeout(r,gap))}};
+document.getElementById('bFast').onclick=()=>{bFast=!bFast;document.getElementById('bFast').textContent=bFast?'⏸ Modo normal':'⏩ Modo rápido'};
+document.getElementById('bCheck').onclick=()=>{if(bChosen==null)return;TOTAL.bonus++;totalChecks++;const q=document.getElementById('bq');if(parseInt(bChosen,10)===bSeq[bMissing]){CORR.bonus++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('bFb').innerHTML='<span class=good>✅ Correcto</span>'}else{INC.bonus++;q.classList.add('incorrect');q.classList.remove('correct');document.getElementById('bFb').innerHTML='<span class=bad>→ '+bSeq[bMissing]+'</span>';setTimeout(()=>{document.getElementById('bFb').textContent=''},3000)}document.getElementById('bScore').textContent=`Correctos: ${CORR.bonus} / ${TOTAL.bonus}`;newBonus()}
+document.getElementById('bReset').onclick=()=>{INC.bonus=CORR.bonus=TOTAL.bonus=0;document.getElementById('bScore').textContent='Correctos: 0 / 10';newBonus()};
+
+/* A3 */
+let a3Target=null;
+function newA3(){a3Target=pickInt(0,31);document.getElementById('a3Num').textContent=a3Target;document.getElementById('a3Input').value='';document.getElementById('a3Fb').textContent=''}
+document.getElementById('a3Tip').onclick=()=>{const t=document.getElementById('a3TipBox');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),8000)};
+document.getElementById('a3Check').onclick=()=>{const raw=document.getElementById('a3Input').value;if(!raw)return;TOTAL.a3++;totalChecks++;const q=document.getElementById('a3q');const corr=NUM_WORD[a3Target];if(norm(raw)===norm(corr)){CORR.a3++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a3Fb').innerHTML='<span class=good>✅ '+corr+'</span>';newA3()}else{INC.a3++;q.classList.add('incorrect');q.classList.remove('correct');if(['dieciséis','veintidós','veintitrés','veintiséis'].includes(corr)&&norm(raw)===norm(corr.replace('í','i').replace('é','e').replace('ó','o'))){document.getElementById('a3Fb').innerHTML='<span class=bad>Añade el acento: <b>'+corr+'</b></span>'}else{document.getElementById('a3Fb').innerHTML='<span class=bad>→ '+corr+'</span>';setTimeout(()=>{document.getElementById('a3Fb').textContent=''},3000);newA3()}}document.getElementById('a3Score').textContent=`Correctos: ${CORR.a3} / ${TOTAL.a3}`}
+document.getElementById('a3Reset').onclick=()=>{INC.a3=CORR.a3=TOTAL.a3=0;document.getElementById('a3Score').textContent='Correctos: 0 / 10';newA3()};
+
+/* A4 */
+let a4Day=null,a4Month=null;
+function newA4(){a4Day=pickInt(1,31);a4Month=pick(MONTHS);document.getElementById('a4Input').value='';document.getElementById('a4Fb').textContent=''}
+document.getElementById('a4Play').onclick=()=>{const phr=(a4Day===1?'el primero de ':'el '+NUM_WORD[a4Day]+' de ')+a4Month;speakNow(phr)};
+document.getElementById('a4Check').onclick=()=>{const raw=document.getElementById('a4Input').value.trim();if(!raw)return;TOTAL.a4++;totalChecks++;const q=document.getElementById('a4q');const num=parseInt(raw,10);if(num===a4Day){CORR.a4++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a4Fb').innerHTML='<span class=good>✅ Correcto</span>';newA4()}else{INC.a4++;q.classList.add('incorrect');q.classList.remove('correct');document.getElementById('a4Fb').innerHTML='<span class=bad>→ '+a4Day+'</span>';setTimeout(()=>{document.getElementById('a4Fb').textContent=''},3000);newA4()}document.getElementById('a4Score').textContent=`Correctos: ${CORR.a4} / ${TOTAL.a4}`}
+document.getElementById('a4Reset').onclick=()=>{INC.a4=CORR.a4=TOTAL.a4=0;document.getElementById('a4Score').textContent='Correctos: 0 / 10';newA4()};
+
+/* A5 */
+let a5Age=null;
+function newA5(){a5Age=pickInt(0,31);document.getElementById('a5Input').value='';document.getElementById('a5Fb').textContent=''}
+document.getElementById('a5Play').onclick=()=>{speakNow('Tengo '+NUM_WORD[a5Age]+' años')};
+document.getElementById('a5Check').onclick=()=>{const raw=document.getElementById('a5Input').value.trim();if(!raw)return;TOTAL.a5++;totalChecks++;const q=document.getElementById('a5q');const val=/^\d+$/.test(raw)?parseInt(raw,10):parseInt(WORD_NUM[Object.keys(WORD_NUM).find(w=>norm(w)===norm(raw))]||'NaN',10);if(val===a5Age){CORR.a5++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a5Fb').innerHTML='<span class=good>✅ Correcto</span>';newA5()}else{INC.a5++;q.classList.add('incorrect');q.classList.remove('correct');document.getElementById('a5Fb').innerHTML='<span class=bad>→ '+a5Age+'</span>';setTimeout(()=>{document.getElementById('a5Fb').textContent=''},3000);newA5()}document.getElementById('a5Score').textContent=`Correctos: ${CORR.a5} / ${TOTAL.a5}`}
+document.getElementById('a5Reset').onclick=()=>{INC.a5=CORR.a5=TOTAL.a5=0;document.getElementById('a5Score').textContent='Correctos: 0 / 10';newA5()};
+
+/* A6 */
+let a6Target='';
+function genPhone(){const len=pickInt(7,10);let s='';for(let i=0;i<len;i++)s+=String(pickInt(0,9));return s}
+async function sayPhoneDigits(s,{gap=650,rate=.95}={}){await speakNow('Mi número de teléfono es',{rate});for(const ch of s){await speakNow(NUM_WORD[parseInt(ch,10)]||ch,{rate});await new Promise(r=>setTimeout(r,gap))}}
+function newA6(){a6Target=genPhone();document.getElementById('a6Input').value='';document.getElementById('a6Fb').textContent=''}
+document.getElementById('a6Ask').onclick=()=>sayPhoneDigits(a6Target);
+document.getElementById('a6Repeat').onclick=()=>sayPhoneDigits(a6Target,{gap:850,rate:.9});
+document.getElementById('a6Check').onclick=()=>{const raw=digitsOnly(document.getElementById('a6Input').value);if(!raw)return;TOTAL.a6++;totalChecks++;const q=document.getElementById('a6q');if(raw===a6Target){CORR.a6++;q.classList.add('correct');q.classList.remove('incorrect');document.getElementById('a6Fb').innerHTML='<span class=good>✅ Correcto</span>';newA6()}else{INC.a6++;q.classList.add('incorrect');q.classList.remove('correct');document.getElementById('a6Fb').innerHTML='<span class=bad>→ '+a6Target+'</span>';setTimeout(()=>{document.getElementById('a6Fb').textContent=''},3000);newA6()}document.getElementById('a6Score').textContent=`Correctos: ${CORR.a6} / ${TOTAL.a6}`}
+document.getElementById('a6Reset').onclick=()=>{INC.a6=CORR.a6=TOTAL.a6=0;document.getElementById('a6Score').textContent='Correctos: 0 / 5';newA6()};
+
+/* Report */
+function pad2(n){return n<10?'0'+n:n}function formatSeconds(s){const m=Math.floor(s/60),r=s%60;return m+':'+pad2(r)}
+function buildReport(){const name=(document.getElementById('studentName').value||'SinNombre').trim();const secs=Math.round((performance.now()-pageStart)/1000);return['Student: '+name,'Time in activity: '+formatSeconds(secs),'Total checks: '+totalChecks,'Incorrect A1 (listen->choose word): '+INC.a1,'Incorrect A2 (listen->type digits/word): '+INC.a2,'Incorrect Bonus (missing number): '+INC.bonus,'Incorrect A3 (digits->word): '+INC.a3,'Incorrect A4 (date day): '+INC.a4,'Incorrect A5 (age): '+INC.a5,'Incorrect A6 (phone digits): '+INC.a6,'Tab-away seconds: '+Math.round(timeAwayTotal/1000)].join('\r\n')}
+function refreshReport(){document.getElementById('reportPreview').textContent=buildReport()}
+function copyReport(){const t=buildReport();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>alert('Copied'))}else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Copied')}}
+function downloadReport(){const name=(document.getElementById('studentName').value||'report').replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,'');const blob=new Blob([buildReport()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(name||'report')+'_losnumeros_0a31.txt';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},0)}
+document.getElementById('previewBtn').onclick=refreshReport;document.getElementById('copyBtn').onclick=copyReport;document.getElementById('downloadReport').onclick=downloadReport;
+
+/* Init */
+function initAll(){newA1();newA2();newBonus();newA3();newA4();newA5();newA6();document.getElementById('audioGate').style.display='block'}
+initAll();
+</script></body></html>
