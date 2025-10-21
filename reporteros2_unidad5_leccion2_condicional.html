@@ -50,7 +50,6 @@
   .highlight{outline:3px solid #16a34a}
   .shake{animation:shake .35s}
   @keyframes shake { 10%, 90% {transform: translateX(-1px);} 20%, 80% {transform: translateX(2px);} 30%, 50%, 70% {transform: translateX(-4px);} 40%, 60% {transform: translateX(4px);} }
-  /* A4 reorder helpers */
   .dropzone.a4 {min-height:56px;padding:10px;border:2px dashed #cbd5e1;border-radius:12px;background:#f8fafc}
   .chip.dragging{opacity:.6}
 </style>
@@ -202,19 +201,28 @@
       <span id="arrowSiImp">▼</span>
     </button>
     <div id="siImpInfo" class="collap-body">
-      <h3>Relación de tiempos</h3>
+      <h3>Relación de tiempos (significado)</h3>
       <p class="dir">
         <b>Estructura:</b> <i>Si + imperfecto de subjuntivo</i>, <i>condicional</i>.<br>
+        <b>Valor:</b> la cláusula con <i>si</i> describe una situación <u>no real / contraria a la realidad</u> en el presente.  
+        Con el <b>condicional</b> en la segunda parte, decimos que si la primera parte <u>fuera verdad</u>, la segunda <u>podría cumplirse</u> (sería posible).<br>
         Ej.: <b>Si</b> <i>tuviéramos</i> más recursos, <b>trabajaríamos</b> con energía solar.
       </p>
-      <h3>Formación del <i>imperfecto de subjuntivo</i></h3>
+
+      <h3>Cómo formar el <i>imperfecto de subjuntivo</i></h3>
       <p class="dir">
-        1) Toma la forma de <b>ellos</b> en pretérito (p. ej., <i>tuvieron</i>, <i>fueron</i>, <i>pudieron</i>).<br>
-        2) Quita <b>-ron</b> → <i>tuvie-</i>, <i>fue-</i>, <i>pudie-</i>.<br>
+        1) Toma la forma de <b>ellos</b> en pretérito: <i>tuvieron, fueron, pudieron, hicieron…</i><br>
+        2) Quita <b>-ron</b>: <i>tuvie-, fue-, pudie-, hicie-</i>…<br>
         3) Añade terminaciones: <span class="kbd">-ra, -ras, -ra, -ramos, -rais, -ran</span> (acento en la sílaba anterior a <i>-ramos</i>).<br>
-        Ejemplos: <i>tuviera/tuvieran</i>, <i>fuera/fueran</i>, <i>pudiera/pudieran</i>, <i>hiciera</i>, <i>viniera</i>.
+        Ej.: <i>tuviera/tuvieran</i>, <i>fuera/fueran</i>, <i>pudiera/pudieran</i>, <i>hiciera</i>, <i>viniera</i>.
       </p>
-      <p class="small">Usa esta estructura para hipótesis menos probables o contrarias a la realidad en el presente.</p>
+
+      <h3>Más ejemplos</h3>
+      <p class="dir">
+        • <b>Si</b> <i>fuera</i> más barato, <b>viajaríamos</b> en tren.<br>
+        • <b>Si</b> <i>pudiéramos</i> instalar paneles, <b>ahorraríamos</b> energía.<br>
+        • <b>Si</b> <i>hubiera</i> menos contaminación, <b>disfrutaríamos</b> más la ciudad.
+      </p>
     </div>
   </section>
 
@@ -243,9 +251,17 @@ if('speechSynthesis' in window){
   pickEsVoice();
   window.speechSynthesis.onvoiceschanged = pickEsVoice;
 }
+
+// Make endings like "-ía" speak as "ía" (strip leading hyphen for audio only)
+function sayForChip(txt){
+  const s = String(txt).trim();
+  return s.startsWith('-') ? s.slice(1) : s;
+}
+
 function speakEs(text){
   if(!('speechSynthesis' in window)) return;
-  const u = new SpeechSynthesisUtterance(String(text));
+  const toSay = sayForChip(text);
+  const u = new SpeechSynthesisUtterance(String(toSay));
   if(ES_VOICE){ u.voice = ES_VOICE; u.lang = ES_VOICE.lang; } else { u.lang = 'es-ES'; }
   u.rate = 1.0; u.pitch = 1.0;
   window.speechSynthesis.cancel();
