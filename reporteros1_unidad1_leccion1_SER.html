@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros · SER — v3</title>
+<style>
+
+:root{
+  --bg:#f8fafc; --card:#fff; --ink:#0f172a; --muted:#475569;
+  --accent:#0ea5e9; --ok:#16a34a; --bad:#dc2626; --chip:#e2e8f0;
+  --ring-ok:#22c55e; --ring-bg:#e5e7eb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
+header{padding:14px;background:linear-gradient(90deg,#0ea5e9,#22c55e);
+  color:#fff;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+header .brand{font-weight:900;background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px}
+header h1{margin:0;font-size:1.04rem}
+header .ver{margin-left:auto;font-size:.85rem;opacity:.9}
+.wrap{max-width:1100px;margin:18px auto;padding:0 12px 64px}
+.card{position:relative;background:var(--card);border:1px solid #e5e7eb;border-radius:14px;
+  box-shadow:0 6px 20px rgba(2,6,23,.06);padding:16px;margin:12px 0}
+.dir{font-size:.95rem;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:6px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;background:#e2e8f0;border-radius:999px;padding:.2rem .6rem;font-size:.8rem}
+.small{font-size:.92rem;color:var(--muted)}
+.primary{background:#0ea5e9;color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}
+.ghost{background:#eef2ff;border:1px solid #c7d2fe;color:#111827;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer}
+.q{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin-top:8px}
+.feedback{margin-top:6px;font-size:.95rem;min-height:1.2em}
+.good{color:#065f46}.bad{color:#b91c1c}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-weight:700;cursor:grab;user-select:none;border:1px solid #cbd5e1}
+.chip.sel{outline:3px solid #2563eb}
+.drop{border:3px dashed #60a5fa;background:#eff6ff;border-radius:12px;min-height:90px;padding:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.drop::before{content:attr(data-placeholder);color:#1e3a8a;font-weight:700;opacity:.8;margin-right:8px}
+.grid2x3{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:900px){ .grid2x3{grid-template-columns:1fr 1fr} }
+.slot{border:3px dashed #60a5fa;background:#eff6ff;border-radius:12px;min-height:90px;padding:8px;position:relative}
+.slot .hint{position:absolute;top:6px;left:8px;font-size:.8rem;color:#1e3a8a;font-weight:700}
+.slot .drop{border:none;background:transparent;min-height:42px;padding-top:18px}
+.pbar-wrap{margin-top:6px;background:#e5e7eb;border-radius:999px;overflow:hidden;height:10px}
+.pbar{height:10px;background:linear-gradient(90deg,#34d399,#10b981);width:0%;transition:width .35s ease}
+.ring-wrap{ position:absolute; top:10px; right:12px; display:flex; align-items:center; gap:8px }
+.ring svg{ display:block }
+.ring text{ font-size:10px; font-weight:800; fill:#0f172a }
+.ring .bg{ stroke:var(--ring-bg) }
+.ring .fg{ stroke:var(--ring-ok); transition: stroke-dashoffset .35s ease }
+.ring.done .fg{ stroke:#16a34a }
+.warn{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;border-radius:8px;padding:8px 10px;margin-top:6px}
+input[type="text"]{padding:6px 8px;border:1px solid #cbd5e1;border-radius:8px}
+
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">ProfeVT</span>
+  <h1>Reporteros · SER — v3</h1>
+  <div class="ver">v3 — 2025-10-21</div>
+</header>
+<div class="wrap">
+  
+<section class="card">
+  <h2>Objetivos & ACTFL / Goals & Standards</h2>
+  <p class="dir"><b>Yo puedo / I can:</b> usar <b>ser</b> para hablar de <b>profesión</b>, <b>origen</b> y <b>identificación</b>; emparejar sujetos con la forma; construir oraciones; ordenar preguntas y respuestas.</p>
+  <div class="row small">
+    <span class="pill">Nombre / Name:</span><input id="studentName" placeholder="Tu nombre… / Your name…" style="max-width:280px">
+    <button id="enableAudio" class="ghost">🔊 Audio activado (clic si no oyes)</button>
+    <span id="audioWarn" class="warn" style="display:none">Nota: el navegador puede bloquear el audio automático.</span>
+  </div>
+</section>
+
+  
+<!-- A1 -->
+<section class="card" id="a1">
+  <div class="ring-wrap"><div class="ring" id="a1_ring"></div><div class="ring-tip" id="a1_tip">0%</div></div>
+  <h3>Actividad 1 — Ordena los pronombres</h3>
+  <p class="dir" id="a1_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 12 ubicaciones correctas.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a1_bar"></div></div>
+  <div class="chips" id="a1Bank"></div>
+  <div class="grid2x3" id="a1Grid"></div>
+  <div class="row" style="justify-content:flex-end;margin-top:8px"><button class="ghost" id="a1Reset">Reiniciar</button></div>
+  <div class="pill" id="a1Score">Correctos: 0 / 12</div>
+</section>
+
+<!-- A2 -->
+<section class="card" id="a2">
+  <div class="ring-wrap"><div class="ring" id="a2_ring"></div><div class="ring-tip" id="a2_tip">0%</div></div>
+  <h3>Actividad 2 — Formas de <em>ser</em></h3>
+  <p class="dir" id="a2_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 12 ubicaciones correctas.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a2_bar"></div></div>
+  <div class="chips" id="a2Bank"></div>
+  <div class="grid2x3" id="a2Grid"></div>
+  <div class="row" style="justify-content:flex-end;margin-top:8px"><button class="ghost" id="a2Reset">Reiniciar</button></div>
+  <div class="pill" id="a2Score">Correctos: 0 / 12</div>
+</section>
+
+<!-- A3 -->
+<section class="card" id="a3">
+  <div class="ring-wrap"><div class="ring" id="a3_ring"></div><div class="ring-tip" id="a3_tip">0%</div></div>
+  <h3>Actividad 3 — Sujeto ↔ forma (autocalifica)</h3>
+  <p class="dir" id="a3_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 20 aciertos.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a3_bar"></div></div>
+  <div class="q">
+    <div id="a3Prompt" style="font-size:1.1rem;font-weight:800;margin-bottom:8px">—</div>
+    <div id="a3Drop" class="drop" data-placeholder="Suelta la forma aquí / Drop the form here"></div>
+    <div class="chips" id="a3Bank"></div>
+    <div id="a3Res" class="feedback"></div>
+    <div class="small" id="a3Progress">Correctos 0 • Incorrectos 0 • Precisión 0%</div>
+  </div>
+</section>
+
+<!-- A4 -->
+<section class="card" id="a4">
+  <div class="ring-wrap"><div class="ring" id="a4_ring"></div><div class="ring-tip" id="a4_tip">0%</div></div>
+  <h3>Actividad 4 — Oraciones con <em>ser</em></h3>
+  <p class="dir" id="a4_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 20 oraciones correctas.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a4_bar"></div></div>
+  <div class="q">
+    <div class="chips" id="a4Bank"></div>
+    <div id="a4Drop" class="drop" data-placeholder="Suelta aquí tu oración / Drop here"></div>
+    <div class="feedback" id="a4Fb"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghost" id="a4Reset">Reiniciar</button>
+      <button class="primary" id="a4Check">Comprobar</button>
+      <button class="ghost" id="a4Read">🔊 Leer oración</button>
+    </div>
+    <div class="small" id="a4Hint" style="margin-top:6px;color:#111827"></div>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-top:6px">
+      <div class="pill" id="a4Score">Correctos: 0 / 20</div>
+      <div id="a4Tr" class="small"></div>
+    </div>
+  </div>
+</section>
+
+<!-- A5 -->
+<section class="card" id="a5">
+  <div class="ring-wrap"><div class="ring" id="a5_ring"></div><div class="ring-tip" id="a5_tip">0%</div></div>
+  <h3>Actividad 5 — Patrones con <em>ser</em></h3>
+  <p class="dir" id="a5_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 20 oraciones correctas.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a5_bar"></div></div>
+  <div class="q">
+    <div class="chips" id="a5Bank"></div>
+    <div id="a5Drop" class="drop" data-placeholder="Suelta aquí tu oración / Drop here"></div>
+    <div class="feedback" id="a5Fb"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghost" id="a5Reset">Reiniciar</button>
+      <button class="primary" id="a5Check">Comprobar</button>
+      <button class="ghost" id="a5Read">🔊 Leer oración</button>
+    </div>
+    <div class="small" id="a5Hint" style="margin-top:6px;color:#111827"></div>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-top:6px">
+      <div class="pill" id="a5Score">Correctos: 0 / 20</div>
+      <div id="a5Tr" class="small"></div>
+    </div>
+  </div>
+</section>
+
+<!-- A6 -->
+<section class="card" id="a6">
+  <div class="ring-wrap"><div class="ring" id="a6_ring"></div><div class="ring-tip" id="a6_tip">0%</div></div>
+  <h3>Actividad 6 — Escucha y ordena</h3>
+  <p class="dir" id="a6_dir"></p>
+  <p class="small"><b>Meta / Goal:</b> 20 oraciones correctas.</p>
+  <div class="pbar-wrap"><div class="pbar" id="a6_bar"></div></div>
+  <div class="q">
+    <div class="chips" id="a6Bank"></div>
+    <div id="a6Drop" class="drop" data-placeholder="Ordena la oración aquí / Build here"></div>
+    <div class="feedback" id="a6Fb"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghost" id="a6Reset">Nueva oración</button>
+      <button class="primary" id="a6Check">Comprobar</button>
+      <button class="ghost" id="a6Read">🔊 Repetir</button>
+    </div>
+    <div class="small" id="a6Hint" style="margin-top:6px;color:#111827"></div>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-top:6px">
+      <div class="pill" id="a6Score">Correctos: 0 / 20</div>
+    </div>
+  </div>
+</section>
+
+  <section class="card">
+    <h2>Informe / Report</h2>
+    <pre id="reportPreview" class="small">— Pulsa “Actualizar vista previa” —</pre>
+    <div class="row" style="justify-content:flex-end">
+      <button class="ghost" id="previewBtn">Actualizar vista previa</button>
+      <button class="ghost" id="copyBtn">Copiar</button>
+      <button class="primary" id="downloadReport">Descargar (.txt)</button>
+    </div>
+  </section>
+</div>
+<script>
+
+// ===== modules: i18n, audio, ui =====
+const I18N = {
+  dir: {
+    a1: "ES: Arrastra fichas a las casillas (etiquetas en inglés). Reordena o devuelve al banco. EN: Drag chips into the English-labeled boxes. Reorder or return to the bank.",
+    a2: "ES: Arrastra la forma correcta a cada casilla (etiquetas en inglés). Reordena o devuelve al banco. EN: Drag the correct form to each English-labeled box. Reorder or return to the bank.",
+    a3: "ES: Elige la forma correcta y suéltala; se califica automáticamente. EN: Choose the correct form and drop it; it auto-grades.",
+    build: "ES: Escucha y construye la oración correcta. EN: Listen and build the correct sentence.",
+    a6extra: " Auto-lectura en español / Auto-reads in Spanish."
+  }
+};
+
+const Audio = (()=>{
+  let ES_VOICE=null, OK=false;
+  function pickVoice(){
+    const voices=window.speechSynthesis? window.speechSynthesis.getVoices():[];
+    ES_VOICE = voices.find(v=> v.lang && v.lang.toLowerCase().startsWith('es-es'))
+             || voices.find(v=> v.lang && v.lang.toLowerCase().startsWith('es-'))
+             || voices.find(v=> /spanish/i.test(v.name))
+             || null;
+  }
+  function init(){
+    OK=true;
+    if('speechSynthesis' in window){
+      pickVoice();
+      window.speechSynthesis.onvoiceschanged=pickVoice;
+      setTimeout(()=>speak('Bienvenidos'), 150);
+    }
+  }
+  function speak(text){
+    if(!OK || !('speechSynthesis' in window)) return;
+    const u=new SpeechSynthesisUtterance(String(text));
+    if(ES_VOICE){ u.voice=ES_VOICE; u.lang=ES_VOICE.lang; } else { u.lang='es-ES'; }
+    try{ window.speechSynthesis.cancel(); }catch(_){}
+    window.speechSynthesis.speak(u);
+  }
+  return { init, speak };
+})();
+
+const UI = (()=>{
+  function ring(elId, size){
+    const el=document.getElementById(elId); if(!el) return; const r=Math.floor(size/2)-6, c=Math.PI*2*r;
+    el.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">
+      <circle class="bg" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="6" fill="none"></circle>
+      <circle class="fg" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="6" fill="none" stroke-dasharray="${c}" stroke-dashoffset="${c}" stroke-linecap="round"></circle>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">0%</text>
+    </svg>`; el.dataset.circ=c;
+  }
+  function setRing(elId, pct, done){
+    const el=document.getElementById(elId), tip=document.getElementById(elId.replace('_ring','_tip')); if(!el) return;
+    const c=parseFloat(el.dataset.circ||0); const clamped=Math.max(0,Math.min(100,pct)); const off=c*(1-clamped/100);
+    const fg=el.querySelector('.fg'), txt=el.querySelector('text'); if(fg) fg.style.strokeDashoffset=off;
+    if(txt) txt.textContent=done?'✅':(Math.round(clamped)+'%'); if(tip) tip.textContent=done?'Meta':(Math.round(clamped)+'%');
+    el.classList.toggle('done', !!done);
+  }
+  function setBar(elId, pct){ const el=document.getElementById(elId); if(el) el.style.width=Math.max(0,Math.min(100,pct))+'%'; }
+  function mkChip(txt, scopeSel){
+    const chip=document.createElement('span'); chip.className='chip'; chip.textContent=txt; chip.draggable=true;
+    chip.addEventListener('click',()=>{ document.querySelectorAll(scopeSel+' .chip').forEach(c=>c.classList.remove('sel')); chip.classList.add('sel'); });
+    chip.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain', txt); chip.classList.add('sel'); });
+    chip.addEventListener('dragend',()=> chip.classList.remove('sel'));
+    chip.tabIndex=0; return chip;
+  }
+  function enableBank(scopeSel, bankEl){
+    bankEl.addEventListener('dragover', e=>e.preventDefault());
+    bankEl.addEventListener('drop', e=>{ e.preventDefault(); const sel=document.querySelector(scopeSel+' .chip.sel'); if(sel){ bankEl.appendChild(sel); sel.classList.remove('sel'); } });
+    bankEl.addEventListener('click', ()=>{ const sel=document.querySelector(scopeSel+' .chip.sel'); if(sel){ bankEl.appendChild(sel); sel.classList.remove('sel'); } });
+  }
+  function enableDrop(scopeSel, dropEl, onPlace){
+    dropEl.addEventListener('dragover', e=>e.preventDefault());
+    dropEl.addEventListener('drop', e=>{
+      e.preventDefault(); const sel=document.querySelector(scopeSel+' .chip.sel'); if(!sel) return;
+      if(onPlace) onPlace(sel.textContent, sel, dropEl);
+    });
+    dropEl.addEventListener('click', e=>{
+      const sel=document.querySelector(scopeSel+' .chip.sel'); if(!sel) return;
+      if(onPlace) onPlace(sel.textContent, sel, dropEl, e.target.closest('.chip'));
+    });
+  }
+  function shuffle(a){ const x=a.slice(); for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; } return x; }
+  function tokenize(s){ return s.replace(/\s*,\s*/g,' , ').replace(/([.?!¿])/g,' $1 ').trim().split(/\s+/); }
+  function normalize(arr){ let t=arr.join(' ').replace(/\s+([.,!?:;])/g,'$1'); if(!t) return ''; if(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ¿]/.test(t.charAt(0))) t=t.charAt(0).toUpperCase()+t.slice(1); if(/¿/.test(t) && !/\?$/.test(t)) t+='?'; if(!/[.!?]$/.test(t)) t+='.'; return t; }
+  function arraysEq(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++){ if(a[i]!==b[i]) return false; } return true; }
+  return { ring, setRing, setBar, mkChip, enableBank, enableDrop, shuffle, tokenize, normalize, arraysEq };
+})();
+
+
+// ===== data =====
+
+const DATA = {
+  goals: { a1:12, a2:12, a3:20, a4:20, a5:20, a6:20 },
+  pronouns: ["yo","tú","él","ella","usted","nosotros","nosotras","vosotros","vosotras","ellos","ellas","ustedes"],
+  pronTargets: [
+    {hint:"I", accepts:["yo"]},
+    {hint:"we", accepts:["nosotros","nosotras"]},
+    {hint:"you (informal)", accepts:["tú"]},
+    {hint:"you all (Spain)", accepts:["vosotros","vosotras"]},
+    {hint:"he / she / you (formal)", accepts:["él","ella","usted"]},
+    {hint:"they / you all", accepts:["ellos","ellas","ustedes"]}
+  ],
+  forms: ["soy","eres","es","somos","sois","son"],
+  personToForm: {"yo":"soy","tú":"eres","él":"es","ella":"es","usted":"es","nosotros":"somos","nosotras":"somos","vosotros":"sois","vosotras":"sois","ellos":"son","ellas":"son","ustedes":"son"},
+  a3Subjects: [
+    {label:"Yo", form:"soy"},{label:"Tú", form:"eres"},{label:"Él", form:"es"},{label:"Ella", form:"es"},{label:"Usted", form:"es"},
+    {label:"Nosotros", form:"somos"},{label:"Nosotras", form:"somos"},{label:"Vosotros", form:"sois"},{label:"Vosotras", form:"sois"},
+    {label:"Ellos", form:"son"},{label:"Ellas", form:"son"},{label:"Ustedes", form:"son"}
+  ],
+  prom4: [
+    {es:"Soy estudiante.", en:"I am a student."},{es:"Eres profesor.", en:"You are a teacher."},{es:"Él es doctor.", en:"He is a doctor."},
+    {es:"Ella es actriz.", en:"She is an actress."},{es:"Somos de Vermont.", en:"We are from Vermont."},{es:"Vosotros sois turistas.", en:"You all are tourists."},
+    {es:"Ustedes son artistas.", en:"You all are artists."},{es:"Ellos son mis amigos.", en:"They are my friends."},
+    {es:"Soy de México.", en:"I am from Mexico."},{es:"Eres de los Estados Unidos.", en:"You are from the United States."}
+  ],
+  a4Distr:["una","de","la","los","amigo","actriz","doctora","personas","soy","eres","somos","sois","son"],
+  prom5: [
+    {es:"Soy de España.", en:"I am from Spain."},{es:"Él es de Argentina.", en:"He is from Argentina."},{es:"Somos de América del Norte.", en:"We are from North America."},
+    {es:"Ellos son ingenieros.", en:"They are engineers."},{es:"Ustedes son mis compañeros.", en:"You all are my classmates."},{es:"Vosotras sois estudiantes.", en:"You (Spain, fem.) are students."},
+    {es:"Ella es médica.", en:"She is a physician."},{es:"Yo soy Dana.", en:"I am Dana."}
+  ],
+  a5Distr:["una","de","los","las","somos","son","es","profesor","actriz","amigo"],
+  prom6: [
+    {es:"¿De dónde eres?", en:"Where are you from?"},{es:"¿De dónde es ella?", en:"Where is she from?"},{es:"¿De dónde es usted?", en:"Where are you from? (formal)"},
+    {es:"¿De dónde son ustedes?", en:"Where are you all from?"},{es:"¿Cuál es tu ocupación?", en:"What is your occupation?"},{es:"¿Cuál es su ocupación?", en:"What is his/her/your (formal) occupation?"},
+    {es:"¿Cuál es tu cumpleaños?", en:"When is your birthday?"},{es:"¿Cuál es su cumpleaños?", en:"When is his/her/your (formal) birthday?"},{es:"¿Cuál es tu correo electrónico?", en:"What is your email address?"},
+    {es:"¿Cuál es su correo electrónico?", en:"What is his/her/your (formal) email address?"},{es:"¿Cuál es tu número de teléfono?", en:"What is your phone number?"},
+    {es:"¿Cuál es su número de teléfono?", en:"What is his/her/your (formal) phone number?"},{es:"Ella es de los Estados Unidos.", en:"She is from the United States."},
+    {es:"Soy de Vermont.", en:"I am from Vermont."},{es:"Somos de España.", en:"We are from Spain."},{es:"Ustedes son de Argentina.", en:"You all are from Argentina."},
+    {es:"Él es doctor.", en:"He is a doctor."},{es:"Es actriz.", en:"She is an actress."},{es:"Mi cumpleaños es el 15 de agosto.", en:"My birthday is August 15."},
+    {es:"Su cumpleaños es el 3 de mayo.", en:"His/Her birthday is May 3."}
+  ],
+  a6Distr:["Eres","eres","son","somos","tiene","tienes","tienen","Elle","ellas","ello","de","del","la","las","los","al","un","una","Estados","Unidos","Canadá","México","Argentina","Perú","profesor","profesora","doctor","doctora","actriz","actor","correo","electrónico","número","teléfono","mi","su","tu","sus","tus","?","¿",".",",","!"]
+};
+
+
+// ===== build logic =====
+
+// Progress state
+const SCORE = { a1:0, a2:0, a3:0, a4:0, a5:0, a6:0 };
+
+function setProgress(act, val){
+  const goal=DATA.goals[act]; SCORE[act]=Math.min(val,goal);
+  UI.setBar(`${act}_bar`, (SCORE[act]/goal)*100);
+  UI.setRing(`${act}_ring`, (SCORE[act]/goal)*100, SCORE[act]>=goal);
+}
+
+function buildHeader(){
+  ['a1','a2','a3','a4','a5','a6'].forEach(a=>{ UI.ring(a+'_ring',44); UI.setBar(a+'_bar',0); UI.setRing(a+'_ring',0,false); });
+  document.getElementById('a1_dir').textContent=I18N.dir.a1;
+  document.getElementById('a2_dir').textContent=I18N.dir.a2;
+  document.getElementById('a3_dir').textContent=I18N.dir.a3;
+  document.getElementById('a4_dir').textContent=I18N.dir.build;
+  document.getElementById('a5_dir').textContent=I18N.dir.build;
+  document.getElementById('a6_dir').textContent=I18N.dir.build + I18N.dir.a6extra;
+  document.getElementById('enableAudio').addEventListener('click', Audio.init);
+  document.addEventListener('DOMContentLoaded', Audio.init);
+}
+
+// A1 pronoun bins
+function buildA1(){
+  SCORE.a1=0; setProgress('a1',0);
+  const bank=document.getElementById('a1Bank'); bank.innerHTML='';
+  UI.shuffle(DATA.pronouns).forEach(p=> bank.appendChild(UI.mkChip(p,'#a1')));
+  UI.enableBank('#a1', bank);
+  const grid=document.getElementById('a1Grid'); grid.innerHTML='';
+  DATA.pronTargets.forEach(t=>{
+    const slot=document.createElement('div'); slot.className='slot';
+    slot.innerHTML=`<span class="hint">${t.hint}</span><div class="drop" data-placeholder="Drop here"></div>`;
+    const dz=slot.querySelector('.drop');
+    UI.enableDrop('#a1', dz, (txt, sel)=>{
+      const chip=UI.mkChip(txt,'#a1'); if(t.accepts.includes(txt)) { chip.dataset.scored='1'; setProgress('a1',SCORE.a1+1); }
+      dz.appendChild(chip); sel.remove();
+      document.getElementById('a1Score').textContent=`Correctos: ${SCORE.a1} / ${DATA.goals.a1}`;
+    });
+    grid.appendChild(slot);
+  });
+  document.getElementById('a1Reset').addEventListener('click', buildA1);
+}
+
+// A2 forms into pronoun bins
+function buildA2(){
+  SCORE.a2=0; setProgress('a2',0);
+  const bank=document.getElementById('a2Bank'); bank.innerHTML='';
+  const pool=UI.shuffle(DATA.forms.concat(DATA.forms));
+  pool.forEach(f=> bank.appendChild(UI.mkChip(f,'#a2')));
+  UI.enableBank('#a2', bank);
+  const grid=document.getElementById('a2Grid'); grid.innerHTML='';
+  const prSlots=[
+    {key:'yo', hint:'I'}, {key:'nos', hint:'we'}, {key:'tú', hint:'you (informal)'}, {key:'vos', hint:'you all (Spain)'},
+    {key:'él', hint:'he / she / you (formal)'}, {key:'ellos', hint:'they / you all'}
+  ];
+  prSlots.forEach(s=>{
+    const slot=document.createElement('div'); slot.className='slot';
+    slot.innerHTML=`<span class="hint">${s.hint}</span><div class="drop" data-placeholder="Drop the form"></div>`;
+    const dz=slot.querySelector('.drop');
+    UI.enableDrop('#a2', dz, (txt, sel)=>{
+      const accepts=Object.keys(DATA.personToForm).filter(p=> p.startsWith(s.key)).map(p=> DATA.personToForm[p]);
+      const chip=UI.mkChip(txt,'#a2'); if(accepts.includes(txt)) { chip.dataset.scored='1'; setProgress('a2',SCORE.a2+1); }
+      dz.appendChild(chip); sel.remove();
+      document.getElementById('a2Score').textContent=`Correctos: ${SCORE.a2} / ${DATA.goals.a2}`;
+    });
+    grid.appendChild(slot);
+  });
+  document.getElementById('a2Reset').addEventListener('click', buildA2);
+}
+
+// A3 match autograde
+let A3Q=[], A3cur=null, A3C=0, A3I=0;
+function a3Update(){ const total=A3C+A3I; const acc= total? Math.round((A3C/total)*100):0;
+  document.getElementById('a3Progress').textContent=`Correctos ${A3C} • Incorrectos ${A3I} • Precisión ${acc}%`;
+  setProgress('a3', A3C);
+}
+function a3Next(){ if(A3Q.length===0) A3Q = UI.shuffle(DATA.a3Subjects); A3cur=A3Q.shift(); document.getElementById('a3Prompt').textContent=A3cur.label; }
+function buildA3(reset){
+  if(reset){ SCORE.a3=0; setProgress('a3',0); A3C=0; A3I=0; A3cur=null; }
+  const bank=document.getElementById('a3Bank'); const drop=document.getElementById('a3Drop');
+  bank.innerHTML=''; drop.innerHTML='';
+  UI.shuffle(DATA.forms.concat(["sóy","ereses","somoss","sonn","són"])).forEach(x=> bank.appendChild(UI.mkChip(x,'#a3')));
+  UI.enableBank('#a3', bank);
+  UI.enableDrop('#a3', drop, (txt, sel)=>{
+    if(txt===A3cur.form){ A3C++; setProgress('a3',SCORE.a3+1); document.getElementById('a3Res').innerHTML='<span class="good">✔ Correcto</span>'; Audio.speak(A3cur.label+' — '+txt); a3Next(); buildA3(false); }
+    else { A3I++; document.getElementById('a3Res').innerHTML='<span class="bad">✖ Intenta otra vez</span>'; a3Update(); }
+  });
+  a3Update(); if(!A3cur) a3Next();
+}
+
+// Sentence builders (A4/A5/A6)
+function buildSentenceWB(scope, promptList, distractors, autoRead=false){
+  let target=null, english=null;
+  const bank=document.getElementById(scope+'Bank'), drop=document.getElementById(scope+'Drop');
+  const hint=document.getElementById(scope+'Hint'), fb=document.getElementById(scope+'Fb'), tr=document.getElementById(scope+'Tr');
+  function buildWB(tgt, en){
+    bank.innerHTML=''; drop.innerHTML=''; fb.textContent=''; if(tr) tr.textContent=''; hint.textContent=en||'';
+    const toks=UI.tokenize(tgt);
+    const pool=toks.concat(UI.shuffle((distractors||[]).filter(d=>!toks.includes(d))).slice(0,10));
+    UI.shuffle(pool).forEach(w=> bank.appendChild(UI.mkChip(w, '#'+scope)));
+    UI.enableBank('#'+scope, bank);
+    UI.enableDrop('#'+scope, drop, (txt, sel)=>{ drop.appendChild(UI.mkChip(txt, '#'+scope)); sel.remove(); });
+  }
+  document.getElementById(scope+'Read').addEventListener('click', ()=>{ if(!target){ const p=promptList[Math.floor(Math.random()*promptList.length)]; target=p.es; english=p.en; buildWB(target,english); } Audio.speak(target); });
+  document.getElementById(scope+'Reset').addEventListener('click', ()=>{ target=null; english=null; bank.innerHTML=''; drop.innerHTML=''; fb.textContent=''; if(tr) tr.textContent=''; hint.textContent=''; setProgress(scope,0); document.getElementById(scope+'Score').textContent='Correctos: 0 / '+DATA.goals[scope]; });
+  document.getElementById(scope+'Check').addEventListener('click', ()=>{
+    const got=[...drop.querySelectorAll('.chip')].map(c=>c.textContent); const student=UI.normalize(got);
+    const stu=UI.tokenize(student); const tgt=UI.tokenize(target||'');
+    if(target && UI.arraysEq(stu,tgt)){ fb.innerHTML='<span class="good">✅ Correcto</span>'; Audio.speak(student); if(tr) tr.textContent=english; setProgress(scope, SCORE[scope]+1); document.getElementById(scope+'Score').textContent=`Correctos: ${SCORE[scope]} / ${DATA.goals[scope]}`; target=null; english=null; }
+    else { fb.innerHTML='<span class="bad">Pulsa 🔊 y vuelve a intentar</span>'; setTimeout(()=>{ fb.textContent=''; },2000); }
+  });
+  if(autoRead){
+    // For A6 auto-read new prompt on reset/new
+    document.getElementById(scope+'Reset').addEventListener('click', ()=>{ const p=promptList[Math.floor(Math.random()*promptList.length)]; target=p.es; english=p.en; buildWB(target,english); Audio.speak(target); });
+    document.getElementById(scope+'Read').addEventListener('click', ()=>{ if(target) Audio.speak(target); });
+    // initial
+    const p=promptList[Math.floor(Math.random()*promptList.length)]; target=p.es; english=p.en; buildWB(target,english); Audio.speak(target);
+  }
+}
+
+// Report
+function initReport(){
+  function buildReport(){
+    const name=(document.getElementById('studentName').value||'SinNombre').trim();
+    return [
+      'Student: '+name,
+      'A1 Pronouns: '+SCORE.a1+' / '+DATA.goals.a1,
+      'A2 Forms: '+SCORE.a2+' / '+DATA.goals.a2,
+      'A3 Subject→Form: '+SCORE.a3+' / '+DATA.goals.a3,
+      'A4 Builds: '+SCORE.a4+' / '+DATA.goals.a4,
+      'A5 Builds: '+SCORE.a5+' / '+DATA.goals.a5,
+      'A6 Token Sorts: '+SCORE.a6+' / '+DATA.goals.a6
+    ].join('\\n');
+  }
+  document.getElementById('previewBtn').addEventListener('click',()=>{ document.getElementById('reportPreview').textContent=buildReport(); });
+  document.getElementById('copyBtn')?.addEventListener('click',()=>{ const t=buildReport(); navigator.clipboard?.writeText(t); });
+  document.getElementById('downloadReport').addEventListener('click',()=>{
+    const name=(document.getElementById('studentName').value||'report').replace(/[^\w\sÁÉÍÓÚÜÑáéíóúüñ.-]/g,'');
+    const blob=new Blob([buildReport()],{type:'text/plain;charset=utf-8'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=(name||'report')+'_SER_report.txt'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },0);
+  });
+}
+
+// Init
+function initAll(){
+  buildHeader();
+  // header rings
+  ['a1','a2','a3','a4','a5','a6'].forEach(a=> UI.ring(a+'_ring',44));
+  // activities
+  buildA1(); buildA2(); buildA3(true);
+  buildSentenceWB('a4', DATA.prom4, DATA.a4Distr, false);
+  buildSentenceWB('a5', DATA.prom5, DATA.a5Distr, false);
+  buildSentenceWB('a6', DATA.prom6, DATA.a6Distr, true);
+  initReport();
+}
+document.addEventListener('DOMContentLoaded', initAll);
+
+</script>
+</body>
+</html>
