@@ -6,61 +6,467 @@
 <title>Reporteros 2 • Unidad 2 • Lección 2 — Experiencias (positivas y negativas)</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Pacifico&family=Roboto+Slab:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* --- simplified core styling (summary) --- */
-:root{--paper:#fff8e1;--terracotta:#d93223;--mustard:#ffb841;--navy:#2c3c80;--olive:#41845f;--ink:#3d3d3d;--shadow:rgba(0,0,0,.15)}
-html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Roboto Slab",serif}
-.wrap{max-width:960px;margin:auto;padding:16px 18px 80px}
-.airmail{height:12px;background:repeating-linear-gradient(45deg,#d93223 0 16px,#ffb841 16px 32px,#2c3c80 32px 48px)}
-header{background:#fff;border-radius:12px;box-shadow:0 4px 10px var(--shadow);margin-top:10px;padding:14px}
-.title{font-family:"Montserrat Alternates";font-size:1.25rem;font-weight:700}
-.section{background:#fff;border-radius:12px;box-shadow:0 4px 10px var(--shadow);padding:16px;margin:18px 0}
-.stopprog{display:flex;align-items:center;gap:10px;margin:8px 0}
-.mini-prog{flex:1;height:12px;background:#e9dfc6;border-radius:8px;overflow:hidden}
-.mini-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffb841,#ffd87a)}
-.mini-fill.meets{background:linear-gradient(90deg,#4caf50,#81c784)}
-.mini-txt{font-size:.9rem;min-width:160px;text-align:right}
-.p1-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.target{background:#fbf1d3;border:2px dashed #c5b28b;border-radius:10px;padding:10px}
-.spanish-chip{display:inline-block;background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:8px 12px;margin:10px 0;cursor:pointer}
-.btn{border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
-.btn.olive{background:#41845f;color:#fff}
-.btn.ghost{background:#fff;border:2px solid #bfa06b}
+  :root{--paper:#fff8e1;--terracotta:#d93223;--mustard:#ffb841;--navy:#2c3c80;--olive:#41845f;--ink:#3d3d3d;--shadow:rgba(0,0,0,.15)}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Roboto Slab", Georgia, serif}
+  .wrap{max-width:960px;margin:0 auto;padding:16px 18px 80px}
+  .airmail{height:12px;background:repeating-linear-gradient(45deg,#d93223 0 16px,#ffb841 16px 32px,#2c3c80 32px 48px)}
+  header{background:linear-gradient(#fff8e1,#fbecc3);border:2px solid rgba(0,0,0,.08);border-radius:14px;box-shadow:0 4px 14px var(--shadow);margin-top:12px;padding:14px}
+  .head-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .stamp{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#b23b2f 0 25%,#8a2a21 26% 100%);box-shadow:inset 0 0 0 6px rgba(0,0,0,.15),0 4px 8px var(--shadow);position:relative}
+  .stamp:after{content:"🗺️";position:absolute;inset:0;display:grid;place-items:center;font-size:28px;color:#f5e2df;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25))}
+  .title{flex:1;min-width:220px;font-family:"Montserrat Alternates", Arial, sans-serif;font-weight:700;font-size:1.25rem;line-height:1.2;padding:10px 14px;background:#fff;border:2px solid rgba(0,0,0,.08);border-radius:10px;box-shadow:0 4px 10px var(--shadow)}
+  .namefields{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .namefields label{font-size:.85rem}
+  .nf{border:1.5px dashed #bfa06b;background:#fff;padding:6px 8px;border-radius:8px;min-width:120px}
+  .route{margin-top:10px;border-top:1px dashed rgba(0,0,0,.2);padding-top:12px}
+  .route-line{position:relative;height:16px;background:#e9dfc6;border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+  .route-fill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,#ffb841,#ffd87a);transition:width .4s}
+  .pinrow{display:flex;justify-content:space-between;margin-top:6px}
+  .pin{width:26px;height:26px;border-radius:50%;background:#ccc;border:2px solid #777;display:grid;place-items:center;font-size:.8rem;box-shadow:0 2px 4px var(--shadow)}
+  .pin.done{background:#4caf50;border-color:#2e7d32;color:#fff}
+
+  .section{background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:14px;box-shadow:0 6px 14px var(--shadow);padding:16px;margin:18px 0;position:relative}
+  h2,h3{font-family:"Montserrat Alternates", Arial, sans-serif;margin:6px 0 8px}
+  h2{font-size:1.2rem}
+  details summary{font-weight:600;cursor:pointer;user-select:none}
+
+  .stopprog{display:flex;align-items:center;gap:10px;margin:8px 0 6px}
+  .mini-prog{flex:1;height:12px;background:#e9dfc6;border-radius:8px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+  .mini-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffb841,#ffd87a);transition:width .4s}
+  .mini-fill.meets{background:linear-gradient(90deg,#4caf50,#81c784)}
+  .mini-txt{font-size:.9rem;color:#3d3d3d;min-width:185px;text-align:right}
+
+  /* Parada 1 */
+  .p1-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:8px 4px;overflow-x:hidden}
+  .target{background:#fbf1d3;border:2px dashed #c5b28b;border-radius:12px;padding:10px;transition:transform .15s}
+  .target:hover{transform:translateY(-2px)}
+  .target .icon{font-size:22px;margin-right:6px}
+  .drop-here{font-size:.88rem;opacity:.75;margin-top:6px}
+  .spanish-chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:8px 12px;margin:10px 0;cursor:grab;box-shadow:0 2px 6px var(--shadow);font-weight:600}
+  .correct{outline:3px solid #4caf50}
+  .wrong{animation:shake .28s linear}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+  /* Parada 2 */
+  .clue{font-family:"Roboto Slab",serif;background:#fff8e6;border-left:6px solid var(--olive);padding:10px;border-radius:8px}
+  .p2-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .btn{border:none;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px var(--shadow)}
+  .btn.navy{background:var(--navy);color:#fff}
+  .btn.olive{background:var(--olive);color:#fff}
+  .btn.ghost{background:#fff;border:2px solid #bfa06b}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+
+  /* Parada 3 */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .grid.locked{pointer-events:none;opacity:.7;filter:saturate(.8)}
+  .card{position:relative;height:110px;perspective:800px;cursor:pointer}
+  .face{position:absolute;inset:0;background:#fff;border-radius:12px;border:2px solid rgba(0,0,0,.08);display:grid;place-items:center;backface-visibility:hidden;transition:transform .4s;box-shadow:0 2px 8px var(--shadow);padding:8px;text-align:center}
+  .front{transform:rotateY(180deg)}
+  .back{transform:rotateY(0deg)}
+  .card.flipped .front{transform:rotateY(0deg)}
+  .card.flipped .back{transform:rotateY(-180deg)}
+  .flag{position:relative;width:88%;height:70%;border:2px solid #333;border-radius:6px;background:linear-gradient(#75aadb 0 33%,#fff 33% 66%,#75aadb 66%)}
+  .flag .sun{position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);width:26px;height:26px;border-radius:50%;background:#f1b400;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
+  .p3-banner{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(255,248,225,.92);backdrop-filter:blur(2px);border-radius:12px}
+  .p3-banner.show{display:flex}
+  .p3-card{background:#fff;border:2px dashed #bfa06b;border-radius:14px;box-shadow:0 8px 18px var(--shadow);padding:18px 20px;text-align:center;max-width:520px}
+  .p3-card h3{margin:6px 0 6px;font-family:"Montserrat Alternates", Arial, sans-serif}
+  .p3-card p{margin:6px 0 8px}
+  .p3-card .btn{margin-top:8px}
+
+  /* Parada 4 */
+  .dropzone{min-height:64px;border:2px dashed #bfa06b;background:#fff;border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px}
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .chip{background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:6px 10px;cursor:grab;box-shadow:0 2px 6px var(--shadow)}
+  .p4-controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .hint{font-size:.95rem;opacity:.8;margin-top:6px}
+
+  /* Parada 5 */
+  .radio{background:#222;color:#fff;border-radius:16px;padding:14px;display:flex;align-items:center;gap:14px;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+  .record{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#666 0 30%,#111 31% 100%);display:grid;place-items:center;animation:spin 6s linear infinite paused}
+  .record.playing{animation-play-state:running}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  footer{margin-top:22px;display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+  .postcard{background:#fff;border:2px solid rgba(0,0,0,.08);border-radius:12px;box-shadow:0 6px 14px var(--shadow);padding:12px;min-width:260px}
+
+  .voice-pill{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff;border:2px dashed #bfa06b;border-radius:999px;padding:8px 12px;margin-top:10px}
+  .voice-pill select,.voice-pill input[type="range"]{accent-color:#41845f}
+  .voice-label{font-size:.85rem;opacity:.8}
 </style>
 </head>
 <body>
 <div class="airmail"></div>
 <div class="wrap">
-<header>
-  <div class="title">Reporteros 2 • Unidad 2 • Lección 2 — <em>Experiencias (positivas y negativas)</em></div>
-</header>
+  <header>
+    <div class="head-row">
+      <div class="stamp" aria-hidden="true"></div>
+      <div class="title">Reporteros 2 • Unidad 2 • Lección 2 — <em>Experiencias (positivas y negativas)</em></div>
+      <div class="namefields">
+        <label>✍ Nombre<br><input id="nf-nombre" class="nf" placeholder="Nombre"></label>
+        <label>✍ Apellido<br><input id="nf-apellido" class="nf" placeholder="Apellido"></label>
+      </div>
+    </div>
+    <div class="route">
+      <div class="route-line"><div id="routeFill" class="route-fill"></div></div>
+      <div class="pinrow">
+        <div id="pin1" class="pin" title="Parada 1">1</div>
+        <div id="pin2" class="pin" title="Parada 2">2</div>
+        <div id="pin3" class="pin" title="Parada 3">3</div>
+        <div id="pin4" class="pin" title="Parada 4">4</div>
+        <div id="pin5" class="pin" title="Parada 5">5</div>
+      </div>
+      <div class="voice-pill" title="Voice Settings">
+        <span class="voice-label">🎙️ Voice:</span>
+        <select id="voiceSelect"></select>
+        <span class="voice-label">Rate</span>
+        <input id="voiceRate" type="range" min="0.8" max="1.2" step="0.01" value="0.92">
+        <span class="voice-label">Pitch</span>
+        <input id="voicePitch" type="range" min="0.8" max="1.2" step="0.01" value="1.03">
+      </div>
+    </div>
+  </header>
 
-<section class="section">
-  <details open>
-    <summary>📘 ACTFL Standards — The 5 Cs</summary>
-    <ul>
-      <li><b>Communication:</b> Interpersonal (drag-drop and memory), Interpretive (listening & clues), Presentational (read-aloud practice).</li>
-      <li><b>Cultures:</b> Explore products and practices through concerts, fiestas and excursions in Spanish-speaking contexts.</li>
-      <li><b>Connections:</b> Link to arts and social studies by interpreting reviews and personal experiences.</li>
-      <li><b>Comparisons:</b> Contrast <em>Fue + adjetivo / La pasé + adverbio</em> with English “It was…” and “I had a good time.”</li>
-      <li><b>Communities:</b> Share exports via Schoology and use these phrases to describe real events outside class.</li>
-    </ul>
-  </details>
-</section>
+  <section class="section">
+    <details open>
+      <summary>📘 ACTFL Standards — The 5 Cs</summary>
+      <ul>
+        <li><b>Communication:</b> <i>Interpersonal</i> (drag-and-drop, memory matches with immediate feedback), <i>Interpretive</i> (listening prompts and reading clues), and light <i>Presentational</i> skills when students read sentences aloud.</li>
+        <li><b>Cultures:</b> Products/Practices/Perspectives through common leisure contexts (conciertos, fiestas, excursiones) in Spanish-speaking settings.</li>
+        <li><b>Connections:</b> Links to arts and social studies by interpreting event reviews and personal experiences.</li>
+        <li><b>Comparisons:</b> Contrast Spanish structures (<i>Fue + adjetivo</i>, <i>La pasé + adverbio</i>) with English patterns (“It was…”, “I had a good time”).</li>
+        <li><b>Communities:</b> Share exports via Schoology; apply phrases outside class when describing real-life events.</li>
+      </ul>
+    </details>
+  </section>
 
-<!-- Simplified activity stubs to illustrate structure -->
-<section class="section"><h2>Parada 1 — Match the Experience</h2>
-<p>Drag the Spanish chip to the matching English card.</p>
-<div class="stopprog"><div class="mini-prog"><div class="mini-fill"></div></div><div class="mini-txt">Progress</div></div>
-<div class="spanish-chip">Fue divertido.</div>
-<div class="p1-row"><div class="target">It was fun.</div><div class="target">It was boring.</div></div>
-</section>
+  <!-- PARADA 1 -->
+  <section class="section" id="p1">
+    <h2>Parada 1 — Match the Experience</h2>
+    <p><b>Instructions:</b> Drag the <b>Spanish chip</b> onto the correct <b>English card</b>. Click any chip or card to hear Spanish.</p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p1Fill"></div></div>
+      <div class="mini-txt" id="p1Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div id="p1Chip"></div>
+    <div class="p1-row" id="p1Targets"></div>
+  </section>
 
-<section class="section"><h2>Parada 2 — Guess from the Clue</h2><p>Read or listen to the clue and choose the correct expression.</p></section>
-<section class="section"><h2>Parada 3 — Memory Game</h2><p>Flip cards to find matching Spanish–English pairs.</p></section>
-<section class="section"><h2>Parada 4 — Build a Sentence</h2><p>Drag the words to recreate the Spanish sentence.</p></section>
-<section class="section"><h2>Parada 5 — Mini Listening</h2><p>Listen and choose the correct meaning.</p></section>
+  <!-- PARADA 2 -->
+  <section class="section" id="p2">
+    <h2>Parada 2 — Guess from the Clue</h2>
+    <p><b>Instructions:</b> Read/hear the clue and pick the correct expression. Starters used: <i>Es cuando…, Es como…, Es lo contrario de…, Es una experiencia que…, Es un recuerdo que…</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p2Fill"></div></div>
+      <div class="mini-txt" id="p2Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div class="clue" id="p2Clue">Press ▶️ to hear the clue.</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn olive" id="p2Play">▶️ Listen</button>
+      <button class="btn ghost" id="p2New">🔄 New clue</button>
+    </div>
+    <div class="p2-options" id="p2Options"></div>
+  </section>
 
-<footer class="section"><p><b>📮 Export:</b> Download CSV or JSON and upload to Schoology when finished.</p></footer>
+  <!-- PARADA 3 -->
+  <section class="section" id="p3">
+    <h2>Parada 3 — Memory (Argentina)</h2>
+    <p><b>Instructions:</b> Match all <b id="p3count"></b> pairs. Matched cards are removed and <b>not replaced</b>. Completion = all pairs matched.</p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p3Fill"></div></div>
+      <div class="mini-txt" id="p3Txt">Pairs: 0/0</div>
+    </div>
+    <div class="grid" id="p3Grid" aria-live="polite"></div>
+    <div id="p3Banner" class="p3-banner" role="dialog" aria-modal="true" aria-labelledby="p3Title" aria-describedby="p3Desc">
+      <div class="p3-card">
+        <h3 id="p3Title">¡Mapa completado! 🗺️</h3>
+        <p id="p3Desc">You matched all pairs. ¡Excelente!</p>
+        <button class="btn olive" id="p3Close">OK</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARADA 4 -->
+  <section class="section" id="p4">
+    <h2>Parada 4 — Build a Sentence</h2>
+    <p><b>Instructions:</b> Drag the words to build the exact Spanish sentence. Then press <b>Grade</b>. (Click any word to hear it.)</p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p4Fill"></div></div>
+      <div class="mini-txt" id="p4Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div id="p4Eng" class="hint"></div>
+    <div id="p4Drop" class="dropzone" aria-label="Sentence drop zone"></div>
+    <div id="p4Bank" class="bank"></div>
+    <div class="p4-controls">
+      <button id="p4Grade" class="btn olive">✅ Grade</button>
+      <button id="p4Clear" class="btn ghost">🧽 Clear</button>
+      <button id="p4Next" class="btn navy">➡️ Next</button>
+    </div>
+  </section>
+
+  <!-- PARADA 5 -->
+  <section class="section" id="p5">
+    <h2>Parada 5 — Mini Listening</h2>
+    <p><b>Instructions:</b> Press <b>▶️</b> to listen and choose the correct meaning. (Click options to hear them.)</p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p5Fill"></div></div>
+      <div class="mini-txt" id="p5Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div class="radio">
+      <div id="disc" class="record" aria-hidden="true">▶️</div>
+      <div>
+        <div id="p5Prompt" style="margin-bottom:8px;">Press ▶️ to play.</div>
+        <div id="p5Options" class="p2-options"></div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn olive" id="p5Play">▶️ Play</button>
+          <button class="btn ghost" id="p5New">🔄 New audio</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="postcard">
+      <h3 style="margin:6px 0">📊 Summary</h3>
+      <div id="sumStats">Attempts: 0 • Correct: 0 • Accuracy: 0%</div>
+    </div>
+    <div class="postcard">
+      <h3 style="margin:6px 0">⬇️ Export</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="dlCSV" class="btn ghost">📮 Download CSV</button>
+        <button id="dlJSON" class="btn ghost">📜 Download My Data (JSON)</button>
+      </div>
+      <p style="margin-top:10px"><i>Note:</i> Upload your file to <b>Schoology</b> in the assignment matching this page’s title.</p>
+    </div>
+  </footer>
 </div>
+
+<script>
+/* ===== VOICE ===== */
+const voiceSelect=document.getElementById("voiceSelect");
+const voiceRate=document.getElementById("voiceRate");
+const voicePitch=document.getElementById("voicePitch");
+function loadVoicePrefs(){const v=localStorage.getItem("voicePref");const r=localStorage.getItem("voiceRate");const p=localStorage.getItem("voicePitch");if(r)voiceRate.value=r;if(p)voicePitch.value=p;if(v)voiceSelect.dataset.saved=v;}
+voiceRate.addEventListener("input",()=>localStorage.setItem("voiceRate",voiceRate.value));
+voicePitch.addEventListener("input",()=>localStorage.setItem("voicePitch",voicePitch.value));
+voiceSelect.addEventListener("change",()=>localStorage.setItem("voicePref",voiceSelect.value));
+function listVoices(){const all=speechSynthesis.getVoices();voiceSelect.innerHTML="";const pref=[],oth=[];
+  all.forEach(v=>{const es=v.lang&&v.lang.toLowerCase().startsWith("es");const eses=v.lang&&v.lang.toLowerCase().startsWith("es-es");const gg=/Google/i.test(v.name);
+    const score=(eses?3:0)+(es?1:0)+(gg?1:0);(score>0?pref:oth).push({v,score})});
+  pref.sort((a,b)=>b.score-a.score);
+  const ordered=[...pref.map(x=>x.v),...oth.map(x=>x.v)];
+  ordered.forEach(v=>{const o=document.createElement("option");o.value=v.name+"::"+v.lang;o.textContent=v.name+" — "+v.lang;voiceSelect.appendChild(o)});
+  const saved=voiceSelect.dataset.saved;
+  if(saved&&[...voiceSelect.options].some(o=>o.value===saved)){voiceSelect.value=saved}
+  else if(ordered.length){const best=pref.length?pref[0].v:ordered[0];voiceSelect.value=best.name+"::"+best.lang}
+}
+loadVoicePrefs();
+if(typeof speechSynthesis!=="undefined"){speechSynthesis.onvoiceschanged=()=>{listVoices()};setTimeout(listVoices,200)}
+function speakEs(text){
+  try{
+    const parts=(text||"").split(/([.!?;:])/).reduce((a,c)=>{if(/[.!?;:]/.test(c)&&a.length){a[a.length-1]+=c}else if(c.trim()){a.push(c.trim())}return a},[]);
+    const selected=voiceSelect.value;const [vName,vLang]=selected?selected.split("::"):[null,null];
+    const pick=()=>{const vs=speechSynthesis.getVoices();let m=vs.find(v=>v.name===vName&&v.lang===vLang);
+      if(!m){m=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("es-es"))||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("es"))||vs[0]}return m};
+    let delay=0;const rate=parseFloat(voiceRate.value||"0.92");const pitch=parseFloat(voicePitch.value||"1.03");
+    speechSynthesis.cancel();
+    parts.forEach(p=>{const u=new SpeechSynthesisUtterance(p);u.lang="es-ES";const v=pick();if(v)u.voice=v;u.rate=rate;u.pitch=pitch;u.volume=0.95;
+      const pad=/[.!?]$/.test(p)?180:120;setTimeout(()=>speechSynthesis.speak(u),delay);delay+=Math.max(250,p.length*12)+pad})
+  }catch(e){console.warn(e)}
+}
+
+/* ===== DATA ===== */
+const MASTER=[
+  {es:"Fue divertido.", en:"It was fun.", icon:"😄", cat:"pos"},
+  {es:"Fue espectacular.", en:"It was spectacular.", icon:"🌟", cat:"pos"},
+  {es:"Fue impresionante.", en:"It was amazing.", icon:"🤯", cat:"pos"},
+  {es:"Fue genial.", en:"It was great, wonderful.", icon:"🎉", cat:"pos"},
+  {es:"Fue increíble.", en:"It was incredible.", icon:"✨", cat:"pos"},
+  {es:"La pasé muy bien.", en:"I had a very good time.", icon:"🥳", cat:"pos"},
+  {es:"La pasé bien.", en:"I had a good time.", icon:"😊", cat:"pos"},
+  {es:"Fue aburrido.", en:"It was boring.", icon:"🥱", cat:"neg"},
+  {es:"Fue decepcionante.", en:"It was disappointing.", icon:"😕", cat:"neg"},
+  {es:"Fue terrible.", en:"It was terrible.", icon:"😖", cat:"neg"},
+  {es:"Fue un desastre.", en:"It was a disaster.", icon:"💥", cat:"neg"}
+];
+const P2_CLUES=[
+  {clue:"Es cuando recuerdas una actividad y te reíste mucho. Es similar a ‘me divertí’.", ans:"Fue divertido."},
+  {clue:"Es una experiencia muy, muy buena; es como decir ‘fue excelente’.", ans:"Fue espectacular."},
+  {clue:"Es cuando algo te sorprende muchísimo; es como ‘asombroso’.", ans:"Fue impresionante."},
+  {clue:"Es como decir ‘fue fantástico’; te encantó.", ans:"Fue genial."},
+  {clue:"Es una experiencia tan buena que casi no la crees.", ans:"Fue increíble."},
+  {clue:"Es cuando cuentas que tuviste un tiempo excelente con amigos o familia.", ans:"La pasé muy bien."},
+  {clue:"Es cuando cuentas que tuviste un buen tiempo, pero no necesariamente excelente.", ans:"La pasé bien."},
+  {clue:"Es lo contrario de interesante; te dio sueño.", ans:"Fue aburrido."},
+  {clue:"Es cuando esperabas algo mejor; no cumplió tus expectativas.", ans:"Fue decepcionante."},
+  {clue:"Es una experiencia muy mala; todo salió mal.", ans:"Fue terrible."},
+  {clue:"Es lo opuesto de ‘salió bien’; hubo problemas por todas partes.", ans:"Fue un desastre."}
+];
+const P4_SENTENCES=[
+  {es:"El museo fue divertido.", en:"The museum was fun."},
+  {es:"El concierto fue espectacular.", en:"The concert was spectacular."},
+  {es:"La excursión fue impresionante.", en:"The hike was amazing."},
+  {es:"La fiesta fue genial.", en:"The party was great."},
+  {es:"El viaje fue increíble.", en:"The trip was incredible."},
+  {es:"La pasé muy bien en la playa.", en:"I had a very good time at the beach."},
+  {es:"La pasé bien con mi familia.", en:"I had a good time with my family."},
+  {es:"El documental fue aburrido.", en:"The documentary was boring."},
+  {es:"El partido fue decepcionante.", en:"The match was disappointing."},
+  {es:"La comida fue terrible.", en:"The food was terrible."},
+  {es:"La organización fue un desastre.", en:"The organization was a disaster."}
+];
+const P5_ITEMS=[
+  {tts:"La pasé muy bien en el viaje con mi familia.", q:"¿Cómo lo pasó?", options:["Muy bien","Terrible","Aburrido"], correct:0},
+  {tts:"El espectáculo fue espectacular.", q:"¿Cómo fue el espectáculo?", options:["Espectacular","Aburrido","Un desastre"], correct:0},
+  {tts:"La excursión fue impresionante.", q:"¿Cómo fue la excursión?", options:["Impresionante","Decepcionante","Terrible"], correct:0},
+  {tts:"La película fue aburrida.", q:"¿Cómo fue la película?", options:["Aburrida","Genial","Increíble"], correct:0},
+  {tts:"La experiencia en el restaurante fue decepcionante.", q:"¿Cómo fue la experiencia en el restaurante?", options:["Decepcionante","Genial","Espectacular"], correct:0},
+  {tts:"El concierto fue terrible.", q:"¿Cómo fue el concierto?", options:["Terrible","Divertido","Espectacular"], correct:0},
+  {tts:"La organización del evento fue un desastre.", q:"¿Cómo fue la organización del evento?", options:["Un desastre","Increíble","Muy bien"], correct:0},
+  {tts:"La fiesta fue genial.", q:"¿Cómo fue la fiesta?", options:["Genial","Aburrida","Terrible"], correct:0},
+  {tts:"El viaje fue increíble.", q:"¿Cómo fue el viaje?", options:["Increíble","Decepcionante","Un desastre"], correct:0},
+  {tts:"Con mis amigos, la pasé bien.", q:"¿Cómo lo pasó con sus amigos?", options:["Bien","Terrible","Aburrido"], correct:0}
+];
+
+/* ===== STATE/UTILS ===== */
+const GOAL_CORRECT=12, GOAL_ACC=0.80;
+const state={p1:{correct:0,attempts:0},p2:{correct:0,attempts:0},p3:{correct:0,attempts:0,matchedSet:new Set(),deck:[],complete:false},p4:{correct:0,attempts:0,current:null},p5:{correct:0,attempts:0,current:null}};
+const $=sel=>document.querySelector(sel);
+function pct(n){return Math.round(n*100)}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function sample(arr,n){return shuffle(arr.slice()).slice(0,n)}
+function playStamp(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator();const g=ctx.createGain();o.type="square";o.frequency.value=120;g.gain.value=0.25;o.connect(g);g.connect(ctx.destination);o.start();setTimeout(()=>{g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.18)},15);setTimeout(()=>{o.stop();ctx.close()},220)}catch(e){}}
+function confetti(){const el=document.createElement("div");el.style.position="fixed";el.style.inset="0";el.style.pointerEvents="none";document.body.appendChild(el);const N=60;for(let i=0;i<N;i++){const s=document.createElement("div");s.textContent="🎉";s.style.position="absolute";s.style.left=(Math.random()*100)+"%";s.style.top="-10px";s.style.fontSize=(12+Math.random()*18)+"px";s.style.opacity="1";el.appendChild(s);const dx=(Math.random()*2-1)*60;const dy=window.innerHeight+40;const rot=(Math.random()*720-360);s.animate([{transform:"translate(0,0) rotate(0deg)",opacity:1},{transform:`translate(${dx}px, ${dy}px) rotate(${rot}deg)`,opacity:0}],{duration:1400+Math.random()*600,easing:"ease-out",fill:"forwards"})}
+setTimeout(()=>el.remove(),2200)}
+function normalizeSentence(s){return s.replace(/\s+/g," ").replace(/\s+([.,!?;:])/g,"$1").trim()}
+function meets(id,data){if(id==="p3"){return data.matchedSet.size>=MASTER.length}return data.correct>=GOAL_CORRECT && (data.correct/Math.max(1,data.attempts))>=GOAL_ACC}
+function updateStopBars(){
+  const items=[{id:"p1",data:state.p1},{id:"p2",data:state.p2},{id:"p3",data:state.p3},{id:"p4",data:state.p4},{id:"p5",data:state.p5}];
+  let completed=0;
+  items.forEach((it,idx)=>{
+    const fEl=document.getElementById(it.id+"Fill"), tEl=document.getElementById(it.id+"Txt");
+    if(it.id==="p3"){
+      const matched=it.data.matchedSet.size, total=MASTER.length, fill=Math.min(100,Math.round((matched/total)*100));
+      if(fEl){fEl.style.width=fill+"%";fEl.classList.toggle("meets",meets("p3",it.data))}
+      if(tEl){tEl.textContent=`Pairs: ${matched}/${total}`}
+    }else{
+      const acc=it.data.attempts?it.data.correct/it.data.attempts:0, fill=Math.min(100,Math.round((it.data.correct/GOAL_CORRECT)*100));
+      if(fEl){fEl.style.width=fill+"%";fEl.classList.toggle("meets",meets(it.id,it.data))}
+      if(tEl){tEl.textContent=`Correct: ${it.data.correct}/${GOAL_CORRECT} • Acc: ${pct(acc)}%`}
+    }
+    const pin=document.getElementById("pin"+(idx+1)); if(pin) pin.classList.toggle("done",meets(it.id,it.data));
+    if(meets(it.id,it.data)) completed++;
+  });
+  document.getElementById("routeFill").style.width=(completed/5*100)+"%";
+  if(completed===5){confetti();playStamp()}
+  const totalA=items.reduce((a,b)=>a+b.data.attempts,0);
+  const totalC=items.reduce((a,b)=>a+b.data.correct,0);
+  const acc=totalA? totalC/totalA:0;
+  document.getElementById("sumStats").textContent=`Attempts: ${totalA} • Correct: ${totalC} • Accuracy: ${pct(acc)}%`
+}
+
+/* ===== PARADA 1 ===== */
+const p1Chip=$("#p1Chip"), p1Targets=$("#p1Targets"); let p1Current=null, p1Recent=[];
+function p1NewRound(){
+  const pool=MASTER.filter(v=>!p1Recent.includes(v.es));
+  const chosen=pool.length? pool[Math.floor(Math.random()*pool.length)] : MASTER[Math.floor(Math.random()*MASTER.length)];
+  p1Current=chosen; p1Recent.push(chosen.es); if(p1Recent.length>5) p1Recent.shift();
+  const sameCat=MASTER.filter(v=>v.cat===chosen.cat && v.es!==chosen.es);
+  const from=sameCat.length>=3? sameCat : MASTER.filter(v=>v.es!==chosen.es);
+  const distractors=sample(from,3);
+  const set=shuffle([{...chosen,correct:true},...distractors.map(d=>({...d,correct:false}))]);
+  p1Chip.innerHTML=`<div draggable="true" class="spanish-chip" id="p1Drg" role="button" tabindex="0">🔊 <span>${chosen.es}</span></div>`;
+  const drg=$("#p1Drg");
+  drg.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain","chip")});
+  drg.addEventListener("click",()=>speakEs(chosen.es));
+  drg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")speakEs(chosen.es)});
+  p1Targets.innerHTML="";
+  set.forEach(t=>{
+    const dz=document.createElement("div"); dz.className="target"; dz.dataset.correct=t.correct? "1":"0";
+    dz.innerHTML=`<div><span class="icon">🔊</span><b>${t.en}</b></div><div class="drop-here">Drop here</div>`;
+    dz.addEventListener("dragover",e=>e.preventDefault());
+    dz.addEventListener("drop",e=>{e.preventDefault();state.p1.attempts++; if(dz.dataset.correct==="1"){state.p1.correct++;dz.classList.add("correct");playStamp();p1Chip.innerHTML=`<div class="spanish-chip" style="opacity:.6">🔊 <span>${chosen.es}</span></div>`;setTimeout(()=>{p1NewRound();updateStopBars()},450)}else{dz.classList.add("wrong");setTimeout(()=>dz.classList.remove("wrong"),300);updateStopBars()}});
+    dz.addEventListener("click",()=>speakEs(chosen.es));
+    dz.setAttribute("tabindex","0"); dz.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")speakEs(chosen.es)});
+    p1Targets.appendChild(dz);
+  });
+}
+p1NewRound();
+
+/* ===== PARADA 2 ===== */
+const p2Clue=$("#p2Clue"), p2Options=$("#p2Options"), btnP2Play=$("#p2Play"), btnP2New=$("#p2New"); let p2Current=null;
+function p2New(){p2Current=P2_CLUES[Math.floor(Math.random()*P2_CLUES.length)]; p2Clue.textContent=p2Current.clue;
+  const corr=MASTER.find(v=>v.es===p2Current.ans); const pool=MASTER.filter(v=>v.es!==p2Current.ans); const opts=shuffle([corr,...sample(pool,3)]);
+  p2Options.innerHTML="";
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn ghost"; b.textContent=`${o.es}`.trim();
+    b.addEventListener("click",()=>{speakEs(o.es); state.p2.attempts++; if(o.es===p2Current.ans){state.p2.correct++; playStamp(); b.classList.add("correct")}else{b.classList.add("wrong")} [...p2Options.querySelectorAll("button")].forEach(bb=>bb.disabled=true); updateStopBars(); setTimeout(()=>p2New(),900)});
+    p2Options.appendChild(b)
+  });
+}
+btnP2Play.addEventListener("click",()=>{if(p2Current)speakEs(p2Current.clue)}); btnP2New.addEventListener("click",p2New); p2New();
+
+/* ===== PARADA 3 ===== */
+const p3Grid=$("#p3Grid"), p3Banner=$("#p3Banner"), p3Close=$("#p3Close"); let p3First=null, p3Lock=false;
+function p3InitDeck(){state.p3.deck=[]; MASTER.forEach(it=>{state.p3.deck.push({type:"es",key:it.es,text:it.es,icon:"🔊",pair:it.en,_gone:false}); state.p3.deck.push({type:"en",key:it.en,text:it.en,icon:"🔊",pair:it.es,_gone:false})}); state.p3.deck=shuffle(state.p3.deck); document.getElementById("p3count").textContent=MASTER.length; document.getElementById("p3Txt").textContent=`Pairs: 0/${MASTER.length}`}
+function p3Render(){p3Grid.innerHTML=""; state.p3.deck.forEach((card,i)=>{if(card._gone)return; const c=document.createElement("div"); c.className="card"; c.innerHTML=`<div class="face back"><div class="flag"><div class="sun"></div></div></div><div class="face front"><div><div style="font-size:24px">${card.icon}</div><div>${card.text}</div></div></div>`; c.addEventListener("click",()=>p3Flip(c,card,i)); c.setAttribute("tabindex","0"); c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")p3Flip(c,card,i)}); p3Grid.appendChild(c)}); p3Grid.classList.toggle("locked",state.p3.complete)}
+function p3ShowBanner(){p3Banner.classList.add("show"); p3Grid.classList.add("locked"); confetti(); playStamp()}
+p3Close.addEventListener("click",()=>{p3Banner.classList.remove("show")});
+function p3Flip(el,card,idx){if(state.p3.complete||p3Lock||el.classList.contains("gone")||el.classList.contains("flipped"))return; el.classList.add("flipped"); speakEs(card.type==="es"?card.text:card.pair);
+  if(!p3First){p3First={el,card,idx};return}
+  p3Lock=true; const first=p3First; p3First=null;
+  setTimeout(()=>{state.p3.attempts++; const isMatch = (first.card.type==="es"? first.card.pair===card.text : first.card.text===card.pair);
+    if(isMatch){ state.p3.correct++; const keyEs = first.card.type==="es"? first.card.key : first.card.pair; state.p3.matchedSet.add(keyEs);
+      first.el.classList.add("gone"); first.el.style.visibility="hidden"; el.classList.add("gone"); el.style.visibility="hidden"; state.p3.deck[first.idx]._gone=true; state.p3.deck[idx]._gone=true;
+      if(state.p3.matchedSet.size===MASTER.length){state.p3.complete=true; updateStopBars(); p3Render(); setTimeout(p3ShowBanner,250); p3Lock=false; return}
+      playStamp()
+    }else{ first.el.classList.remove("flipped"); el.classList.remove("flipped") }
+    p3Lock=false; updateStopBars()
+  },420)
+}
+p3InitDeck(); p3Render();
+
+/* ===== PARADA 4 ===== */
+const p4Eng=$("#p4Eng"), p4Drop=$("#p4Drop"), p4Bank=$("#p4Bank"); const p4Grade=$("#p4Grade"), p4Clear=$("#p4Clear"), p4Next=$("#p4Next");
+function tokenize(s){return s.replace(/([.,!?])/g," $1 ").trim().split(/\s+/)}
+function p4Load(){state.p4.current=P4_SENTENCES[Math.floor(Math.random()*P4_SENTENCES.length)]; p4Eng.textContent=state.p4.current.en; p4Drop.innerHTML=""; p4Bank.innerHTML="";
+  const toks=tokenize(state.p4.current.es), shuffled=shuffle(toks.slice()); shuffled.forEach(tok=>{const chip=document.createElement("span"); chip.className="chip"; chip.textContent=tok; chip.draggable=true; chip.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",tok); chip.classList.add("dragging")}); chip.addEventListener("dragend",()=>chip.classList.remove("dragging")); chip.addEventListener("click",()=>speakEs(tok)); chip.setAttribute("tabindex","0"); chip.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")speakEs(tok)}); p4Bank.appendChild(chip)})}
+["dragover","drop"].forEach(evt=>{p4Drop.addEventListener(evt,e=>{e.preventDefault(); if(evt==="drop"){const d=document.querySelector(".chip.dragging"); if(d){p4Drop.appendChild(d)}}}); p4Bank.addEventListener(evt,e=>{e.preventDefault(); if(evt==="drop"){const d=document.querySelector(".chip.dragging"); if(d){p4Bank.appendChild(d)}}})});
+p4Grade.addEventListener("click",()=>{const built=[...p4Drop.querySelectorAll(".chip")].map(c=>c.textContent).join(" "); const ok=normalizeSentence(built)===normalizeSentence(state.p4.current.es); state.p4.attempts++; if(ok){state.p4.correct++; playStamp(); p4Eng.textContent="PASAPORTE APROBADO ✓ / PASSPORT APPROVED ✓"}else{p4Eng.textContent="Revisa el orden / Check the order"; p4Drop.classList.add("wrong"); setTimeout(()=>p4Drop.classList.remove("wrong"),300)} updateStopBars()});
+p4Clear.addEventListener("click",()=>{[...p4Drop.querySelectorAll(".chip")].forEach(c=>p4Bank.appendChild(c))});
+p4Next.addEventListener("click",p4Load); p4Load();
+
+/* ===== PARADA 5 ===== */
+const disc=$("#disc"), p5Prompt=$("#p5Prompt"), p5Options=$("#p5Options"), btnP5Play=$("#p5Play"), btnP5New=$("#p5New");
+function p5New(){state.p5.current=P5_ITEMS[Math.floor(Math.random()*P5_ITEMS.length)]; p5Prompt.textContent=state.p5.current.q; p5Options.innerHTML="";
+  state.p5.current.options.forEach((opt,i)=>{const b=document.createElement("button"); b.className="btn ghost"; b.textContent=opt; b.addEventListener("click",()=>{speakEs(opt); state.p5.attempts++; if(i===state.p5.current.correct){state.p5.correct++; b.classList.add("correct"); playStamp()}else{b.classList.add("wrong")} [...p5Options.querySelectorAll("button")].forEach(bb=>bb.disabled=true); updateStopBars(); setTimeout(()=>p5New(),900)}); b.setAttribute("aria-label","opción"); p5Options.appendChild(b)})
+}
+function p5Speak(){if(state.p5.current)speakEs(state.p5.current.tts)}
+btnP5Play.addEventListener("click",()=>{disc.classList.add("playing"); p5Speak(); setTimeout(()=>disc.classList.remove("playing"),2200)});
+btnP5New.addEventListener("click",p5New); p5New();
+
+/* ===== EXPORT ===== */
+document.getElementById("dlCSV").addEventListener("click",()=>{
+  const nombre=document.getElementById("nf-nombre").value||"", apellido=document.getElementById("nf-apellido").value||"";
+  const rows=[["Nombre","Apellido","Parada","Correct","Attempts","Accuracy","P3 Unique Pairs"],
+    [nombre,apellido,"1",state.p1.correct,state.p1.attempts,(state.p1.attempts?(state.p1.correct/state.p1.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"2",state.p2.correct,state.p2.attempts,(state.p2.attempts?(state.p2.correct/state.p2.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"3",state.p3.correct,state.p3.attempts,(state.p3.attempts?(state.p3.correct/state.p3.attempts).toFixed(2):"0"), state.p3.matchedSet.size+"/"+MASTER.length],
+    [nombre,apellido,"4",state.p4.correct,state.p4.attempts,(state.p4.attempts?(state.p4.correct/state.p4.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"5",state.p5.correct,state.p5.attempts,(state.p5.attempts?(state.p5.correct/state.p5.attempts).toFixed(2):"0"),""]
+  ];
+  const csv=rows.map(r=>r.join(",")).join("\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="reporteros2_unidad2_leccion2_experiencias_resultados.csv"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500);
+});
+document.getElementById("dlJSON").addEventListener("click",()=>{
+  const payload={titulo:document.title,nombre:document.getElementById("nf-nombre").value||"",apellido:document.getElementById("nf-apellido").value||"",fecha:new Date().toISOString(),resultados:{p1:state.p1,p2:state.p2,p3:{correct:state.p3.correct,attempts:state.p3.attempts,matchedCount:state.p3.matchedSet.size,complete:state.p3.complete},p4:state.p4,p5:state.p5}};
+  const pretty=JSON.stringify(payload,null,2); const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([pretty],{type:"application/json"}));
+  a.download="reporteros2_unidad2_leccion2_experiencias_mis_datos.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500);
+});
+
+/* INIT */
+updateStopBars();
+</script>
 </body>
 </html>
