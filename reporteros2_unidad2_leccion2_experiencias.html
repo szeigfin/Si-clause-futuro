@@ -40,7 +40,6 @@
   .p1-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:8px 4px;overflow-x:hidden}
   .target{background:#fbf1d3;border:2px dashed #c5b28b;border-radius:12px;padding:10px;transition:transform .15s}
   .target:hover{transform:translateY(-2px)}
-  .target .icon{font-size:22px;margin-right:6px}
   .drop-here{font-size:.88rem;opacity:.75;margin-top:6px}
   .spanish-chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:8px 12px;margin:10px 0;cursor:grab;box-shadow:0 2px 6px var(--shadow);font-weight:600}
   .correct{outline:3px solid #4caf50}
@@ -132,10 +131,10 @@
       <summary>📘 ACTFL Standards — The 5 Cs</summary>
       <ul>
         <li><b>Communication:</b> <i>Interpersonal</i> (drag-and-drop, memory matches with immediate feedback), <i>Interpretive</i> (listening prompts and reading clues), and light <i>Presentational</i> skills when students read sentences aloud.</li>
-        <li><b>Cultures:</b> Products/Practices/Perspectives through common leisure contexts (conciertos, fiestas, excursiones) in Spanish-speaking settings.</li>
-        <li><b>Connections:</b> Links to arts and social studies by interpreting event reviews and personal experiences.</li>
-        <li><b>Comparisons:</b> Contrast Spanish structures (<i>Fue + adjetivo</i>, <i>La pasé + adverbio</i>) with English patterns (“It was…”, “I had a good time”).</li>
-        <li><b>Communities:</b> Share exports via Schoology; apply phrases outside class when describing real-life events.</li>
+        <li><b>Cultures:</b> Products/Practices/Perspectives through leisure contexts in Spanish-speaking settings.</li>
+        <li><b>Connections:</b> Links to arts/social studies by interpreting event reviews and personal experiences.</li>
+        <li><b>Comparisons:</b> Contrast Spanish (<i>Fue + adjetivo</i>, <i>La pasé + adverbio</i>) with English (“It was…”, “I had a good time”).</li>
+        <li><b>Communities:</b> Share exports via Schoology; apply phrases outside class to describe real events.</li>
       </ul>
     </details>
   </section>
@@ -383,7 +382,7 @@ function p1NewRound(){
   p1Targets.innerHTML="";
   set.forEach(t=>{
     const dz=document.createElement("div"); dz.className="target"; dz.dataset.correct=t.correct? "1":"0";
-    dz.innerHTML=`<div><span class="icon">🔊</span><b>${t.en}</b></div><div class="drop-here">Drop here</div>`;
+    dz.innerHTML=`<div><b>${t.en}</b></div><div class="drop-here">Drop here</div>`;
     dz.addEventListener("dragover",e=>e.preventDefault());
     dz.addEventListener("drop",e=>{e.preventDefault();state.p1.attempts++; if(dz.dataset.correct==="1"){state.p1.correct++;dz.classList.add("correct");playStamp();p1Chip.innerHTML=`<div class="spanish-chip" style="opacity:.6">🔊 <span>${chosen.es}</span></div>`;setTimeout(()=>{p1NewRound();updateStopBars()},450)}else{dz.classList.add("wrong");setTimeout(()=>dz.classList.remove("wrong"),300);updateStopBars()}});
     dz.addEventListener("click",()=>speakEs(chosen.es));
@@ -409,7 +408,7 @@ btnP2Play.addEventListener("click",()=>{if(p2Current)speakEs(p2Current.clue)}); 
 /* ===== PARADA 3 ===== */
 const p3Grid=$("#p3Grid"), p3Banner=$("#p3Banner"), p3Close=$("#p3Close"); let p3First=null, p3Lock=false;
 function p3InitDeck(){state.p3.deck=[]; MASTER.forEach(it=>{state.p3.deck.push({type:"es",key:it.es,text:it.es,icon:"🔊",pair:it.en,_gone:false}); state.p3.deck.push({type:"en",key:it.en,text:it.en,icon:"🔊",pair:it.es,_gone:false})}); state.p3.deck=shuffle(state.p3.deck); document.getElementById("p3count").textContent=MASTER.length; document.getElementById("p3Txt").textContent=`Pairs: 0/${MASTER.length}`}
-function p3Render(){p3Grid.innerHTML=""; state.p3.deck.forEach((card,i)=>{if(card._gone)return; const c=document.createElement("div"); c.className="card"; c.innerHTML=`<div class="face back"><div class="flag"><div class="sun"></div></div></div><div class="face front"><div><div style="font-size:24px">${card.icon}</div><div>${card.text}</div></div></div>`; c.addEventListener("click",()=>p3Flip(c,card,i)); c.setAttribute("tabindex","0"); c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")p3Flip(c,card,i)}); p3Grid.appendChild(c)}); p3Grid.classList.toggle("locked",state.p3.complete)}
+function p3Render(){p3Grid.innerHTML=""; state.p3.deck.forEach((card,i)=>{if(card._gone)return; const c=document.createElement("div"); c.className="card"; c.innerHTML=`<div class="face back"><div class="flag"><div class="sun"></div></div></div><div class="face front"><div><div style="font-size:24px">🔊</div><div>${card.text}</div></div></div>`; c.addEventListener("click",()=>p3Flip(c,card,i)); c.setAttribute("tabindex","0"); c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")p3Flip(c,card,i)}); p3Grid.appendChild(c)}); p3Grid.classList.toggle("locked",state.p3.complete)}
 function p3ShowBanner(){p3Banner.classList.add("show"); p3Grid.classList.add("locked"); confetti(); playStamp()}
 p3Close.addEventListener("click",()=>{p3Banner.classList.remove("show")});
 function p3Flip(el,card,idx){if(state.p3.complete||p3Lock||el.classList.contains("gone")||el.classList.contains("flipped"))return; el.classList.add("flipped"); speakEs(card.type==="es"?card.text:card.pair);
