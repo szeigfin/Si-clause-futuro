@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 2 · U2 L2 — Describir Experiencias</title>
+<style>
+  :root{
+    --paper:#fff8e1; --terracotta:#d93223; --mustard:#ffb841; --navy:#2c3c80;
+    --olive:#41845f; --ink:#3d3d3d; --ok:#2e7d32; --warn:#b00020; --maxw:960px;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Roboto Slab", serif;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:16px 20px 80px;}
+  header{
+    background:linear-gradient( to right, #e9e0c7, #f9f1d8 );
+    border:6px solid transparent; position:relative; margin-bottom:12px;
+    box-shadow:0 8px 18px rgba(0,0,0,.05);
+  }
+  header:before{
+    content:""; position:absolute; inset:-6px; z-index:-1;
+    background: repeating-linear-gradient(45deg, #d93223 0 14px, #fff 14px 28px, #2c3c80 28px 42px, #fff 42px 56px);
+  }
+  .hdr-inner{padding:18px 18px 14px 18px; display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center;}
+  .wax{
+    width:70px;height:70px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #ef6a5e, #b22619 60%, #7a140e);
+    box-shadow:inset 0 6px 10px rgba(255,255,255,.35), inset 0 -6px 12px rgba(0,0,0,.2), 0 6px 12px rgba(0,0,0,.15);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:Pacifico, cursive;font-size:22px;
+  }
+  h1{font-family:"Montserrat Alternates", "Montserrat", system-ui, sans-serif; margin:0 0 8px; font-weight:800; letter-spacing:.5px; color:var(--navy);}
+  .name-row{display:flex; gap:10px; flex-wrap:wrap}
+  .name-row label{font-family:Pacifico, cursive; color:var(--terracotta); font-size:.95rem}
+  .name-row input{padding:10px 12px;border:2px dashed #ccb890;background:#fff7da;border-radius:10px;min-width:220px;font-size:1rem}
+
+  /* Route bar */
+  .route{background:linear-gradient(#f2e6c9,#f9f1d8); border:1px solid #e2d3ad; border-radius:12px; padding:12px 14px; margin:10px 0 18px;}
+  .route-line{height:6px;background:#e6d8b3;border-radius:99px;position:relative;margin:12px 0}
+  .route-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--mustard),var(--olive));border-radius:99px;transition:width .35s ease}
+  .pins{display:flex;justify-content:space-between;margin-top:8px}
+  .pin{width:28px;height:28px;border-radius:50%;background:#e0d1a7;border:2px solid #c3b183;display:grid;place-items:center;font-weight:700;color:#6b5b2e}
+  .pin.complete{background:var(--olive);color:#fff;border-color:#2f6d4a; box-shadow:0 0 0 3px rgba(65,132,95,.2)}
+  .row{display:flex; gap:10px; align-items:center}
+
+  /* Cards and UI */
+  details{background:#fff7da;border:1px solid #e2d3ad;border-radius:12px;padding:10px 14px;margin:12px 0}
+  summary{cursor:pointer;font-weight:700;color:#2c3c80}
+  .ctrls{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:6px 0 12px}
+  .ctrls select, .ctrls input[type="range"]{accent-color:var(--olive)}
+  .badge{display:inline-block;background:#e9f6ef;color:#1b5e20;border:1px solid #b9e2c6;border-radius:999px;padding:4px 8px;font-size:.83rem}
+  .card{background:#fff;border:1px solid #e4d7b3;border-radius:16px;margin:16px 0;padding:14px 14px 16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .card h2{margin:4px 0 4px;font-family:"Montserrat Alternates","Montserrat",system-ui,sans-serif;color:#2c3c80}
+  .goal{font-size:.95rem;color:#3d3d3d;margin:6px 0 10px}
+  .dir{font-size:.95rem;background:#fff3cd;border:1px dashed #e0c86c;border-radius:10px;padding:8px 10px;margin:8px 0}
+  .mini{height:8px;background:#f0e4c2;border-radius:99px;position:relative;margin:8px 0 6px}
+  .mini-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--mustard),var(--terracotta));border-radius:99px;transition:width .3s ease}
+  .mini-txt{font-size:.86rem;color:#4e4e4e}
+
+  /* Grids */
+  .targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .target{border:2px dashed #cdbb8e;background:#fffddb;padding:10px;border-radius:12px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;gap:8px}
+  .target .icon{font-size:1.1rem}
+  .target.ok{border-color:#2e7d32;background:#e9f6ef;animation:pop .2s ease}
+  .target.bad{animation:shake .25s ease}
+
+  @keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  @keyframes pop{0%{transform:scale(0.96)}100%{transform:scale(1)}}
+
+  .chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #d7c6a2;border-radius:999px;padding:8px 12px;cursor:grab;user-select:none}
+  .chip .icon{opacity:1}
+
+  /* Memory */
+  .memory{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .cardlet{position:relative;height:120px;perspective:800px}
+  .face{position:absolute;inset:0;border-radius:12px;border:2px solid #cdbb8e;display:grid;place-items:center;padding:10px;background:#fff;backface-visibility:hidden;transition:transform .35s ease}
+  .front-content{display:grid;place-items:center;gap:6px;text-align:center}
+  .back{background:linear-gradient(#75aadb,#75aadb 33%, #fff 33% 66%, #75aadb 66%)}
+  .front{transform:rotateY(180deg)}
+  .flipped .front{transform:rotateY(0)}
+  .flipped .back{transform:rotateY(180deg)}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;z-index:10}
+  .overlay.show{display:flex}
+
+  /* Sentence builder */
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .token{background:#fff;border:2px solid #d7c6a2;border-radius:10px;padding:8px 10px;cursor:grab}
+  .dropzone{min-height:64px;border:2px dashed #9e8f6b;background:#fffdf0;border-radius:12px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .dz-hint{opacity:.6;font-size:.9rem}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+  button.alt{background:var(--terracotta)}
+  button.ghost{background:#fff;color:#2c3c80;border:2px solid #2c3c80}
+  .status{margin-top:6px;min-height:22px}
+
+  /* Radio */
+  .radio{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:2px dashed #cdbb8e;border-radius:12px;padding:10px;background:#fffdf0}
+  .record{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #444, #111 60%);position:relative;animation:spin 0s linear infinite}
+  .record.spin{animation-duration:1.4s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .opt{border:2px solid #d7c6a2;border-radius:10px;padding:8px 10px;cursor:pointer;background:#fff;display:flex;align-items:center;gap:8px}
+  .opt.correct{background:#e9f6ef;border-color:#2e7d32}
+  .opt.wrong{background:#ffebee;border-color:#c62828}
+
+  /* Footer */
+  footer{margin-top:18px;font-size:.88rem;color:#5c5c5c}
+  .summary{background:#f6edd6;border:1px solid #e2d3ad;border-radius:12px;padding:10px}
+  .hideable{margin-top:6px}
+  .hide-toggle{display:block;width:100%;text-align:left;background:#f3e7c7;border:1px solid #e2d3ad;color:#3a3a3a;padding:8px;border-radius:12px;cursor:pointer}
+  .hidden{display:none}
+  .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hdr-inner">
+        <div class="wax" aria-hidden="true">R2</div>
+        <div>
+          <h1>Reporteros 2 · Unidad 2 Lección 2 — Describir experiencias</h1>
+          <div class="name-row">
+            <label>Nombre / First name <input id="fname" placeholder="Nombre / First name"/></label>
+            <label>Apellido / Last name <input id="lname" placeholder="Apellido / Last name"/></label>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="route" aria-label="Global progress route">
+      <div class="row ctrls">
+        <span class="badge">🗣️ Voice</span>
+        <select id="voiceSel" title="Seleccione una voz / Choose a voice"></select>
+        <span class="badge">⏱️ Rate</span>
+        <input id="rate" type="range" min="0.7" max="1.2" step="0.01" value="0.92"/>
+        <span class="badge">🎚️ Pitch</span>
+        <input id="pitch" type="range" min="0.8" max="1.2" step="0.01" value="1.02"/>
+      </div>
+      <div class="route-line" aria-hidden="true"><div class="route-fill" id="routeFill"></div></div>
+      <div class="pins">
+        <div class="pin" id="pin1">1</div>
+        <div class="pin" id="pin2">2</div>
+        <div class="pin" id="pin3">3</div>
+        <div class="pin" id="pin4">4</div>
+        <div class="pin" id="pin5">5</div>
+      </div>
+    </section>
+
+    <details open>
+      <summary>📘 ACTFL Standards — The 5 Cs</summary>
+      <ul>
+        <li><b>Communication:</b> Interpersonal (drag/drop, memory), Interpretive (listening &amp; clues), Presentational (optional read-aloud).</li>
+        <li><b>Cultures:</b> Products/Practices/Perspectives via describing experiences.</li>
+        <li><b>Connections:</b> Tie-ins to geography, arts, and wellness.</li>
+        <li><b>Comparisons:</b> Contrast reflexives &amp; preterite vs. English.</li>
+        <li><b>Communities:</b> Export &amp; share results (Schoology).</li>
+      </ul>
+    </details>
+
+    <!-- PARADA 1 -->
+    <section class="card" id="p1">
+      <h2>Parada 1 — Empareja la palabra · Match the Word</h2>
+      <div class="goal">Objetivo / Goal: Conectar español → inglés.</div>
+      <div class="dir">Instrucciones / Directions: Arrastra la ficha en <b>español</b> a la tarjeta correcta en <b>inglés</b>. / Drag the Spanish chip onto the correct English card.</div>
+      <div class="mini"><div class="mini-fill" id="mini1"></div></div>
+      <div class="mini-txt" id="mini1txt">Correct: 0/12 • Acc: 0%</div>
+      <div id="p1chip" style="margin:8px 0;"></div>
+      <div class="targets" id="p1targets" aria-live="polite"></div>
+    </section>
+
+    <!-- PARADA 2 -->
+    <section class="card" id="p2">
+      <h2>Parada 2 — Circunlocución · Circumlocution</h2>
+      <div class="goal">Objetivo / Goal: Elegir la palabra a partir de una pista en español. / Pick the word from a Spanish clue.</div>
+      <div class="dir">Instrucciones / Directions: Lee o escucha la pista y elige la mejor opción. / Read or listen to the clue and choose the best option.</div>
+      <div class="mini"><div class="mini-fill" id="mini2"></div></div>
+      <div class="mini-txt" id="mini2txt">Correct: 0/12 • Acc: 0%</div>
+      <div class="row" style="gap:8px;align-items:center;">
+        <button class="ghost" id="p2play">▶️ Reproducir pista / Play clue</button>
+        <div id="p2clue" style="font-weight:700"></div>
+      </div>
+      <div class="targets" id="p2opts"></div>
+    </section>
+
+    <!-- PARADA 3 -->
+    <section class="card" id="p3">
+      <h2>Parada 3 — Memoria · Memory (🇦🇷 back)</h2>
+      <div class="goal">Objetivo / Goal: Emparejar todas las parejas español–inglés. / Match all Spanish–English pairs.</div>
+      <div class="dir">Instrucciones / Directions: Voltea dos cartas para encontrar la pareja. Al acertar, se eliminan. / Flip two cards to find a pair. Matches are removed.</div>
+      <div class="mini"><div class="mini-fill" id="mini3"></div></div>
+      <div class="mini-txt" id="mini3txt">Pairs: 0/0</div>
+      <div class="memory" id="memgrid" aria-live="polite"></div>
+    </section>
+
+    <!-- PARADA 4 -->
+    <section class="card" id="p4">
+      <h2>Parada 4 — Forma la oración · Build the Sentence</h2>
+      <div class="goal">Objetivo / Goal: Reconstruir la oración en español según el enunciado en inglés. / Rebuild the Spanish sentence that matches the English prompt.</div>
+      <div class="dir">Instrucciones / Directions: Arrastra las fichas a la <b>zona de construcción</b>. Luego pulsa <b>Calificar</b>. / Drag tokens to the <b>drop zone</b>, then press <b>Grade</b>.</div>
+      <div class="mini"><div class="mini-fill" id="mini4"></div></div>
+      <div class="mini-txt" id="mini4txt">Correct: 0/12 • Acc: 0%</div>
+      <div style="margin:6px 0 4px"><b>Prompt:</b> <span id="p4prompt"></span></div>
+      <div class="dropzone" id="p4drop" aria-label="Zona de construcción / Drop zone"><span class="dz-hint">⋯ suelta las palabras aquí / drop words here</span></div>
+      <div class="bank" id="p4bank"></div>
+      <div class="btns">
+        <button id="p4grade">✅ Calificar / Grade</button>
+        <button id="p4clear" class="ghost">🧽 Borrar / Clear</button>
+        <button id="p4next" class="alt">➡️ Siguiente / Next</button>
+      </div>
+      <div class="status" id="p4status" aria-live="polite"></div>
+    </section>
+
+    <!-- PARADA 5 -->
+    <section class="card" id="p5">
+      <h2>Parada 5 — Mini escucha · Mini Listening</h2>
+      <div class="goal">Objetivo / Goal: Escucha y elige la mejor respuesta. / Listen and choose the best answer.</div>
+      <div class="dir">Instrucciones / Directions: Pulsa reproducir y elige el significado correcto. / Press play and choose the correct meaning.</div>
+      <div class="mini"><div class="mini-fill" id="mini5"></div></div>
+      <div class="mini-txt" id="mini5txt">Correct: 0/12 • Acc: 0%</div>
+      <div class="radio">
+        <div class="record" id="record"></div>
+        <div>
+          <div id="p5q" style="font-weight:700;margin-bottom:8px">—</div>
+          <div class="btns">
+            <button id="p5play" class="ghost">▶️ Reproducir / Play</button>
+            <button id="p5next" class="alt">➡️ Siguiente / Next</button>
+          </div>
+        </div>
+      </div>
+      <div class="targets" id="p5opts" style="margin-top:10px"></div>
+    </section>
+
+    <footer>
+      <button class="hide-toggle" onclick="document.getElementById('exp').classList.toggle('hidden')">⬇️ Export / Resumen</button>
+      <div id="exp" class="hidden hideable">
+        <div class="summary" id="summaryBox">—</div>
+        <div class="btns">
+          <button id="dlcsv">⬇️ Download CSV</button>
+          <button id="dljson" class="ghost">⬇️ Download My Data (JSON)</button>
+        </div>
+        <div style="margin-top:6px">Nota / Note: “Sube este archivo a Schoology…”</div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="overlay" id="overlay"><div>🎉 <b>¡Mapa completado!</b> / Route complete!</div></div>
+
+<script>
+/* ===== Helpers ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const rand=(a)=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* ===== LocalStorage Keys ===== */
+const KEY = {
+  fname:'uvb_fname', lname:'uvb_lname', voice:'uvb_voice', rate:'uvb_rate', pitch:'uvb_pitch',
+  progress:'uvb_progress_'+location.pathname
+};
+
+/* ===== Voice / TTS ===== */
+let VOICES=[]; let voiceURI=null;
+let rate=parseFloat(localStorage.getItem(KEY.rate))||0.92;
+let pitch=parseFloat(localStorage.getItem(KEY.pitch))||1.02;
+$("#rate").value=rate; $("#pitch").value=pitch;
+function loadVoices(){
+  VOICES = speechSynthesis.getVoices();
+  const sel=$("#voiceSel"); sel.innerHTML="";
+  VOICES.forEach(v=>{
+    const opt=document.createElement('option');
+    opt.value=v.voiceURI; opt.textContent = `${v.name} — ${v.lang}`;
+    sel.appendChild(opt);
+  });
+  let pref = VOICES.find(v=>v.lang==='es-ES') || VOICES.find(v=>v.lang.startsWith('es'));
+  let saved = VOICES.find(v=>v.voiceURI === localStorage.getItem(KEY.voice));
+  voiceURI = (saved || pref || VOICES[0] || {}).voiceURI || null;
+  if(voiceURI) sel.value=voiceURI;
+}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged=()=>loadVoices();
+}
+$("#voiceSel").addEventListener('change', e=>{ voiceURI=e.target.value; localStorage.setItem(KEY.voice, voiceURI||""); });
+$("#rate").addEventListener('input', e=>{ rate=parseFloat(e.target.value); localStorage.setItem(KEY.rate, rate); });
+$("#pitch").addEventListener('input', e=>{ pitch=parseFloat(e.target.value); localStorage.setItem(KEY.pitch, pitch); });
+function splitPhrases(txt){
+  return txt.split(/([.?!;:—,-])/).reduce((acc,part)=>{
+    if(part.match(/^[.?!;:—,-]$/) && acc.length){ acc[acc.length-1]+=part; }
+    else if(part.trim()){ acc.push(part.trim()); }
+    return acc;
+  },[]);
+}
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  const v = VOICES.find(v=>v.voiceURI===voiceURI);
+  const chunks = splitPhrases(text);
+  function say(i){
+    if(i>=chunks.length) return;
+    const u = new SpeechSynthesisUtterance(chunks[i]);
+    if(v) u.voice=v; u.rate=rate; u.pitch=pitch;
+    speechSynthesis.speak(u);
+    u.onend = ()=> say(i+1);
+  }
+  say(0);
+}
+
+/* ===== Stamp sound & Confetti ===== */
+let audioCtx;
+function stampSound(){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type='square'; o.frequency.setValueAtTime(120, audioCtx.currentTime);
+    g.gain.setValueAtTime(0.001, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.7, audioCtx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+0.09);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime+0.1);
+  }catch(e){}
+}
+function confetti(){
+  const c=document.createElement('canvas'); c.width=innerWidth; c.height=innerHeight;
+  c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9999';
+  document.body.appendChild(c);
+  const ctx=c.getContext('2d');
+  const parts = Array.from({length:140},()=>({x:Math.random()*c.width,y:-20*Math.random(),r:3+Math.random()*4,vy:2+Math.random()*3,vx:-1+Math.random()*2,rot:Math.random()*Math.PI}));
+  let t=0;
+  (function anim(){
+    ctx.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{
+      p.y += p.vy; p.x += p.vx; p.rot += 0.1;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = ['#d93223','#ffb841','#2c3c80','#41845f','#fff8e1'][Math.floor(Math.random()*5)];
+      ctx.fillRect(-p.r,-p.r, p.r*2, p.r*2);
+      ctx.restore();
+    });
+    if(++t<180){ requestAnimationFrame(anim);} else { c.remove(); }
+  })();
+}
+
+/* ===== MASTER: Describir experiencias (prefilled) ===== */
+const MASTER = [
+  {es:"narrar", en:"to narrate", icon:"🗣️", cat:"describir"},
+  {es:"describir", en:"to describe", icon:"📝", cat:"describir"},
+  {es:"explicar", en:"to explain", icon:"💬", cat:"describir"},
+  {es:"contar una historia", en:"to tell a story", icon:"📖", cat:"describir"},
+  {es:"sacar fotos", en:"to take photos", icon:"📸", cat:"describir"},
+  {es:"grabar videos", en:"to record videos", icon:"🎥", cat:"describir"},
+  {es:"escribir una reseña", en:"to write a review", icon:"✍️", cat:"describir"},
+  {es:"recordar", en:"to remember", icon:"🧠", cat:"describir"},
+  {es:"olvidarse", en:"to forget", icon:"❌", cat:"describir"},
+  {es:"sentirse emocionado", en:"to feel excited", icon:"😃", cat:"describir"},
+  {es:"fue increíble", en:"it was incredible", icon:"🌟", cat:"describir"},
+  {es:"fue aburrido", en:"it was boring", icon:"😴", cat:"describir"},
+  {es:"lo mejor fue", en:"the best part was", icon:"🏆", cat:"describir"},
+  {es:"lo peor fue", en:"the worst part was", icon:"⚠️", cat:"describir"},
+  {es:"pasarla bien", en:"to have a good time", icon:"🎉", cat:"describir"},
+  {es:"relajante", en:"relaxing", icon:"🧘", cat:"describir"},
+  {es:"inolvidable", en:"unforgettable", icon:"🌌", cat:"describir"},
+  {es:"probar comida nueva", en:"to try new food", icon:"🍽️", cat:"describir"},
+  {es:"hacer senderismo", en:"to go hiking", icon:"🥾", cat:"describir"},
+];
+
+/* ===== CLUES for Parada 2 ===== */
+const CLUES = {
+  "narrar":"Es una acción que haces cuando cuentas detalles de un evento.",
+  "describir":"Es cuando dices cómo es algo con adjetivos y detalles.",
+  "explicar":"Es cuando aclaras una idea para que otros la entiendan.",
+  "contar una historia":"Es similar a narrar un cuento con principio y final.",
+  "sacar fotos":"Se usa una cámara o un teléfono para guardar imágenes.",
+  "grabar videos":"Es cuando registras movimiento y sonido con un dispositivo.",
+  "escribir una reseña":"Es un texto con tu opinión sobre una experiencia.",
+  "recordar":"Es lo contrario de olvidar; mantienes algo en la memoria.",
+  "olvidarse":"Es cuando no recuerdas información o detalles.",
+  "sentirse emocionado":"Es cuando tienes mucha energía y alegría por algo.",
+  "fue increíble":"Expresión para decir que algo te impresionó mucho.",
+  "fue aburrido":"Expresión para decir que algo no te interesó.",
+  "lo mejor fue":"Frase para presentar el punto más positivo.",
+  "lo peor fue":"Frase para presentar el punto más negativo.",
+  "pasarla bien":"Expresión para decir que disfrutas una experiencia.",
+  "relajante":"Adjetivo para algo que reduce el estrés.",
+  "inolvidable":"Adjetivo para algo que no vas a olvidar.",
+  "probar comida nueva":"Es cuando comes platos diferentes por primera vez.",
+  "hacer senderismo":"Es una actividad en la naturaleza; caminas por rutas."
+};
+
+/* ===== SENTENCES (Parada 4) ===== */
+const SENTENCES = [
+  {en:"I want to tell a story about yesterday.", es:"Quiero contar una historia sobre ayer."},
+  {en:"We took photos at the museum.", es:"Sacamos fotos en el museo."},
+  {en:"They recorded a short video at the concert.", es:"Grabaron un video corto en el concierto."},
+  {en:"I wrote a review of the trip.", es:"Escribí una reseña del viaje."},
+  {en:"The best part was trying new food.", es:"Lo mejor fue probar comida nueva."},
+  {en:"The worst part was that it was boring.", es:"Lo peor fue que fue aburrido."},
+  {en:"The hike was unforgettable and relaxing.", es:"La caminata fue inolvidable y relajante."},
+  {en:"I felt excited during the festival.", es:"Me sentí emocionado durante el festival."}
+];
+
+/* ===== LISTENING (Parada 5) ===== */
+const LISTEN = [
+  { tts:"Anoche narré mi experiencia y fue increíble.", q:"¿Cómo fue la experiencia?", options:["Increíble","Aburrida","Carísima"], correct:0 },
+  { tts:"En el parque, sacamos fotos y grabamos videos.", q:"¿Qué hicieron en el parque?", options:["Jugar videojuegos","Sacar fotos y grabar videos","Dormir"], correct:1 },
+  { tts:"Lo mejor fue probar comida nueva con mis amigos.", q:"¿Qué fue lo mejor?", options:["Probar comida nueva","Hacer tarea","Ver televisión"], correct:0 },
+  { tts:"La excursión fue relajante y casi inolvidable.", q:"¿Cómo fue la excursión?", options:["Relajante","Ruidosa","Cara"], correct:0 },
+  { tts:"Me olvidé del mapa y tuvimos que preguntar.", q:"¿Qué pasó con el mapa?", options:["Lo perdió","Lo olvidó","Lo compró"], correct:1 },
+  { tts:"Al final, lo peor fue la lluvia.", q:"¿Qué fue lo peor?", options:["La lluvia","El sol","La comida"], correct:0 },
+];
+
+/* ===== Progress State ===== */
+const PROG = JSON.parse(localStorage.getItem(KEY.progress) || '{}');
+const DEF = {attempts:0, correct:0, pairsTotal:0, pairsDone:0, complete:false};
+const P = { 1:{...DEF,...(PROG["1"]||{})}, 2:{...DEF,...(PROG["2"]||{})}, 3:{...DEF,...(PROG["3"]||{})}, 4:{...DEF,...(PROG["4"]||{})}, 5:{...DEF,...(PROG["5"]||{})} };
+function saveProg(){ localStorage.setItem(KEY.progress, JSON.stringify(P)); }
+function acc(p){ return p.attempts? Math.round(100*p.correct/Math.max(1,p.attempts)) : 0; }
+function updMini(n){
+  if(n===3){
+    $("#mini3txt").textContent = `Pairs: ${P[3].pairsDone}/${P[3].pairsTotal}`;
+    const fill = P[3].pairsTotal? (100*P[3].pairsDone/P[3].pairsTotal) : 0;
+    $("#mini3").style.width = fill+"%"; return;
+  }
+  const a = acc(P[n]); $("#mini"+n+"txt").textContent = `Correct: ${Math.min(P[n].correct,12)}/12 • Acc: ${a}%`;
+  $("#mini"+n).style.width = clamp((P[n].correct/12)*100, 0, 100)+"%";
+}
+function checkComplete(){
+  [1,2,4,5].forEach(n=>{ P[n].complete = (P[n].correct>=12 && acc(P[n])>=80); });
+  P[3].complete = (P[3].pairsTotal>0 && P[3].pairsDone===P[3].pairsTotal);
+  [1,2,3,4,5].forEach(n=> $("#pin"+n).classList.toggle('complete', !!P[n].complete));
+  const fillPct = ( [1,2,3,4,5].filter(n=>P[n].complete).length / 5 ) * 100;
+  $("#routeFill").style.width = fillPct+"%";
+  saveProg();
+  if([1,2,3,4,5].every(n=>P[n].complete)){
+    stampSound(); confetti(); $("#overlay").classList.add('show'); setTimeout(()=>$("#overlay").classList.remove('show'), 1800);
+  }
+}
+function resetIfEmpty(){
+  if(!P[3].pairsTotal){ P[3].pairsTotal = Math.min(MASTER.length, 10); P[3].pairsDone = 0; }
+  [1,2,3,4,5].forEach(updMini);
+  checkComplete();
+}
+resetIfEmpty();
+
+/* ===== Persist names ===== */
+$("#fname").value = localStorage.getItem(KEY.fname) || "";
+$("#lname").value = localStorage.getItem(KEY.lname) || "";
+$("#fname").addEventListener('input', e=> localStorage.setItem(KEY.fname, e.target.value));
+$("#lname").addEventListener('input', e=> localStorage.setItem(KEY.lname, e.target.value));
+
+/* ===== Click-to-speak ===== */
+document.addEventListener('click', (e)=>{
+  const t = e.target.closest('[data-es]');
+  if(t){ speak(t.getAttribute('data-es')); }
+});
+
+/* ===== Parada 1: Match (icon on SPANISH chip only) ===== */
+let recentEs=[];
+function newP1Round(){
+  const pool = MASTER.filter(it=>!recentEs.includes(it.es));
+  const item = pool.length? rand(pool) : rand(MASTER);
+  recentEs.push(item.es); if(recentEs.length>5) recentEs.shift();
+  // chip (Spanish with icon)
+  const chip = document.createElement('div');
+  chip.className='chip'; chip.draggable=true; chip.setAttribute('data-es', item.es);
+  chip.innerHTML = `<span class="icon">${item.icon||'📎'}</span><span>${item.es}</span>`;
+  $("#p1chip").innerHTML=""; $("#p1chip").appendChild(chip);
+  // targets in English (NO icons)
+  const distractors = shuffle(MASTER.filter(x=>x!==item)).slice(0,3);
+  const tars = shuffle([item, ...distractors]);
+  const cont=$("#p1targets"); cont.innerHTML="";
+  tars.forEach(t=>{
+    const div=document.createElement('div');
+    div.className='target';
+    div.textContent = t.en; // English only, no icon
+    div.setAttribute('data-en', t.en);
+    cont.appendChild(div);
+  });
+  // drag
+  chip.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', item.en); });
+  $$('#p1targets .target').forEach(tg=>{
+    tg.addEventListener('dragover', e=>e.preventDefault());
+    tg.addEventListener('drop', e=>{
+      e.preventDefault();
+      const en = e.dataTransfer.getData('text/plain');
+      P[1].attempts++;
+      if(tg.getAttribute('data-en')===en){
+        tg.classList.add('ok'); stampSound(); P[1].correct++; updMini(1); checkComplete(); saveProg();
+        setTimeout(newP1Round, 350);
+      }else{
+        tg.classList.add('bad'); setTimeout(()=>tg.classList.remove('bad'),200);
+        updMini(1); checkComplete(); saveProg();
+      }
+    });
+  });
+}
+newP1Round();
+
+/* ===== Parada 2: Circunlocución (icons on SPANISH options only) ===== */
+let p2Ans = null;
+function newP2Round(){
+  const item = rand(MASTER);
+  p2Ans = item;
+  $("#p2clue").textContent = CLUES[item.es] || "Es una palabra del tema de describir experiencias.";
+  const opts = shuffle([item, ...shuffle(MASTER.filter(x=>x!==item)).slice(0,3)]);
+  const cont=$("#p2opts"); cont.innerHTML="";
+  opts.forEach(o=>{
+    const div=document.createElement('div');
+    div.className='target opt'; div.setAttribute('data-es', o.es);
+    // Spanish option with icon
+    div.innerHTML = `<span class="icon">${o.icon||'📎'}</span><span>${o.es}</span>`;
+    div.onclick=()=>{
+      P[2].attempts++;
+      if(o===item){ div.classList.add('correct'); stampSound(); P[2].correct++; }
+      else{ div.classList.add('wrong'); }
+      updMini(2); checkComplete(); saveProg();
+      setTimeout(newP2Round, 520);
+    };
+    cont.appendChild(div);
+  });
+}
+$("#p2play").onclick=()=>{ if(p2Ans) speak($("#p2clue").textContent); };
+newP2Round();
+
+/* ===== Parada 3: Memory (icons ONLY on the SPANISH cards) ===== */
+let memFirst=null; let memLock=false;
+function buildMemory(){
+  const n = Math.min(MASTER.length, 10);
+  P[3].pairsTotal = n; P[3].pairsDone = 0; updMini(3); saveProg();
+  const picks = MASTER.slice(0,n);
+  const cards = [];
+  // Push Spanish card (with icon) and English card (no icon)
+  picks.forEach(it=>{
+    cards.push({key:it.es, label:it.es, icon:it.icon, isEs:true});
+    cards.push({key:it.es, label:it.en, icon:null, isEs:false});
+  });
+  shuffle(cards);
+  const grid=$("#memgrid"); grid.innerHTML="";
+  cards.forEach(c=>{
+    const cell=document.createElement('div'); cell.className='cardlet'; cell.setAttribute('data-key', c.key); cell.tabIndex=0;
+    const iconHTML = c.isEs && c.icon ? `<div class="icon" style="font-size:1.4rem">${c.icon}</div>` : "";
+    cell.innerHTML = `
+      <div class="face back"></div>
+      <div class="face front">
+        <div class="front-content" ${c.isEs?'data-es="'+c.label+'"':''}>
+          ${iconHTML}
+          <div>${c.label}</div>
+        </div>
+      </div>`;
+    grid.appendChild(cell);
+  });
+  $$('#memgrid .cardlet').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      if(memLock || card.classList.contains('gone')) return;
+      card.classList.add('flipped');
+      if(!memFirst){ memFirst = card; return; }
+      memLock = true; P[3].attempts++;
+      const same = memFirst.getAttribute('data-key')===card.getAttribute('data-key') && memFirst!==card;
+      if(same){
+        setTimeout(()=>{
+          memFirst.classList.add('gone'); card.classList.add('gone'); stampSound();
+          memFirst.style.visibility='hidden'; card.style.visibility='hidden';
+          P[3].pairsDone++; updMini(3); checkComplete(); saveProg();
+          memFirst=null; memLock=false;
+        }, 280);
+      }else{
+        setTimeout(()=>{
+          memFirst.classList.remove('flipped'); card.classList.remove('flipped');
+          memFirst=null; memLock=false; updMini(3); checkComplete(); saveProg();
+        }, 420);
+      }
+    });
+  });
+}
+buildMemory();
+
+/* ===== Parada 4: Sentence Builder ===== */
+let p4Cur=null;
+function norm(s){
+  return s.replace(/\s+/g,' ').replace(/\s+([.,;:!?])/g,'$1').replace(/([¿¡])\s+/g,'$1').trim().toLowerCase();
+}
+function loadP4(){
+  p4Cur = rand(SENTENCES);
+  $("#p4prompt").textContent = p4Cur.en;
+  const tokens = p4Cur.es.replace(/([.,;:!?])/g,' $1 ').split(/\s+/).filter(Boolean);
+  const bank=$("#p4bank"); bank.innerHTML="";
+  const drop=$("#p4drop"); drop.innerHTML='<span class="dz-hint">⋯ suelta las palabras aquí / drop words here</span>';
+  shuffle(tokens).forEach(tok=>{
+    const t=document.createElement('div'); t.className='token'; t.textContent=tok;
+    t.draggable=true; t.setAttribute('data-es', tok);
+    t.addEventListener('dragstart', e=> e.dataTransfer.setData('text/plain', tok));
+    t.addEventListener('click', ()=> speak(tok));
+    bank.appendChild(t);
+  });
+  $("#p4drop").addEventListener('dragover', e=> e.preventDefault());
+  $("#p4drop").addEventListener('drop', e=>{
+    e.preventDefault();
+    const tok = e.dataTransfer.getData('text/plain');
+    if(tok){
+      const el = [...$("#p4bank").children].find(n=>n.textContent===tok);
+      if(el){ $("#p4drop").appendChild(el); $(".dz-hint")?.remove(); }
+    }
+  });
+  $("#p4bank").addEventListener('dragover', e=>e.preventDefault());
+  $("#p4bank").addEventListener('drop', e=>{
+    e.preventDefault();
+    const tok = e.dataTransfer.getData('text/plain');
+    if(tok){
+      const el = [...$("#p4drop").children].find(n=>n.textContent===tok);
+      if(el){ $("#p4bank").appendChild(el); }
+    }
+  });
+  $("#p4status").textContent="";
+}
+function readDropSentence(){ return [...$("#p4drop").children].map(n=>n.textContent).join(' ').trim(); }
+$("#p4grade").onclick=()=>{
+  P[4].attempts++;
+  const built = readDropSentence();
+  if(norm(built)===norm(p4Cur.es)){ P[4].correct++; $("#p4status").textContent="PASAPORTE APROBADO ✓"; stampSound(); }
+  else{ $("#p4status").textContent="Revisa el orden / Check the order."; }
+  updMini(4); checkComplete(); saveProg();
+};
+$("#p4clear").onclick=()=>{ [...$("#p4drop").children].forEach(n=>$("#p4bank").appendChild(n)); $("#p4status").textContent=""; };
+$("#p4next").onclick=()=> loadP4();
+loadP4();
+
+/* ===== Parada 5: Mini Listening ===== */
+let p5Cur=null;
+function loadP5(){
+  p5Cur = rand(LISTEN);
+  $("#p5q").textContent = p5Cur.q;
+  const cont=$("#p5opts"); cont.innerHTML="";
+  p5Cur.options.forEach((txt,i)=>{
+    const div=document.createElement('div');
+    div.className='opt'; div.innerHTML = `<span class="icon">🎧</span><span>${txt}</span>`; div.setAttribute('data-es', txt);
+    div.onclick=()=>{
+      P[5].attempts++;
+      if(i===p5Cur.correct){ div.classList.add('correct'); stampSound(); P[5].correct++; }
+      else{ div.classList.add('wrong'); }
+      updMini(5); checkComplete(); saveProg();
+      setTimeout(loadP5, 520);
+    };
+    cont.appendChild(div);
+  });
+}
+$("#p5play").onclick=()=>{ $("#record").classList.add('spin'); speak(p5Cur.tts); setTimeout(()=>$("#record").classList.remove('spin'), 1400); };
+$("#p5next").onclick=()=> loadP5();
+loadP5();
+
+/* ===== Exports & Summary ===== */
+function overall(){
+  const totalAttempts = [1,2,3,4,5].reduce((s,n)=>s+P[n].attempts,0);
+  const totalCorrect = [1,2,3,4,5].reduce((s,n)=>s+(n===3?P[n].pairsDone:P[n].correct),0);
+  const accuracy = totalAttempts? Math.round(100*totalCorrect/totalAttempts):0;
+  return {totalAttempts,totalCorrect,accuracy};
+}
+function refreshSummary(){
+  const o = overall();
+  $("#summaryBox").innerHTML = `<div><b>Total attempts:</b> ${o.totalAttempts}</div><div><b>Total correct:</b> ${o.totalCorrect}</div><div><b>Accuracy:</b> ${o.accuracy}%</div>`;
+}
+refreshSummary(); setInterval(refreshSummary, 1000);
+function download(filename, content, type='text/plain'){
+  const blob = new Blob([content], {type}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
+}
+$("#dlcsv").onclick=()=>{
+  const rows=[["Parada","Correct","Attempts","Accuracy"]];
+  [1,2,4,5].forEach(n=> rows.push([n, P[n].correct, P[n].attempts, (P[n].attempts? Math.round(100*P[n].correct/P[n].attempts):0)+"%"]));
+  rows.push([3, P[3].pairsDone, P[3].attempts, (P[3].pairsTotal? Math.round(100*P[3].pairsDone/P[3].pairsTotal):0)+"%"]);
+  const csv = rows.map(r=>r.join(",")).join("\n");
+  const fn = `reporteros2_unidad2_leccion2_describirexperiencias_${($("#fname").value||"").trim()}_${($("#lname").value||"").trim()}.csv`;
+  download(fn, csv, 'text/csv');
+};
+$("#dljson").onclick=()=>{
+  const data = { first: $("#fname").value||"", last: $("#lname").value||"", timestamp: new Date().toISOString(), progress: P };
+  const fn = `reporteros2_unidad2_leccion2_describirexperiencias_${($("#fname").value||"").trim()}_${($("#lname").value||"").trim()}.json`;
+  download(fn, JSON.stringify(data,null,2), 'application/json');
+};
+
+/* ===== A11y & Audio Unlock ===== */
+$("#memgrid").addEventListener('keydown', e=>{
+  if(e.key==='Enter' || e.key===' '){
+    const card = e.target.closest('.cardlet'); if(card) card.click();
+  }
+});
+document.addEventListener('click', function once(){ stampSound(); document.removeEventListener('click', once); }, {once:true});
+</script>
+</body>
+</html>
