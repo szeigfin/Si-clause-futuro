@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 2 • Unidad 5 • Lección 2 — La personalidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@700&family=Pacifico&family=Roboto+Slab:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fff8e1; --terracotta:#d93223; --mustard:#ffb841; --navy:#2c3c80;
+    --olive:#41845f; --ink:#3d3d3d; --shadow:rgba(0,0,0,.15);
+  }
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Roboto Slab", Georgia, serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:16px 18px 80px;}
+  .airmail{height:12px;background:repeating-linear-gradient(45deg, #d93223 0 16px,#ffb841 16px 32px,#2c3c80 32px 48px);}
+  header{
+    background:linear-gradient(#fff8e1,#fbecc3);border:2px solid rgba(0,0,0,.08);
+    border-radius:14px;box-shadow:0 4px 14px var(--shadow);margin-top:12px;padding:14px;
+  }
+  .head-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+  .stamp{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #b23b2f 0 25%, #8a2a21 26% 100%);box-shadow:inset 0 0 0 6px rgba(0,0,0,.15), 0 4px 8px var(--shadow);position:relative;}
+  .stamp:after{content:"✈️";position:absolute;inset:0;display:grid;place-items:center;font-size:30px;color:#f5e2df;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25));}
+  .title{flex:1;min-width:220px;font-family:"Montserrat Alternates", Arial, sans-serif;font-weight:700;font-size:1.35rem; line-height:1.2;padding:10px 14px;background:#fff;border:2px solid rgba(0,0,0,.08);border-radius:10px;box-shadow:0 4px 10px var(--shadow);}
+  .namefields{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .namefields label{font-size:.85rem;}
+  .nf{border:1.5px dashed #bfa06b;background:#fff; padding:6px 8px;border-radius:8px;min-width:120px;}
+  .route{margin-top:10px;border-top:1px dashed rgba(0,0,0,.2);padding-top:12px;}
+  .route-line{position:relative;height:16px;background:#e9dfc6;border-radius:999px;overflow:hidden; box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+  .route-fill{position:absolute;inset:0; width:0%; background:linear-gradient(90deg, #ffb841 0%, #ffd87a 100%); transition:width .4s;}
+  .pinrow{display:flex;justify-content:space-between;margin-top:6px;}
+  .pin{width:26px;height:26px;border-radius:50%;background:#ccc;border:2px solid #777; display:grid;place-items:center;font-size:.8rem;box-shadow:0 2px 4px var(--shadow);}
+  .pin.done{background:#4caf50;border-color:#2e7d32;color:#fff;}
+
+  .section{background:#fff;border:1.5px solid rgba(0,0,0,.08);border-radius:14px;box-shadow:0 6px 14px var(--shadow);padding:16px;margin:18px 0;position:relative;}
+  h2,h3{font-family:"Montserrat Alternates", Arial, sans-serif;margin:6px 0 8px}
+  h2{font-size:1.25rem}
+  details summary{font-weight:600;cursor:pointer;user-select:none}
+
+  .stopprog{display:flex;align-items:center;gap:10px;margin:8px 0 6px}
+  .mini-prog{flex:1;height:12px;background:#e9dfc6;border-radius:8px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+  .mini-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffb841,#ffd87a);transition:width .4s}
+  .mini-fill.meets{background:linear-gradient(90deg,#4caf50,#81c784)}
+  .mini-txt{font-size:.9rem;color:#3d3d3d;min-width:185px;text-align:right}
+
+  .p1-row{display:grid;grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));gap:12px;padding:8px 4px;overflow-x:hidden;}
+  .target{background:#fbf1d3;border:2px dashed #c5b28b;border-radius:12px;padding:10px;position:relative;transition:transform .15s;}
+  .target:hover{transform:translateY(-2px)}
+  .target .icon{font-size:22px;margin-right:6px}
+  .drop-here{font-size:.9rem;opacity:.7;margin-top:8px}
+  .spanish-chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:8px 12px;margin:10px 0;cursor:grab;box-shadow:0 2px 6px var(--shadow);font-weight:600;}
+  .correct{outline:3px solid #4caf50}
+  .wrong{animation:shake .28s linear}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}
+  }
+
+  .clue{font-family:"Roboto Slab", serif;background:#fff8e6;border-left:6px solid var(--olive);padding:10px;border-radius:8px}
+  .p2-options{display:grid;grid-template-columns:1fr 1fr; gap:10px;margin-top:10px}
+  .btn{border:none;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px var(--shadow);}
+  .btn.navy{background:var(--navy);color:#fff}
+  .btn.olive{background:var(--olive);color:#fff}
+  .btn.ghost{background:#fff;border:2px solid #bfa06b}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+
+  .grid{display:grid;grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));gap:10px;}
+  .grid.locked{pointer-events:none;opacity:.7;filter:saturate(.8);}
+  .card{position:relative;height:110px;perspective:800px;cursor:pointer}
+  .face{position:absolute;inset:0;background:#fff;border-radius:12px;border:2px solid rgba(0,0,0,.08);display:grid;place-items:center;backface-visibility:hidden;transition:transform .4s;box-shadow:0 2px 8px var(--shadow);padding:8px;text-align:center;}
+  .front{transform:rotateY(180deg)}
+  .back{transform:rotateY(0deg)}
+  .card.flipped .front{transform:rotateY(0deg)}
+  .card.flipped .back{transform:rotateY(-180deg)}
+  .flag{position:relative;width:88%;height:70%;border:2px solid #333;border-radius:6px;background:linear-gradient(#75aadb 0 33%,#fff 33% 66%,#75aadb 66%)}
+  .flag .sun{position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);width:26px;height:26px;border-radius:50%;background:#f1b400;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
+
+  .p3-banner{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(255,248,225,.92);backdrop-filter:blur(2px);border-radius:12px;}
+  .p3-banner.show{display:flex;}
+  .p3-card{background:#fff;border:2px dashed #bfa06b;border-radius:14px;box-shadow:0 8px 18px var(--shadow);padding:18px 20px;text-align:center;max-width:520px;}
+  .p3-card h3{margin:6px 0 6px;font-family:"Montserrat Alternates", Arial, sans-serif}
+  .p3-card p{margin:6px 0 8px}
+  .p3-card .btn{margin-top:8px}
+
+  .dropzone{min-height:64px;border:2px dashed #bfa06b;background:#fff;border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px}
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .chip{background:#fff;border:2px solid #bfa06b;border-radius:999px;padding:6px 10px;cursor:grab;box-shadow:0 2px 6px var(--shadow);}
+  .p4-controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .hint{font-size:.95rem;opacity:.8;margin-top:6px}
+
+  .radio{background:#222;color:#fff;border-radius:16px;padding:14px;display:flex;align-items:center;gap:14px;box-shadow:0 6px 14px rgba(0,0,0,.4)}
+  .record{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #666 0 30%, #111 31% 100%);display:grid;place-items:center;animation:spin 6s linear infinite paused}
+  .record.playing{animation-play-state:running}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  footer{margin-top:22px;display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+  .postcard{background:#fff;border:2px solid rgba(0,0,0,.08);border-radius:12px;box-shadow:0 6px 14px var(--shadow);padding:12px;min-width:260px;}
+
+  .voice-pill{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff;border:2px dashed #bfa06b;border-radius:999px;padding:8px 12px;margin-top:10px}
+  .voice-pill select,.voice-pill input[type="range"]{accent-color:#41845f}
+  .voice-label{font-size:.85rem;opacity:.8}
+</style>
+</head>
+<body>
+<div class="airmail"></div>
+<div class="wrap">
+  <header>
+    <div class="head-row">
+      <div class="stamp" aria-hidden="true"></div>
+      <div class="title">Reporteros 2 • Unidad 5 • Lección 2 — <em>La personalidad</em></div>
+      <div class="namefields">
+        <label>✍ Nombre<br><input id="nf-nombre" class="nf" placeholder="Nombre"></label>
+        <label>✍ Apellido<br><input id="nf-apellido" class="nf" placeholder="Apellido"></label>
+      </div>
+    </div>
+    <div class="route">
+      <div class="route-line"><div id="routeFill" class="route-fill"></div></div>
+      <div class="pinrow">
+        <div id="pin1" class="pin" title="Parada 1">1</div>
+        <div id="pin2" class="pin" title="Parada 2">2</div>
+        <div id="pin3" class="pin" title="Parada 3">3</div>
+        <div id="pin4" class="pin" title="Parada 4">4</div>
+        <div id="pin5" class="pin" title="Parada 5">5</div>
+      </div>
+      <div class="voice-pill" title="Voice Settings">
+        <span class="voice-label">🎙️ Voice:</span>
+        <select id="voiceSelect"></select>
+        <span class="voice-label">Rate</span>
+        <input id="voiceRate" type="range" min="0.8" max="1.2" step="0.01" value="0.92">
+        <span class="voice-label">Pitch</span>
+        <input id="voicePitch" type="range" min="0.8" max="1.2" step="0.01" value="1.03">
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <details>
+      <summary>📘 Estándares ACTFL – 5 Cs / ACTFL Standards – 5 Cs</summary>
+      <ul>
+        <li><b>Comunicación / Communication:</b> Interpersonal (drag-drop, memory) e Interpretive (listening).</li>
+        <li><b>Culturas / Cultures:</b> Rasgos de personalidad y descripciones en contextos hispanos.</li>
+        <li><b>Conexiones / Connections:</b> Psicología, trabajo en equipo y convivencia.</li>
+        <li><b>Comparaciones / Comparisons:</b> Adjetivos español ↔ inglés, uso de género.</li>
+        <li><b>Comunidades / Communities:</b> Comparte resultados en Schoology para practicar fuera de clase.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- PARADA 1 -->
+  <section class="section" id="p1">
+    <h2>Parada 1 — Empareja con Ícono / Match with Icon</h2>
+    <p><b>Instructions:</b> Drag the <b>Spanish chip</b> onto the correct <b>English card</b> with its icon. <i>(Click any chip or card to hear it in Spanish.)</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p1Fill"></div></div>
+      <div class="mini-txt" id="p1Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div id="p1Chip"></div>
+    <div class="p1-row" id="p1Targets"></div>
+  </section>
+
+  <!-- PARADA 2 -->
+  <section class="section" id="p2">
+    <h2>Parada 2 — Circunlocución / Circumlocution</h2>
+    <p><b>Instructions:</b> Listen/read the <b>Spanish clue</b> and choose the correct term. <i>(Click the options to hear them.)</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p2Fill"></div></div>
+      <div class="mini-txt" id="p2Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div class="clue" id="p2Clue">Press ▶️ to hear the clue.</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn olive" id="p2Play">▶️ Listen</button>
+      <button class="btn ghost" id="p2New">🔄 New clue</button>
+    </div>
+    <div class="p2-options" id="p2Options"></div>
+  </section>
+
+  <!-- PARADA 3 -->
+  <section class="section" id="p3">
+    <h2>Parada 3 — Memoria (Argentina) / Memory (Argentina)</h2>
+    <p><b>Instructions:</b> Match all <b id="p3count"></b> unique pairs. Cards are removed and <b>not replaced</b>. Completion = all pairs matched (accuracy ignored). <i>(Click a card to hear the term in Spanish.)</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p3Fill"></div></div>
+      <div class="mini-txt" id="p3Txt">Pairs: 0/0</div>
+    </div>
+    <div class="grid" id="p3Grid" aria-live="polite"></div>
+    <div id="p3Banner" class="p3-banner" role="dialog" aria-modal="true" aria-labelledby="p3Title" aria-describedby="p3Desc">
+      <div class="p3-card">
+        <h3 id="p3Title">¡Mapa completado! 🗺️</h3>
+        <p id="p3Desc">You matched all pairs. ¡Excelente trabajo!</p>
+        <button class="btn olive" id="p3Close">OK</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARADA 4 -->
+  <section class="section" id="p4">
+    <h2>Parada 4 — Construye Oraciones / Build Sentences</h2>
+    <p><b>Instructions:</b> Drag the words to build the exact Spanish sentence. Then press <b>Grade</b>. <i>(Click any word to hear it.)</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p4Fill"></div></div>
+      <div class="mini-txt" id="p4Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div id="p4Eng" class="hint"></div>
+    <div id="p4Drop" class="dropzone" aria-label="Zona para construir la oración / Sentence drop zone"></div>
+    <div id="p4Bank" class="bank"></div>
+    <div class="p4-controls">
+      <button id="p4Grade" class="btn olive">✅ Grade</button>
+      <button id="p4Clear" class="btn ghost">🧽 Clear</button>
+      <button id="p4Next" class="btn navy">➡️ Next</button>
+    </div>
+  </section>
+
+  <!-- PARADA 5 -->
+  <section class="section" id="p5">
+    <h2>Parada 5 — Mini Listening</h2>
+    <p><b>Instructions:</b> Press <b>▶️</b> to listen and choose the correct answer. <i>(Click options to hear them.)</i></p>
+    <div class="stopprog">
+      <div class="mini-prog"><div class="mini-fill" id="p5Fill"></div></div>
+      <div class="mini-txt" id="p5Txt">Correct: 0/12 • Acc: 0%</div>
+    </div>
+    <div class="radio">
+      <div id="disc" class="record" aria-hidden="true">▶️</div>
+      <div>
+        <div id="p5Prompt" style="margin-bottom:8px;">Press ▶️ to play.</div>
+        <div id="p5Options" class="p2-options"></div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn olive" id="p5Play">▶️ Play</button>
+          <button class="btn ghost" id="p5New">🔄 New audio</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="postcard">
+      <h3 style="margin:6px 0">📊 Summary</h3>
+      <div id="sumStats">Attempts: 0 • Correct: 0 • Accuracy: 0%</div>
+    </div>
+    <div class="postcard">
+      <h3 style="margin:6px 0">⬇️ Export</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="dlCSV" class="btn ghost">📮 Download CSV</button>
+        <button id="dlJSON" class="btn ghost">📜 Download My Data (JSON)</button>
+      </div>
+      <p style="margin-top:10px"><i>Note:</i> Upload your file to <b>Schoology</b> in the assignment matching this page’s title.</p>
+    </div>
+  </footer>
+</div>
+
+<audio id="bgm" loop muted></audio>
+
+<script>
+// ------------------- VOICE SETTINGS -------------------
+const voiceSelect = document.getElementById("voiceSelect");
+const voiceRate = document.getElementById("voiceRate");
+const voicePitch = document.getElementById("voicePitch");
+
+function loadVoicePrefs(){
+  const v = localStorage.getItem("voicePref");
+  const r = localStorage.getItem("voiceRate");
+  const p = localStorage.getItem("voicePitch");
+  if(r) voiceRate.value = r;
+  if(p) voicePitch.value = p;
+  if(v) voiceSelect.dataset.saved = v;
+}
+voiceRate.addEventListener("input", ()=>localStorage.setItem("voiceRate", voiceRate.value));
+voicePitch.addEventListener("input", ()=>localStorage.setItem("voicePitch", voicePitch.value));
+voiceSelect.addEventListener("change", ()=>localStorage.setItem("voicePref", voiceSelect.value));
+
+function listVoices(){
+  const all = speechSynthesis.getVoices();
+  voiceSelect.innerHTML = "";
+  const preferred = [];
+  const others = [];
+  all.forEach(v=>{
+    const isEs = v.lang && v.lang.toLowerCase().startsWith("es");
+    const isEsEs = v.lang && v.lang.toLowerCase().startsWith("es-es");
+    const isGoogle = /Google/i.test(v.name);
+    const score = (isEsEs?3:0) + (isEs?1:0) + (isGoogle?1:0);
+    (score>0?preferred:others).push({v,score});
+  });
+  preferred.sort((a,b)=>b.score-a.score);
+  const ordered = [...preferred.map(x=>x.v), ...others.map(x=>x.v)];
+  ordered.forEach(v=>{
+    const opt = document.createElement("option");
+    opt.value = v.name + "::" + v.lang;
+    opt.textContent = `${v.name} — ${v.lang}`;
+    voiceSelect.appendChild(opt);
+  });
+  const saved = voiceSelect.dataset.saved;
+  if(saved && [...voiceSelect.options].some(o=>o.value===saved)){
+    voiceSelect.value = saved;
+  }else if(ordered.length){
+    const best = preferred.length? preferred[0].v : ordered[0];
+    voiceSelect.value = best.name + "::" + best.lang;
+  }
+}
+loadVoicePrefs();
+if(typeof speechSynthesis !== "undefined"){
+  speechSynthesis.onvoiceschanged = ()=>{ listVoices(); };
+  setTimeout(listVoices, 200);
+}
+
+// Natural chunked Spanish TTS
+function speakEs(text){
+  try{
+    const parts = (text || "").split(/([.!?;:])/).reduce((acc, cur)=>{
+      if(/[.!?;:]/.test(cur) && acc.length){ acc[acc.length-1] += cur; }
+      else if(cur.trim()){ acc.push(cur.trim()); }
+      return acc;
+    }, []);
+    const selected = voiceSelect.value;
+    const [vName, vLang] = selected? selected.split("::") : [null, null];
+    const pickVoice = ()=>{
+      const vs = speechSynthesis.getVoices();
+      let match = vs.find(v=>v.name===vName && v.lang===vLang);
+      if(!match){
+        match = vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("es-es"))
+              || vs.find(v=>v.lang && v.lang.toLowerCase().startsWith("es"))
+              || vs[0];
+      }
+      return match;
+    };
+    let delay = 0;
+    const rate = parseFloat(voiceRate.value||"0.92");
+    const pitch = parseFloat(voicePitch.value||"1.03");
+    speechSynthesis.cancel();
+    parts.forEach((p)=>{
+      const utt = new SpeechSynthesisUtterance(p);
+      utt.lang = "es-ES";
+      const voice = pickVoice();
+      if(voice) utt.voice = voice;
+      utt.rate = rate;
+      utt.pitch = pitch;
+      utt.volume = 0.95;
+      const pad = (/[.!?]$/.test(p) ? 180 : 120);
+      setTimeout(()=>speechSynthesis.speak(utt), delay);
+      delay += Math.max(250, p.length*12) + pad;
+    });
+  }catch(e){ console.warn(e); }
+}
+
+// ------------------- DATA (adjectives) -------------------
+const MASTER = [
+  // Set 1
+  {es:"simpático/a", say:"simpático o simpática", en:"nice, friendly", icon:"😊", cat:"trait"},
+  {es:"antipático/a", say:"antipático o antipática", en:"unfriendly", icon:"😒", cat:"trait"},
+  {es:"divertido/a", say:"divertido o divertida", en:"fun, funny", icon:"🎉", cat:"trait"},
+  {es:"serio/a", say:"serio o seria", en:"serious", icon:"🧱", cat:"trait"},
+  {es:"tranquilo/a", say:"tranquilo o tranquila", en:"calm", icon:"🌿", cat:"trait"},
+  {es:"nervioso/a", say:"nervioso o nerviosa", en:"nervous", icon:"😬", cat:"trait"},
+  {es:"trabajador/a", say:"trabajador o trabajadora", en:"hardworking", icon:"💪", cat:"trait"},
+  {es:"perezoso/a", say:"perezoso o perezosa", en:"lazy", icon:"🛋️", cat:"trait"},
+  {es:"tímido/a", say:"tímido o tímida", en:"shy", icon:"🙈", cat:"trait"},
+  {es:"sociable", say:"sociable", en:"outgoing, social", icon:"🗣️", cat:"trait"},
+  {es:"inteligente", say:"inteligente", en:"intelligent", icon:"🧠", cat:"trait"},
+  {es:"creativo/a", say:"creativo o creativa", en:"creative", icon:"🎨", cat:"trait"},
+  {es:"responsable", say:"responsable", en:"responsible", icon:"📅", cat:"trait"},
+  {es:"generoso/a", say:"generoso o generosa", en:"generous", icon:"🎁", cat:"trait"},
+  {es:"optimista", say:"optimista", en:"optimistic", icon:"🌞", cat:"trait"},
+  {es:"pesimista", say:"pesimista", en:"pessimistic", icon:"🌧️", cat:"trait"},
+  // LA PERSONALIDAD extended
+  {es:"analítico/a", say:"analítico o analítica", en:"analytical", icon:"📊", cat:"trait"},
+  {es:"artístico/a", say:"artístico o artística", en:"artistic", icon:"🖌️", cat:"trait"},
+  {es:"competitivo/a", say:"competitivo o competitiva", en:"competitive", icon:"🏁", cat:"trait"},
+  {es:"detallista", say:"detallista", en:"detail-oriented", icon:"🔍", cat:"trait"},
+  {es:"empático/a", say:"empático o empática", en:"empathic", icon:"💞", cat:"trait"},
+  {es:"organizado/a", say:"organizado o organizada", en:"organized", icon:"🗂️", cat:"trait"},
+  {es:"persuasivo/a", say:"persuasivo o persuasiva", en:"persuasive", icon:"🗣️", cat:"trait"},
+  {es:"pragmático/a", say:"pragmático o pragmática", en:"pragmatic", icon:"🧩", cat:"trait"},
+  {es:"proactivo/a", say:"proactivo o proactiva", en:"proactive", icon:"⚙️", cat:"trait"},
+  {es:"realista", say:"realista", en:"realistic", icon:"🎯", cat:"trait"},
+  {es:"sensible", say:"sensible", en:"sensitive", icon:"🌸", cat:"trait"},
+  {es:"solidario/a", say:"solidario o solidaria", en:"supportive", icon:"🤝", cat:"trait"},
+];
+
+const P2_CLUES = [
+  {clue:"Persona amable y agradable con los demás.", ans:"simpático/a"},
+  {clue:"Persona que no es amable ni agradable.", ans:"antipático/a"},
+  {clue:"Persona que hace reír y sabe entretener.", ans:"divertido/a"},
+  {clue:"Persona que se toma todo con mucha seriedad.", ans:"serio/a"},
+  {clue:"Persona calmada, sin estrés.", ans:"tranquilo/a"},
+  {clue:"Persona inquieta o con ansiedad.", ans:"nervioso/a"},
+  {clue:"Persona que trabaja mucho y con esfuerzo.", ans:"trabajador/a"},
+  {clue:"Persona que evita el esfuerzo y no trabaja mucho.", ans:"perezoso/a"},
+  {clue:"Persona reservada y que habla poco.", ans:"tímido/a"},
+  {clue:"Persona a la que le gusta estar con gente y conversar.", ans:"sociable"},
+  {clue:"Persona con gran capacidad para aprender y pensar.", ans:"inteligente"},
+  {clue:"Persona con imaginación e ideas originales.", ans:"creativo/a"},
+  {clue:"Persona que cumple con sus obligaciones.", ans:"responsable"},
+  {clue:"Persona que comparte y da a los demás.", ans:"generoso/a"},
+  {clue:"Persona que ve el lado positivo.", ans:"optimista"},
+  {clue:"Persona que ve el lado negativo.", ans:"pesimista"},
+  {clue:"Persona que analiza datos con lógica.", ans:"analítico/a"},
+  {clue:"Persona con talento para el arte.", ans:"artístico/a"},
+  {clue:"Persona que quiere ganar y superar a otros.", ans:"competitivo/a"},
+  {clue:"Persona que presta mucha atención a los detalles.", ans:"detallista"},
+  {clue:"Persona que comprende y comparte emociones.", ans:"empático/a"},
+  {clue:"Persona que mantiene orden y estructura.", ans:"organizado/a"},
+  {clue:"Persona que convence a otras con argumentos.", ans:"persuasivo/a"},
+  {clue:"Persona práctica y orientada a soluciones.", ans:"pragmático/a"},
+  {clue:"Persona que toma la iniciativa sin esperar.", ans:"proactivo/a"},
+  {clue:"Persona que ve las cosas tal como son.", ans:"realista"},
+  {clue:"Persona de emociones finas y fáciles de afectar.", ans:"sensible"},
+  {clue:"Persona que apoya a los demás en momentos difíciles.", ans:"solidario/a"},
+];
+
+const P4_SENTENCES = [
+  {es:"Mi hermano es muy responsable.", en:"My brother is very responsible."},
+  {es:"La clase de hoy fue divertida.", en:"Today’s class was fun."},
+  {es:"El equipo necesita jugadores proactivos.", en:"The team needs proactive players."},
+  {es:"Ana es sociable y habla con todos.", en:"Ana is outgoing and talks to everyone."},
+  {es:"Carlos es detallista y revisa cada informe.", en:"Carlos is detail-oriented and reviews every report."},
+  {es:"Sofía está nerviosa antes del examen.", en:"Sofía is nervous before the exam."},
+  {es:"Mi primo es creativo y pinta cuadros.", en:"My cousin is creative and paints pictures."},
+  {es:"El profesor es exigente pero justo y realista.", en:"The teacher is demanding but fair and realistic."},
+  {es:"Somos optimistas sobre el proyecto.", en:"We are optimistic about the project."},
+  {es:"El niño tímido no hizo muchas preguntas.", en:"The shy boy didn’t ask many questions."},
+  {es:"Marcos es trabajador y llega temprano.", en:"Marcos is hardworking and arrives early."},
+  {es:"A veces soy pesimista por las noticias.", en:"Sometimes I am pessimistic because of the news."},
+];
+
+const P5_ITEMS = [
+  {tts:"Ella es muy creativa y siempre propone ideas nuevas.", q:"¿Cómo es ella?", options:["Creativa","Perezosa","Antipática"], correct:0},
+  {tts:"Mi hermano es tímido y no habla mucho en clase.", q:"¿Qué le pasa a mi hermano?", options:["Es tímido","Es sociable","Es generoso"], correct:0},
+  {tts:"Somos optimistas con los resultados del examen.", q:"¿Cómo nos sentimos con los resultados?", options:["Optimistas","Nerviosos","Pesimistas"], correct:0},
+  {tts:"El jefe es detallista y revisa cada documento.", q:"¿Qué hace el jefe?", options:["Revisa cada documento","Evita trabajar","Cuenta chistes"], correct:0},
+  {tts:"Los estudiantes están nerviosos antes de la presentación.", q:"¿Cómo están los estudiantes?", options:["Tranquilos","Nerviosos","Solidarios"], correct:1},
+  {tts:"Mi amiga es solidaria y siempre me ayuda.", q:"¿Cómo es mi amiga?", options:["Solidaria","Antipática","Competitiva"], correct:0},
+  {tts:"El equipo necesita una actitud proactiva.", q:"¿Qué actitud necesita el equipo?", options:["Proactiva","Pesimista","Perezosa"], correct:0},
+  {tts:"Mi abuelo es realista y da consejos prácticos.", q:"¿Cómo son los consejos del abuelo?", options:["Prácticos","Creativos","Pesados"], correct:0},
+];
+
+// ------------------- STATE -------------------
+const GOAL_CORRECT = 12;
+const GOAL_ACC = 0.80;
+const state = {
+  p1:{correct:0, attempts:0, recent:[]},
+  p2:{correct:0, attempts:0},
+  p3:{correct:0, attempts:0, matchedSet:new Set(), deck:[], complete:false},
+  p4:{correct:0, attempts:0, current:null},
+  p5:{correct:0, attempts:0, current:null},
+};
+
+// ------------------- UTILS -------------------
+function pct(n){return Math.round(n*100);}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function sample(arr, n){return shuffle(arr.slice()).slice(0,n)}
+function playStamp(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type="square"; o.frequency.value=120; g.gain.value=0.3;
+    o.connect(g); g.connect(ctx.destination); o.start();
+    setTimeout(()=>{g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.2)},10);
+    setTimeout(()=>{o.stop();ctx.close()},220);
+  }catch(e){}
+}
+function confetti(){
+  const el = document.createElement("div"); el.style.position="fixed"; el.style.inset="0"; el.style.pointerEvents="none"; document.body.appendChild(el);
+  const pieces = 60;
+  for(let i=0;i<pieces;i++){
+    const s=document.createElement("div"); s.textContent="✈️";
+    s.style.position="absolute"; s.style.left=Math.random()*100+"%"; s.style.top = "-10px"; s.style.fontSize= (12+Math.random()*18)+"px";
+    s.style.transition="transform 1.2s ease-out, opacity 1.2s"; el.appendChild(s);
+    requestAnimationFrame(()=>{ s.style.transform = `translateY(${window.innerHeight+40}px) rotate(${(Math.random()*720-360)}deg)`; s.style.opacity = "0"; });
+  }
+  setTimeout(()=>document.body.removeChild(el),1300);
+}
+function normalizeSentence(s){return s.replace(/\s+/g," ").replace(/\s+([.,!?;:])/g,"$1").trim();}
+function speakItem(spanishEs){
+  const found = MASTER.find(x=>x.es===spanishEs);
+  speakEs(found?.say || spanishEs);
+}
+
+// Completion logic
+function meets(id, data){
+  if(id==="p3"){return data.matchedSet.size >= MASTER.length;} // all pairs matched
+  return data.correct>=GOAL_CORRECT && (data.correct/Math.max(1,data.attempts))>=GOAL_ACC;
+}
+function updateStopBars(){
+  const items=[{id:"p1",data:state.p1},{id:"p2",data:state.p2},{id:"p3",data:state.p3},{id:"p4",data:state.p4},{id:"p5",data:state.p5}];
+  let completed=0;
+  items.forEach((it,idx)=>{
+    const fEl=document.getElementById(it.id+"Fill"); const tEl=document.getElementById(it.id+"Txt");
+    if(it.id==="p3"){
+      const matched = it.data.matchedSet.size; const total = MASTER.length;
+      const fill = Math.min(100, Math.round((matched/total)*100));
+      if(fEl){fEl.style.width=fill+"%"; fEl.classList.toggle("meets", meets("p3",it.data));}
+      if(tEl){tEl.textContent=`Pairs: ${matched}/${total}`;}
+    }else{
+      const acc = it.data.attempts? it.data.correct/it.data.attempts : 0;
+      const fill = Math.min(100, Math.round((it.data.correct/GOAL_CORRECT)*100));
+      if(fEl){fEl.style.width=fill+"%"; fEl.classList.toggle("meets", meets(it.id,it.data));}
+      if(tEl){tEl.textContent=`Correct: ${it.data.correct}/${GOAL_CORRECT} • Acc: ${pct(acc)}%`; }
+    }
+    const pinEl=document.getElementById("pin"+(idx+1)); if(pinEl) pinEl.classList.toggle("done", meets(it.id,it.data));
+    if(meets(it.id,it.data)) completed++;
+  });
+  document.getElementById("routeFill").style.width=(completed/5*100)+"%";
+  if(completed===5){confetti(); playStamp();}
+  const totalAttempts=items.reduce((a,b)=>a+b.data.attempts,0);
+  const totalCorrect=items.reduce((a,b)=>a+b.data.correct,0);
+  const acc= totalAttempts? totalCorrect/totalAttempts : 0;
+  document.getElementById("sumStats").textContent=`Attempts: ${totalAttempts} • Correct: ${totalCorrect} • Accuracy: ${pct(acc)}%`;
+}
+
+// ------------------- PARADA 1 -------------------
+const p1Chip=document.getElementById("p1Chip");
+const p1Targets=document.getElementById("p1Targets");
+let p1Current=null; let p1Recent=[];
+function p1NewRound(){
+  const pool=MASTER.filter(v=>!p1Recent.includes(v.es));
+  const chosen=pool.length? pool[Math.floor(Math.random()*(pool.length))] : MASTER[Math.floor(Math.random()*MASTER.length)];
+  p1Current=chosen; p1Recent.push(chosen.es); if(p1Recent.length>5) p1Recent.shift();
+  const distractors=sample(MASTER.filter(v=>v.es!==chosen.es),3);
+  const set=shuffle([{...chosen,correct:true},...distractors.map(d=>({...d,correct:false}))]);
+  p1Chip.innerHTML=`<div draggable="true" class="spanish-chip" id="p1Drg" role="button" tabindex="0">${chosen.icon} <span>${chosen.es}</span></div>`;
+  const drg = document.getElementById("p1Drg");
+  drg.addEventListener("dragstart", e=>{ e.dataTransfer.setData("text/plain","chip"); });
+  drg.addEventListener("click", ()=>speakItem(chosen.es));
+  drg.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ speakItem(chosen.es);} });
+  p1Targets.innerHTML="";
+  set.forEach(t=>{
+    const dz=document.createElement("div");
+    dz.className="target"; dz.dataset.correct = t.correct? "1":"0";
+    dz.innerHTML=`<div><span class="icon">${t.icon||""}</span><b>${t.en}</b></div><div class="drop-here">Drop here</div>`;
+    dz.addEventListener("dragover", e=>e.preventDefault());
+    dz.addEventListener("drop", e=>{
+      e.preventDefault(); state.p1.attempts++;
+      if(dz.dataset.correct==="1"){ state.p1.correct++; dz.classList.add("correct"); playStamp();
+        p1Chip.innerHTML=`<div class="spanish-chip" style="opacity:.6">${t.icon||""} <span>${chosen.es}</span></div>`;
+        setTimeout(()=>{p1NewRound(); updateStopBars();}, 450);
+      }else{ dz.classList.add("wrong"); setTimeout(()=>dz.classList.remove("wrong"),300); updateStopBars(); }
+    });
+    dz.addEventListener("click", ()=>speakItem(chosen.es)); // speak prompt term when clicking any target
+    dz.setAttribute("tabindex","0");
+    dz.addEventListener("keydown",(e)=>{ if(e.key==="Enter"||e.key===" ") speakItem(chosen.es); });
+    p1Targets.appendChild(dz);
+  });
+}
+p1NewRound();
+
+// ------------------- PARADA 2 -------------------
+const p2Clue=document.getElementById("p2Clue");
+const p2Options=document.getElementById("p2Options");
+const btnP2Play=document.getElementById("p2Play");
+const btnP2New=document.getElementById("p2New");
+let p2Current=null;
+function p2New(){
+  p2Current=P2_CLUES[Math.floor(Math.random()*P2_CLUES.length)];
+  p2Clue.textContent=p2Current.clue;
+  const corr=MASTER.find(v=>v.es===p2Current.ans);
+  const pool=MASTER.filter(v=>v.es!==p2Current.ans);
+  const opts=shuffle([corr,...sample(pool,3)]);
+  p2Options.innerHTML="";
+  opts.forEach(o=>{
+    const b=document.createElement("button"); b.className="btn ghost"; b.textContent=`${o.icon||""} ${o.es}`.trim();
+    b.addEventListener("click", ()=>{
+      // Speak the option clicked (Spanish)
+      speakItem(o.es);
+      state.p2.attempts++; if(o.es===p2Current.ans){ state.p2.correct++; playStamp(); b.classList.add("correct"); } else { b.classList.add("wrong"); }
+      [...p2Options.querySelectorAll("button")].forEach(bb=>bb.disabled=true);
+      updateStopBars(); setTimeout(()=>p2New(), 700);
+    });
+    p2Options.appendChild(b);
+  });
+}
+btnP2Play.addEventListener("click", ()=>{ if(p2Current) speakEs(p2Current.clue); });
+btnP2New.addEventListener("click", p2New);
+p2New();
+
+// ------------------- PARADA 3 -------------------
+const p3Grid=document.getElementById("p3Grid");
+const p3Banner=document.getElementById("p3Banner");
+const p3Close=document.getElementById("p3Close");
+let p3First=null, p3Lock=false;
+function p3InitDeckAll(){
+  state.p3.deck=[];
+  MASTER.forEach(item=>{
+    state.p3.deck.push({type:"es", key:item.es, text:item.es, icon:item.icon, pair:item.en, _gone:false});
+    state.p3.deck.push({type:"en", key:item.en, text:item.en, icon:item.icon, pair:item.es, _gone:false});
+  });
+  state.p3.deck=shuffle(state.p3.deck);
+  document.getElementById("p3count").textContent = MASTER.length;
+  document.getElementById("p3Txt").textContent = `Pairs: 0/${MASTER.length}`;
+}
+function p3Render(){
+  p3Grid.innerHTML="";
+  state.p3.deck.forEach((card,i)=>{
+    if(card._gone) return;
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`<div class="face back"><div class="flag"><div class="sun"></div></div></div>
+                 <div class="face front"><div><div style="font-size:24px">${card.icon||"🧳"}</div><div>${card.text}</div></div></div>`;
+    c.addEventListener("click", ()=>p3Flip(c, card, i));
+    c.setAttribute("tabindex","0");
+    c.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ p3Flip(c, card, i);} });
+    p3Grid.appendChild(c);
+  });
+  p3Grid.classList.toggle("locked", state.p3.complete);
+}
+function p3ShowBanner(){ p3Banner.classList.add("show"); p3Grid.classList.add("locked"); p3Banner.querySelector("button")?.focus?.(); confetti(); playStamp(); }
+p3Close.addEventListener("click", ()=>{ p3Banner.classList.remove("show"); });
+function p3Flip(el, card, idx){
+  if(state.p3.complete) return;
+  if(p3Lock || el.classList.contains("gone") || el.classList.contains("flipped")) return;
+  el.classList.add("flipped");
+  // Speak on flip: say Spanish term (for EN card, find Spanish pair)
+  if(card.type==="es"){ speakItem(card.text); } else { speakItem(card.pair); }
+  if(!p3First){ p3First={el,card,idx}; return; }
+  p3Lock=true;
+  const first=p3First; p3First=null;
+  setTimeout(()=>{
+    state.p3.attempts++;
+    const isMatch = (first.card.type!=="es" ? first.card.pair===card.text : first.card.pair===card.text)
+                 || (card.type!=="es" ? card.pair===first.card.text : card.pair===first.card.text);
+    const sameIcon = first.card.icon===card.icon;
+    if(isMatch && sameIcon){
+      state.p3.correct++;
+      const keyEs = first.card.type==="es" ? first.card.key : first.card.pair;
+      state.p3.matchedSet.add(keyEs);
+      first.el.classList.add("gone"); first.el.style.visibility="hidden";
+      el.classList.add("gone"); el.style.visibility="hidden";
+      state.p3.deck[first.idx]._gone=true; state.p3.deck[idx]._gone=true;
+      if(state.p3.matchedSet.size===MASTER.length){
+        state.p3.complete=true; updateStopBars(); p3Render();
+        document.getElementById("p3").scrollIntoView({behavior:"smooth", block:"center"});
+        setTimeout(p3ShowBanner, 250); p3Lock=false; return;
+      }
+      playStamp();
+    }else{
+      first.el.classList.remove("flipped"); el.classList.remove("flipped");
+    }
+    p3Lock=false; updateStopBars();
+  }, 400);
+}
+p3InitDeckAll(); p3Render();
+
+// ------------------- PARADA 4 -------------------
+const p4Eng=document.getElementById("p4Eng");
+const p4Drop=document.getElementById("p4Drop");
+const p4Bank=document.getElementById("p4Bank");
+const p4Grade=document.getElementById("p4Grade");
+const p4Clear=document.getElementById("p4Clear");
+const p4Next=document.getElementById("p4Next");
+
+function tokenize(sentence){ return sentence.replace(/([.,!?])/g," $1 ").trim().split(/\s+/); }
+function p4Load(){
+  state.p4.current=P4_SENTENCES[Math.floor(Math.random()*P4_SENTENCES.length)];
+  p4Eng.textContent=state.p4.current.en;
+  p4Drop.innerHTML=""; p4Bank.innerHTML="";
+  const tokens=tokenize(state.p4.current.es);
+  const shuffled=shuffle(tokens.slice());
+  shuffled.forEach(tok=>{
+    const chip=document.createElement("span");
+    chip.className="chip"; chip.textContent=tok; chip.draggable=true;
+    chip.addEventListener("dragstart", e=>{ e.dataTransfer.setData("text/plain", tok); chip.classList.add("dragging"); });
+    chip.addEventListener("dragend", ()=>chip.classList.remove("dragging"));
+    chip.addEventListener("click", ()=>speakEs(tok)); // click-to-speak for word chips
+    chip.setAttribute("tabindex","0");
+    chip.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ speakEs(tok);} });
+    p4Bank.appendChild(chip);
+  });
+}
+["dragover","drop"].forEach(evt=>{
+  p4Drop.addEventListener(evt, e=>{ e.preventDefault(); if(evt==="drop"){ const dragging=document.querySelector(".chip.dragging"); if(dragging){ p4Drop.appendChild(dragging); } } });
+  p4Bank.addEventListener(evt, e=>{ e.preventDefault(); if(evt==="drop"){ const dragging=document.querySelector(".chip.dragging"); if(dragging){ p4Bank.appendChild(dragging); } } });
+});
+p4Grade.addEventListener("click", ()=>{
+  const built=[...p4Drop.querySelectorAll(".chip")].map(c=>c.textContent).join(" ");
+  const ok = normalizeSentence(built)===normalizeSentence(state.p4.current.es);
+  state.p4.attempts++;
+  if(ok){ state.p4.correct++; playStamp(); p4Eng.textContent="PASAPORTE APROBADO ✓ / PASSPORT APPROVED ✓"; }
+  else { p4Eng.textContent="Revisa el orden / Check the order"; p4Drop.classList.add("wrong"); setTimeout(()=>p4Drop.classList.remove("wrong"),300); }
+  updateStopBars();
+});
+p4Clear.addEventListener("click", ()=>{ [...p4Drop.querySelectorAll(".chip")].forEach(c=>p4Bank.appendChild(c)); });
+p4Next.addEventListener("click", p4Load);
+p4Load();
+
+// ------------------- PARADA 5 -------------------
+const disc=document.getElementById("disc");
+const p5Prompt=document.getElementById("p5Prompt");
+const p5Options=document.getElementById("p5Options");
+const btnP5Play=document.getElementById("p5Play");
+const btnP5New=document.getElementById("p5New");
+function p5New(){
+  state.p5.current=P5_ITEMS[Math.floor(Math.random()*P5_ITEMS.length)];
+  p5Prompt.textContent=state.p5.current.q;
+  p5Options.innerHTML="";
+  state.p5.current.options.forEach((opt,i)=>{
+    const b=document.createElement("button"); b.className="btn ghost"; b.textContent=opt;
+    b.addEventListener("click", ()=>{
+      // Speak option in Spanish (as written); then grade
+      speakEs(opt);
+      state.p5.attempts++; if(i===state.p5.current.correct){ state.p5.correct++; b.classList.add("correct"); playStamp(); } else { b.classList.add("wrong"); }
+      [...p5Options.querySelectorAll("button")].forEach(bb=>bb.disabled=true);
+      updateStopBars(); setTimeout(()=>p5New(), 700);
+    });
+    b.setAttribute("aria-label", "opción");
+    p5Options.appendChild(b);
+  });
+}
+function p5Speak(){ if(state.p5.current) speakEs(state.p5.current.tts); }
+btnP5Play.addEventListener("click", ()=>{disc.classList.add("playing"); p5Speak(); setTimeout(()=>disc.classList.remove("playing"), 1700)});
+btnP5New.addEventListener("click", p5New);
+p5New();
+
+// ------------------- EXPORT -------------------
+document.getElementById("dlCSV").addEventListener("click", ()=>{
+  const nombre=document.getElementById("nf-nombre").value||"";
+  const apellido=document.getElementById("nf-apellido").value||"";
+  const rows=[
+    ["Nombre","Apellido","Parada","Correct","Attempts","Accuracy","P3 Unique Pairs"],
+    [nombre,apellido,"1",state.p1.correct,state.p1.attempts,(state.p1.attempts? (state.p1.correct/state.p1.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"2",state.p2.correct,state.p2.attempts,(state.p2.attempts? (state.p2.correct/state.p2.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"3",state.p3.correct,state.p3.attempts,(state.p3.attempts? (state.p3.correct/state.p3.attempts).toFixed(2):"0"), state.p3.matchedSet.size+"/"+MASTER.length],
+    [nombre,apellido,"4",state.p4.correct,state.p4.attempts,(state.p4.attempts? (state.p4.correct/state.p4.attempts).toFixed(2):"0"),""],
+    [nombre,apellido,"5",state.p5.correct,state.p5.attempts,(state.p5.attempts? (state.p5.correct/state.p5.attempts).toFixed(2):"0"),""]
+  ];
+  const csv=rows.map(r=>r.join(",")).join("\n");
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download="Reporteros2_U5_L2_La_personalidad_resultados.csv"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),500);
+});
+document.getElementById("dlJSON").addEventListener("click", ()=>{
+  const payload={
+    titulo:document.title,
+    nombre:document.getElementById("nf-nombre").value||"",
+    apellido:document.getElementById("nf-apellido").value||"",
+    fecha:new Date().toISOString(),
+    resultados:{
+      p1:state.p1, p2:state.p2, p3:{correct:state.p3.correct, attempts:state.p3.attempts, matchedCount:state.p3.matchedSet.size, complete:state.p3.complete}, p4:state.p4, p5:state.p5
+    }
+  };
+  const pretty=JSON.stringify(payload,null,2);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([pretty],{type:'application/json'}));
+  a.download="Reporteros2_U5_L2_La_personalidad_mis_datos.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),500);
+});
+
+// Init
+updateStopBars();
+</script>
+</body>
+</html>
