@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reporteros 2 · U5 L1 — La tecnología</title>
+<style>
+  :root{
+    --paper:#fff8e1; --terracotta:#d93223; --mustard:#ffb841; --navy:#2c3c80;
+    --olive:#41845f; --ink:#3d3d3d; --maxw:960px;
+  }
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:"Roboto Slab",serif}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:16px 20px 80px}
+
+  /* Header */
+  header{background:linear-gradient(to right,#e8dec4,#f8efd8);border:6px solid transparent;position:relative;margin-bottom:12px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+  header:before{content:"";position:absolute;inset:-6px;z-index:-1;background:repeating-linear-gradient(45deg,#d93223 0 14px,#fff 14px 28px,#2c3c80 28px 42px,#fff 42px 56px)}
+  .hdr-inner{padding:18px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+  .wax{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:Pacifico,cursive;font-size:22px;background:radial-gradient(circle at 30% 30%,#ef6a5e,#b22619 60%,#7a140e);box-shadow:inset 0 6px 10px rgba(255,255,255,.35), inset 0 -6px 12px rgba(0,0,0,.2), 0 6px 12px rgba(0,0,0,.15)}
+  h1{font-family:"Montserrat Alternates","Montserrat",system-ui,sans-serif;margin:0 0 8px;color:var(--navy);font-weight:800;letter-spacing:.4px}
+  .name-row{display:flex;gap:10px;flex-wrap:wrap}
+  .name-row label{font-family:Pacifico,cursive;color:var(--terracotta);font-size:.95rem}
+  .name-row input{padding:10px 12px;border:2px dashed #ccb890;background:#fff7da;border-radius:10px;min-width:220px;font-size:1rem}
+
+  /* Route bar */
+  .route{background:linear-gradient(#f2e6c9,#f9f1d8);border:1px solid #e2d3ad;border-radius:12px;padding:12px 14px;margin:10px 0 18px}
+  .route-line{height:6px;background:#e6d8b3;border-radius:99px;position:relative;margin:12px 0}
+  .route-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--mustard),var(--olive));border-radius:99px;transition:width .35s ease}
+  .pins{display:flex;justify-content:space-between;margin-top:8px}
+  .pin{width:28px;height:28px;border-radius:50%;background:#e0d1a7;border:2px solid #c3b183;display:grid;place-items:center;font-weight:700;color:#6b5b2e}
+  .pin.complete{background:var(--olive);color:#fff;border-color:#2f6d4a;box-shadow:0 0 0 3px rgba(65,132,95,.2)}
+
+  /* Cards */
+  .card{background:#fff;border:1px solid #e4d7b3;border-radius:16px;margin:16px 0;padding:14px 14px 16px;box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .card h2{margin:4px 0 4px;font-family:"Montserrat Alternates","Montserrat",system-ui,sans-serif;color:#2c3c80}
+  .goal{font-size:.95rem;color:#3d3d3d;margin:6px 0 10px}
+  .dir{font-size:.95rem;background:#fff3cd;border:1px dashed #e0c86c;border-radius:10px;padding:8px 10px;margin:8px 0}
+  .mini{height:8px;background:#f0e4c2;border-radius:99px;position:relative;margin:8px 0 6px}
+  .mini-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#ffb841,#d93223);border-radius:99px;transition:width .3s ease}
+  .mini-txt{font-size:.86rem;color:#4e4e4e}
+
+  /* Controls row */
+  .ctrls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+  .badge{display:inline-block;background:#e9f6ef;color:#1b5e20;border:1px solid #b9e2c6;border-radius:999px;padding:4px 8px;font-size:.83rem}
+  .ctrls select, .ctrls input[type="range"]{accent-color:var(--olive)}
+
+  /* Targets & chips */
+  .targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .target{border:2px dashed #cdbb8e;background:#fffddb;padding:10px;border-radius:12px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;gap:8px}
+  .target.ok{border-color:#2e7d32;background:#e9f6ef;animation:pop .2s ease}
+  .target.bad{animation:shake .25s ease}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px solid #d7c6a2;border-radius:999px;padding:8px 12px;cursor:grab;user-select:none}
+  .chip .icon{font-size:1.2rem}
+  @keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  @keyframes pop{0%{transform:scale(0.96)}100%{transform:scale(1)}}
+
+  /* Memory — 150x150 face, 10px white border, 10px gap, Ecuador flag back */
+  .memory{display:grid;grid-template-columns:repeat(auto-fill,170px);gap:10px;justify-content:center}
+  .cardlet{position:relative;width:170px;height:170px;perspective:900px;background:#fff;border-radius:12px;padding:10px;box-sizing:border-box}
+  .face{position:absolute;inset:10px;width:150px;height:150px;border-radius:10px;border:2px solid #cdbb8e;display:grid;place-items:center;padding:10px;background:#fff;backface-visibility:hidden;transition:transform .35s ease}
+  .front-content{display:grid;place-items:center;gap:6px;text-align:center}
+  .front-content .icon{font-size:1.4rem}
+  .front-content .term{font-size:clamp(.9rem,2.1vw,1.05rem);line-height:1.2}
+  .back{background-image:linear-gradient(to bottom,#fcd116 0,#fcd116 33%,#003893 33%,#003893 66%,#ce1126 66%,#ce1126 100%);border-radius:10px;border:2px solid #cdbb8e;backface-visibility:hidden}
+  .front{transform:rotateY(180deg)}
+  .flipped .front{transform:rotateY(0)}
+  .flipped .back{transform:rotateY(180deg)}
+
+  /* Sentence builder */
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .token{background:#fff;border:2px solid #d7c6a2;border-radius:10px;padding:8px 10px;cursor:grab}
+  .dropzone{min-height:64px;border:2px dashed #9e8f6b;background:#fffdf0;border-radius:12px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .dz-hint{opacity:.6;font-size:.9rem}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+  button.alt{background:var(--terracotta)}
+  button.ghost{background:#fff;color:#2c3c80;border:2px solid #2c3c80}
+  .status{margin-top:6px;min-height:22px}
+
+  /* Radio */
+  .radio{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:2px dashed #cdbb8e;border-radius:12px;padding:10px;background:#fffdf0}
+  .record{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#444,#111 60%);position:relative;animation:spin 0s linear infinite}
+  .record.spin{animation-duration:1.4s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .opt{border:2px solid #d7c6a2;border-radius:10px;padding:8px 10px;cursor:pointer;background:#fff;display:flex;align-items:center;gap:8px}
+  .opt.correct{background:#e9f6ef;border-color:#2e7d32}
+  .opt.wrong{background:#ffebee;border-color:#c62828}
+
+  /* Footer */
+  footer{margin-top:18px;font-size:.88rem;color:#5c5c5c}
+  .summary{background:#f6edd6;border:1px solid #e2d3ad;border-radius:12px;padding:10px}
+  .hideable{margin-top:6px}
+  .hide-toggle{display:block;width:100%;text-align:left;background:#f3e7c7;border:1px solid #e2d3ad;color:#3a3a3a;padding:8px;border-radius:12px;cursor:pointer}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="hdr-inner">
+      <div class="wax" aria-hidden="true">R2</div>
+      <div>
+        <h1>Reporteros 2 · Unidad 5 Lección 1 — La tecnología</h1>
+        <div class="name-row">
+          <label>Nombre / First name <input id="fname" placeholder="Nombre / First name"></label>
+          <label>Apellido / Last name <input id="lname" placeholder="Apellido / Last name"></label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Voice controls + Route bar -->
+  <section class="route" aria-label="Global progress route">
+    <div class="ctrls">
+      <span class="badge">🗣️ Voice</span>
+      <select id="voiceSel" title="Seleccione una voz / Choose a voice"></select>
+      <span class="badge">⏱️ Rate</span>
+      <input id="rate" type="range" min="0.7" max="1.2" step="0.01" value="0.92">
+      <span class="badge">🎚️ Pitch</span>
+      <input id="pitch" type="range" min="0.8" max="1.2" step="0.01" value="1.02">
+    </div>
+    <div class="route-line" aria-hidden="true"><div class="route-fill" id="routeFill"></div></div>
+    <div class="pins"><div class="pin" id="pin1">1</div><div class="pin" id="pin2">2</div><div class="pin" id="pin3">3</div><div class="pin" id="pin4">4</div><div class="pin" id="pin5">5</div></div>
+  </section>
+
+  <details open>
+    <summary>📘 ACTFL Standards — The 5 Cs</summary>
+    <ul>
+      <li><b>Communication:</b> Interpersonal (drag/drop, memory), Interpretive (listening &amp; clues), Presentational (optional read-aloud).</li>
+      <li><b>Cultures:</b> Innovaciones tecnológicas y su impacto social.</li>
+      <li><b>Connections:</b> STEM, ética digital, geografía de la energía.</li>
+      <li><b>Comparisons:</b> Términos tecnológicos y sus equivalentes en inglés.</li>
+      <li><b>Communities:</b> Export/share a Schoology.</li>
+    </ul>
+  </details>
+
+  <!-- P1 -->
+  <section class="card" id="p1">
+    <h2>Parada 1 — Empareja la palabra · Match the Word</h2>
+    <div class="goal">Objetivo: conectar español → inglés.</div>
+    <div class="dir">Arrastra la ficha en <b>español</b> a la tarjeta correcta en <b>inglés</b>.</div>
+    <div class="mini"><div class="mini-fill" id="mini1"></div></div>
+    <div class="mini-txt" id="mini1txt">Correct: 0/12 • Acc: 0%</div>
+    <div id="p1chip" style="margin:8px 0;"></div>
+    <div class="targets" id="p1targets" aria-live="polite"></div>
+  </section>
+
+  <!-- P2 -->
+  <section class="card" id="p2">
+    <h2>Parada 2 — Circunlocución · Circumlocution</h2>
+    <div class="goal">Objetivo: elegir la palabra a partir de una pista en español.</div>
+    <div class="dir">Lee o escucha la pista y elige la mejor opción.</div>
+    <div class="mini"><div class="mini-fill" id="mini2"></div></div>
+    <div class="mini-txt" id="mini2txt">Correct: 0/12 • Acc: 0%</div>
+    <div class="ctrls"><button class="ghost" id="p2play">▶️ Reproducir pista</button><div id="p2clue" style="font-weight:700"></div></div>
+    <div class="targets" id="p2opts"></div>
+  </section>
+
+  <!-- P3 Memory -->
+  <section class="card" id="p3">
+    <h2>Parada 3 — Memoria · Memory (🇪🇨 Ecuador)</h2>
+    <div class="goal">Objetivo: emparejar todas las parejas español–inglés.</div>
+    <div class="dir">Voltea dos cartas para encontrar la pareja; al acertar, se eliminan.</div>
+    <div class="mini"><div class="mini-fill" id="mini3"></div></div>
+    <div class="mini-txt" id="mini3txt">Pairs: 0/0</div>
+    <div class="memory" id="memgrid" aria-live="polite"></div>
+  </section>
+
+  <!-- P4 -->
+  <section class="card" id="p4">
+    <h2>Parada 4 — Forma la oración · Build the Sentence</h2>
+    <div class="goal">Objetivo: reconstruir la oración en español según el enunciado en inglés.</div>
+    <div class="dir">Arrastra las fichas a la zona; pulsa <b>Calificar</b>.</div>
+    <div class="mini"><div class="mini-fill" id="mini4"></div></div>
+    <div class="mini-txt" id="mini4txt">Correct: 0/12 • Acc: 0%</div>
+    <div style="margin:6px 0 4px"><b>Prompt:</b> <span id="p4prompt"></span></div>
+    <div class="dropzone" id="p4drop" aria-label="Zona de construcción"><span class="dz-hint">⋯ suelta las palabras aquí</span></div>
+    <div class="bank" id="p4bank"></div>
+    <div class="btns"><button id="p4grade">✅ Calificar</button><button class="ghost" id="p4clear">🧽 Borrar</button><button class="alt" id="p4next">➡️ Siguiente</button></div>
+    <div class="status" id="p4status" aria-live="polite"></div>
+  </section>
+
+  <!-- P5 -->
+  <section class="card" id="p5">
+    <h2>Parada 5 — Mini escucha · Mini Listening</h2>
+    <div class="goal">Objetivo: escucha y elige la mejor respuesta.</div>
+    <div class="dir">Pulsa reproducir y elige el significado correcto.</div>
+    <div class="mini"><div class="mini-fill" id="mini5"></div></div>
+    <div class="mini-txt" id="mini5txt">Correct: 0/12 • Acc: 0%</div>
+    <div class="radio">
+      <div class="record" id="record"></div>
+      <div>
+        <div id="p5q" style="font-weight:700;margin-bottom:8px">—</div>
+        <div class="btns">
+          <button id="p5play" class="ghost">▶️ Reproducir</button>
+          <button id="p5next" class="alt">➡️ Siguiente</button>
+        </div>
+      </div>
+    </div>
+    <div class="targets" id="p5opts" style="margin-top:10px"></div>
+  </section>
+
+  <footer>
+    <button class="hide-toggle" onclick="document.getElementById('exp').classList.toggle('hidden')">⬇️ Export / Resumen</button>
+    <div id="exp" class="hidden hideable">
+      <div class="summary" id="summaryBox">—</div>
+      <div class="btns">
+        <button id="dlcsv">⬇️ Download CSV</button>
+        <button id="dljson" class="ghost">⬇️ Download My Data (JSON)</button>
+      </div>
+      <div style="margin-top:6px">Nota: “Sube este archivo a Schoology…”</div>
+    </div>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;z-index:10"><div>🎉 <b>¡Mapa completado!</b></div></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+/* ===== helpers ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.prototype.slice.call(document.querySelectorAll(s));
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const rand=(a)=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/* ===== storage keys ===== */
+const KEY={fname:'uvb_fname',lname:'uvb_lname',voice:'uvb_voice',rate:'uvb_rate',pitch:'uvb_pitch',progress:'uvb_progress_'+location.pathname};
+
+/* ===== TTS (defensive) ===== */
+const HAS_TTS = !!(window && window.speechSynthesis && typeof window.speechSynthesis.speak === 'function');
+let VOICES=[]; let voiceURI=null;
+let rate=parseFloat(localStorage.getItem(KEY.rate))||0.92;
+let pitch=parseFloat(localStorage.getItem(KEY.pitch))||1.02;
+const rateEl=$("#rate"), pitchEl=$("#pitch"), voiceSel=$("#voiceSel");
+if(rateEl) rateEl.value=rate;
+if(pitchEl) pitchEl.value=pitch;
+
+function loadVoicesSafe(){
+  try{
+    VOICES = HAS_TTS ? window.speechSynthesis.getVoices() : [];
+    if(voiceSel){ voiceSel.innerHTML=""; VOICES.forEach(v=>{ const o=document.createElement('option'); o.value=v.voiceURI; o.textContent=(v.name||"")+ " — "+(v.lang||""); voiceSel.appendChild(o); }); }
+    let pref = VOICES.find(v=>v.lang==='es-ES') || VOICES.find(v=>v.lang && v.lang.indexOf('es')===0);
+    let saved = VOICES.find(v=>v.voiceURI===localStorage.getItem(KEY.voice));
+    voiceURI = (saved||pref||(VOICES[0]||{})).voiceURI || null;
+    if(voiceSel && voiceURI) voiceSel.value = voiceURI;
+  }catch(e){ /* ignore */ }
+}
+if(HAS_TTS){
+  loadVoicesSafe();
+  try{ window.speechSynthesis.onvoiceschanged = loadVoicesSafe; }catch(e){}
+}
+if(voiceSel){
+  voiceSel.addEventListener('change',e=>{ voiceURI=e.target.value; localStorage.setItem(KEY.voice, voiceURI||""); });
+}
+if(rateEl){ rateEl.addEventListener('input',e=>{ rate=parseFloat(e.target.value); localStorage.setItem(KEY.rate, rate); }); }
+if(pitchEl){ pitchEl.addEventListener('input',e=>{ pitch=parseFloat(e.target.value); localStorage.setItem(KEY.pitch, pitch); }); }
+
+function getVoice(){ return VOICES.find(v=>v.voiceURI===voiceURI) || VOICES.find(v=>v.lang && v.lang.indexOf('es')===0) || null; }
+function splitPhrases(txt){
+  return String(txt||"").split(/([.?!;:—,-])/).reduce((acc,part)=>{ if(/^[.?!;:—,-]$/.test(part) && acc.length){ acc[acc.length-1]+=part; } else if(String(part).trim()){ acc.push(String(part).trim()); } return acc; },[]);
+}
+function speak(text){
+  if(!HAS_TTS) return; // safe no-op when TTS unavailable
+  try{ window.speechSynthesis.cancel(); window.speechSynthesis.resume(); }catch(e){}
+  const v=getVoice();
+  const chunks = splitPhrases(text);
+  (function say(i){
+    if(i>=chunks.length) return;
+    const u=new SpeechSynthesisUtterance(chunks[i]);
+    if(v) u.voice=v; u.lang='es-ES'; u.rate=rate; u.pitch=pitch;
+    window.speechSynthesis.speak(u); u.onend=()=>say(i+1);
+  })(0);
+}
+
+/* ===== stamp & confetti ===== */
+let audioCtx;
+function stampSound(){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(); const g=audioCtx.createGain();
+    o.type='square'; o.frequency.setValueAtTime(120,audioCtx.currentTime);
+    g.gain.setValueAtTime(0.001,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.7,audioCtx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.09);
+    o.connect(g).connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1);
+  }catch(e){}
+}
+function confetti(){
+  const c=document.createElement('canvas'); c.width=innerWidth; c.height=innerHeight; c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9999';
+  document.body.appendChild(c); const ctx=c.getContext('2d');
+  const parts=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20*Math.random(),r:3+Math.random()*4,vy:2+Math.random()*3,vx:-1+Math.random()*2,rot:Math.random()*Math.PI}));
+  let t=0;(function anim(){ ctx.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{ p.y+=p.vy; p.x+=p.vx; p.rot+=.1; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle=['#d93223','#ffb841','#2c3c80','#41845f','#fff8e1'][Math.floor(Math.random()*5)];
+      ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2); ctx.restore(); });
+    if(++t<180){ requestAnimationFrame(anim);} else { c.remove(); } })();
+}
+
+/* ===== Master Vocab ===== */
+const MASTER=[
+  {es:"almacenar energía", en:"to store energy", icon:"🔋", cat:"energía"},
+  {es:"la contraseña", en:"password", icon:"🔑", cat:"seguridad"},
+  {es:"la huella digital", en:"fingerprint", icon:"🆔", cat:"seguridad"},
+  {es:"la impresora 3D", en:"3D printer", icon:"🖨️", cat:"dispositivo"},
+  {es:"los lentes inteligentes", en:"smart glasses", icon:"🕶️", cat:"wearables"},
+  {es:"el panel solar", en:"solar panel", icon:"☀️", cat:"energía"},
+  {es:"la pantalla virtual", en:"virtual screen", icon:"🖥️", cat:"visualización"},
+  {es:"el reconocimiento facial", en:"facial recognition", icon:"🙂📷", cat:"IA"},
+  {es:"el vehículo autónomo", en:"self-driving vehicle", icon:"🚗🤖", cat:"IA"}
+];
+
+/* ===== Clues ===== */
+const CLUES={
+  "almacenar energía":"Es guardar electricidad para usarla más tarde.",
+  "la contraseña":"Es una palabra secreta para entrar a una cuenta.",
+  "la huella digital":"Es una marca única del dedo para identificar a una persona.",
+  "la impresora 3D":"Es una máquina que crea objetos capa por capa.",
+  "los lentes inteligentes":"Es un dispositivo que se usa en la cara y muestra información.",
+  "el panel solar":"Es un objeto que convierte la luz del sol en electricidad.",
+  "la pantalla virtual":"Es una imagen que ves sin un monitor físico.",
+  "el reconocimiento facial":"Es una tecnología que identifica caras.",
+  "el vehículo autónomo":"Es un coche que se maneja solo."
+};
+
+/* ===== Sentences ===== */
+const SENTENCES=[
+  {en:"We store energy with solar panels.", es:"Almacenamos energía con paneles solares."},
+  {en:"Use a strong password.", es:"Usa una contraseña fuerte."},
+  {en:"The phone unlocks with a fingerprint.", es:"El teléfono se desbloquea con huella digital."},
+  {en:"They printed a model with a 3D printer.", es:"Imprimieron un modelo con una impresora 3D."},
+  {en:"Smart glasses show a virtual screen.", es:"Los lentes inteligentes muestran una pantalla virtual."},
+  {en:"Facial recognition identifies the user.", es:"El reconocimiento facial identifica al usuario."},
+  {en:"The autonomous vehicle follows the route.", es:"El vehículo autónomo sigue la ruta."}
+];
+
+/* ===== Listen items ===== */
+const LISTEN=[
+  { tts:"El panel solar almacena energía durante el día.", q:"¿Qué hace el panel solar?", options:["Almacena energía","Pide una contraseña","Imprime objetos en 3D"], correct:0 },
+  { tts:"Necesitas una contraseña segura.", q:"¿Qué necesitas?", options:["Una contraseña segura","Lentes inteligentes","Un vehículo autónomo"], correct:0 },
+  { tts:"El teléfono usa reconocimiento facial para abrirse.", q:"¿Qué usa el teléfono?", options:["Reconocimiento facial","Pantalla virtual","Panel solar"], correct:0 },
+  { tts:"La impresora 3D crea un juguete.", q:"¿Qué crea la impresora 3D?", options:["Un juguete","Lentes inteligentes","Un panel solar"], correct:0 },
+  { tts:"Los lentes inteligentes muestran una pantalla virtual.", q:"¿Qué muestran los lentes inteligentes?", options:["Una pantalla virtual","Una huella digital","Una contraseña"], correct:0 },
+  { tts:"El vehículo autónomo se mueve solo.", q:"¿Cómo se mueve el vehículo?", options:["Solo","Con un conductor","No se mueve"], correct:0 }
+];
+
+/* ===== Progress ===== */
+const PROG=JSON.parse(localStorage.getItem(KEY.progress)||'{}');
+const DEF={attempts:0,correct:0,pairsTotal:0,pairsDone:0,complete:false};
+const P={1:{...DEF,...(PROG["1"]||{})},2:{...DEF,...(PROG["2"]||{})},3:{...DEF,...(PROG["3"]||{})},4:{...DEF,...(PROG["4"]||{})},5:{...DEF,...(PROG["5"]||{})}};
+function saveProg(){ try{ localStorage.setItem(KEY.progress, JSON.stringify(P)); }catch(e){} }
+function acc(p){ return p.attempts? Math.round(100*p.correct/Math.max(1,p.attempts)) : 0; }
+function updMini(n){
+  if(n===3){
+    const m3txt=$("#mini3txt"), m3=$("#mini3");
+    if(m3txt) m3txt.textContent=`Pairs: ${P[3].pairsDone}/${P[3].pairsTotal}`;
+    if(m3) m3.style.width=(P[3].pairsTotal? (100*P[3].pairsDone/P[3].pairsTotal):0)+"%"; return;
+  }
+  const a=acc(P[n]); const t=$("#mini"+n+"txt"), bar=$("#mini"+n);
+  if(t) t.textContent=`Correct: ${Math.min(P[n].correct,12)}/12 • Acc: ${a}%`;
+  if(bar) bar.style.width=clamp((P[n].correct/12)*100,0,100)+"%";
+}
+function checkComplete(){
+  [1,2,4,5].forEach(n=>{ P[n].complete=(P[n].correct>=12 && acc(P[n])>=80); });
+  P[3].complete=(P[3].pairsTotal>0 && P[3].pairsDone===P[3].pairsTotal);
+  [1,2,3,4,5].forEach(n=>{ const p=$("#pin"+n); if(p) p.classList.toggle('complete', !!P[n].complete); });
+  const fillPct=( [1,2,3,4,5].filter(n=>P[n].complete).length / 5 )*100;
+  const rf=$("#routeFill"); if(rf) rf.style.width=fillPct+"%"; saveProg();
+  if([1,2,3,4,5].every(n=>P[n].complete)){
+    stampSound(); confetti(); const ov=$("#overlay"); if(ov){ ov.style.display="flex"; setTimeout(()=>{ ov.style.display="none"; },1800); }
+  }
+}
+(function initProg(){
+  if(!P[3].pairsTotal){ P[3].pairsTotal=Math.min(MASTER.length,12); P[3].pairsDone=0; }
+  [1,2,3,4,5].forEach(updMini); checkComplete();
+})();
+
+/* ===== Persist names ===== */
+const fnEl=$("#fname"), lnEl=$("#lname");
+if(fnEl) { fnEl.value=localStorage.getItem(KEY.fname)||""; fnEl.addEventListener('input',e=> localStorage.setItem(KEY.fname,e.target.value)); }
+if(lnEl) { lnEl.value=localStorage.getItem(KEY.lname)||""; lnEl.addEventListener('input',e=> localStorage.setItem(KEY.lname,e.target.value)); }
+
+/* ===== Global click-to-speak for Spanish ===== */
+document.addEventListener('click',e=>{
+  const t=e.target && e.target.closest ? e.target.closest('[data-es]') : null;
+  if(t) speak(t.getAttribute('data-es'));
+});
+
+/* ===== P1 ===== */
+let recentEs=[];
+function newP1Round(){
+  const pool=MASTER.filter(it=>recentEs.indexOf(it.es)===-1);
+  const item=pool.length? rand(pool): rand(MASTER);
+  recentEs.push(item.es); if(recentEs.length>5) recentEs.shift();
+  const chip=document.createElement('div');
+  chip.className='chip'; chip.draggable=true; chip.setAttribute('data-es', item.es);
+  chip.innerHTML='<span class="icon">'+(item.icon||'📎')+'</span><span>'+item.es+'</span>';
+  const chipWrap=$("#p1chip"); if(chipWrap){ chipWrap.innerHTML=""; chipWrap.appendChild(chip); }
+  const distractors=shuffle(MASTER.filter(x=>x!==item)).slice(0,3);
+  const tars=shuffle([item].concat(distractors));
+  const cont=$("#p1targets"); if(cont) cont.innerHTML="";
+  tars.forEach(t=>{ const d=document.createElement('div'); d.className='target'; d.textContent=t.en; d.setAttribute('data-en',t.en); if(cont) cont.appendChild(d); });
+  chip.addEventListener('dragstart',e=>{ try{ e.dataTransfer.setData('text/plain', item.en); }catch(err){} });
+  $$('#p1targets .target').forEach(tg=>{
+    tg.addEventListener('dragover',e=> e.preventDefault());
+    tg.addEventListener('drop',e=>{
+      e.preventDefault(); const en=(e.dataTransfer && e.dataTransfer.getData)? e.dataTransfer.getData('text/plain') : "";
+      P[1].attempts++;
+      if(tg.getAttribute('data-en')===en){ tg.classList.add('ok'); stampSound(); P[1].correct++; updMini(1); checkComplete(); saveProg(); setTimeout(newP1Round,350); }
+      else{ tg.classList.add('bad'); setTimeout(()=>tg.classList.remove('bad'),200); updMini(1); checkComplete(); saveProg(); }
+    });
+  });
+}
+newP1Round();
+
+/* ===== P2 ===== */
+let p2Ans=null;
+function newP2Round(){
+  const item=rand(MASTER); p2Ans=item;
+  const clueEl=$("#p2clue"); if(clueEl) clueEl.textContent=CLUES[item.es]||"Es una palabra del tema.";
+  const opts=shuffle([item].concat(shuffle(MASTER.filter(x=>x!==item)).slice(0,3)));
+  const cont=$("#p2opts"); if(cont) cont.innerHTML="";
+  opts.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='target opt'; d.setAttribute('data-es', o.es);
+    d.innerHTML='<span class="icon">'+(o.icon||'📎')+'</span><span>'+o.es+'</span>';
+    d.onclick=()=>{ P[2].attempts++; if(o===item){ d.classList.add('correct'); stampSound(); P[2].correct++; } else { d.classList.add('wrong'); }
+      updMini(2); checkComplete(); saveProg(); setTimeout(newP2Round,520); };
+    if(cont) cont.appendChild(d);
+  });
+}
+const p2btn=$("#p2play"); if(p2btn){ p2btn.onclick=()=>{ const clue=$("#p2clue"); if(clue) speak(clue.textContent||""); }; }
+newP2Round();
+
+/* ===== P3 ===== */
+let memFirst=null, memLock=false;
+function buildMemory(){
+  const n=Math.min(MASTER.length,12);
+  P[3].pairsTotal=n; P[3].pairsDone=0; updMini(3); saveProg();
+  const picks=MASTER.slice(0,n);
+  const cards=[];
+  picks.forEach(it=>{ cards.push({key:it.es,label:it.es,icon:it.icon,isEs:true}); cards.push({key:it.es,label:it.en,isEs:false}); });
+  shuffle(cards);
+  const grid=$("#memgrid"); if(grid) grid.innerHTML="";
+  cards.forEach(c=>{
+    const cell=document.createElement('div'); cell.className='cardlet'; cell.setAttribute('data-key',c.key); cell.tabIndex=0;
+    const iconHTML=c.isEs && c.icon? '<div class="icon" style="font-size:1.4rem">'+c.icon+'</div>' : "";
+    cell.innerHTML='<div class="face back"></div><div class="face front"><div class="front-content" '+(c.isEs?'data-es="'+c.label.replace(/"/g,'&quot;')+'"':'')+'>'+iconHTML+'<div class="term">'+c.label+'</div></div></div>';
+    if(grid) grid.appendChild(cell);
+  });
+  $$('#memgrid .cardlet').forEach(card=>{
+    card.addEventListener('click',()=>{
+      if(memLock||card.classList.contains('gone')) return;
+      card.classList.add('flipped');
+      if(!memFirst){ memFirst=card; return; }
+      memLock=true; P[3].attempts++;
+      const same=memFirst.getAttribute('data-key')===card.getAttribute('data-key') && memFirst!==card;
+      if(same){
+        setTimeout(()=>{
+          memFirst.classList.add('gone'); card.classList.add('gone'); stampSound();
+          memFirst.style.visibility='hidden'; card.style.visibility='hidden';
+          P[3].pairsDone++; updMini(3); checkComplete(); saveProg(); memFirst=null; memLock=false;
+        },280);
+      }else{
+        setTimeout(()=>{ memFirst.classList.remove('flipped'); card.classList.remove('flipped'); memFirst=null; memLock=false; updMini(3); checkComplete(); saveProg(); },420);
+      }
+    });
+  });
+}
+buildMemory();
+
+/* ===== P4 ===== */
+let p4Cur=null;
+function norm(s){ return String(s||"").replace(/\s+/g,' ').replace(/\s+([.,;:!?])/g,'$1').replace(/([¿¡])\s+/g,'$1').trim().toLowerCase(); }
+function loadP4(){
+  p4Cur=rand(SENTENCES);
+  const pr=$("#p4prompt"); if(pr) pr.textContent=p4Cur.en;
+  const tokens=p4Cur.es.replace(/([.,;:!?])/g,' $1 ').split(/\s+/).filter(Boolean);
+  const bank=$("#p4bank"); if(bank) bank.innerHTML="";
+  const drop=$("#p4drop"); if(drop) drop.innerHTML='<span class="dz-hint">⋯ suelta las palabras aquí</span>';
+  shuffle(tokens).forEach(tok=>{
+    const t=document.createElement('div'); t.className='token'; t.textContent=tok; t.draggable=true; t.setAttribute('data-es', tok);
+    t.addEventListener('dragstart',e=>{ try{ e.dataTransfer.setData('text/plain', tok); }catch(err){} });
+    t.addEventListener('click',()=> speak(tok));
+    if(bank) bank.appendChild(t);
+  });
+  const dz=$("#p4drop"), bk=$("#p4bank");
+  function allow(e){ e.preventDefault(); }
+  if(dz){ dz.addEventListener('dragover',allow); dz.addEventListener('drop',e=>{ e.preventDefault(); const tok=e.dataTransfer.getData('text/plain'); const el=[].slice.call(bk.children).find(n=>n.textContent===tok); if(el){ dz.appendChild(el); const hint=dz.querySelector('.dz-hint'); if(hint) hint.remove(); } }); }
+  if(bk){ bk.addEventListener('dragover',allow); bk.addEventListener('drop',e=>{ e.preventDefault(); const tok=e.dataTransfer.getData('text/plain'); const el=[].slice.call(dz.children).find(n=>n.textContent===tok); if(el){ bk.appendChild(el); } }); }
+  const st=$("#p4status"); if(st) st.textContent="";
+}
+function readDropSentence(){ const dz=$("#p4drop"); return dz? [].slice.call(dz.children).map(n=>n.textContent).join(' ').trim() : ""; }
+const p4g=$("#p4grade"), p4c=$("#p4clear"), p4n=$("#p4next");
+if(p4g){ p4g.onclick=()=>{ P[4].attempts++; const built=readDropSentence(); if(norm(built)===norm(p4Cur.es)){ P[4].correct++; const st=$("#p4status"); if(st) st.textContent="PASAPORTE APROBADO ✓"; stampSound(); } else { const st=$("#p4status"); if(st) st.textContent="Revisa el orden."; } updMini(4); checkComplete(); saveProg(); }; }
+if(p4c){ p4c.onclick=()=>{ const dz=$("#p4drop"), bk=$("#p4bank"); if(dz && bk){ [].slice.call(dz.children).forEach(n=>bk.appendChild(n)); } const st=$("#p4status"); if(st) st.textContent=""; }; }
+if(p4n){ p4n.onclick=()=> loadP4(); }
+loadP4();
+
+/* ===== P5 ===== */
+let p5Cur=null;
+function loadP5(){
+  p5Cur=rand(LISTEN); const q=$("#p5q"); if(q) q.textContent=p5Cur.q;
+  const cont=$("#p5opts"); if(cont) cont.innerHTML="";
+  p5Cur.options.forEach((txt,i)=>{
+    const d=document.createElement('div'); d.className='opt'; d.innerHTML='<span class="icon">🎧</span><span>'+txt+'</span>'; d.setAttribute('data-es', txt);
+    d.onclick=()=>{ P[5].attempts++; if(i===p5Cur.correct){ d.classList.add('correct'); stampSound(); P[5].correct++; } else { d.classList.add('wrong'); }
+      updMini(5); checkComplete(); saveProg(); setTimeout(loadP5,520); };
+    if(cont) cont.appendChild(d);
+  });
+}
+const p5play=$("#p5play"), p5next=$("#p5next"), rec=$("#record");
+if(p5play){ p5play.onclick=()=>{ if(rec) rec.classList.add('spin'); speak((p5Cur&&p5Cur.tts)||""); setTimeout(()=>{ if(rec) rec.classList.remove('spin'); },1400); }; }
+if(p5next){ p5next.onclick=()=> loadP5(); }
+loadP5();
+
+/* ===== Export & summary ===== */
+function overall(){ const ta=[1,2,3,4,5].reduce((s,n)=>s+P[n].attempts,0); const tc=[1,2,3,4,5].reduce((s,n)=>s+(n===3?P[n].pairsDone:P[n].correct),0); const a=ta?Math.round(100*tc/ta):0; return {ta,tc,a}; }
+function refreshSummary(){ const o=overall(); const box=$("#summaryBox"); if(box) box.innerHTML='<div><b>Total attempts:</b> '+o.ta+'</div><div><b>Total correct:</b> '+o.tc+'</div><div><b>Accuracy:</b> '+o.a+'%</div>'; }
+refreshSummary(); setInterval(refreshSummary,1000);
+function download(filename,content,type){ const blob=new Blob([content],{type:type||'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; a.click(); setTimeout(()=>URL.revokeObjectURL(url),0); }
+const dlcsv=$("#dlcsv"), dljson=$("#dljson");
+if(dlcsv){ dlcsv.onclick=()=>{ const rows=[["Parada","Correct","Attempts","Accuracy"]]; [1,2,4,5].forEach(n=> rows.push([n,P[n].correct,P[n].attempts,(P[n].attempts? Math.round(100*P[n].correct/P[n].attempts):0)+"%"])); rows.push([3,P[3].pairsDone,P[3].attempts,(P[3].pairsTotal? Math.round(100*P[3].pairsDone/P[3].pairsTotal):0)+"%"]); const csv=rows.map(r=>r.join(",")).join("\n"); const fn='reporteros2_unidad5_leccion1_tecnologia_'+((fnEl&&fnEl.value)||"")+'_'+((lnEl&&lnEl.value)||"")+'.csv'; download(fn,csv,'text/csv'); }; }
+if(dljson){ dljson.onclick=()=>{ const data={first:(fnEl&&fnEl.value)||"",last:(lnEl&&lnEl.value)||"",timestamp:new Date().toISOString(),progress:P}; const fn='reporteros2_unidad5_leccion1_tecnologia_'+((fnEl&&fnEl.value)||"")+'_'+((lnEl&&lnEl.value)||"")+'.json'; download(fn,JSON.stringify(data,null,2),'application/json'); }; }
+
+}); /* end DOMContentLoaded */
+</script>
+</body>
+</html>
