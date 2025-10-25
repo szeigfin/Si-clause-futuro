@@ -1,0 +1,892 @@
+[
+  {
+    "Country": "Argentina",
+    "Capital": "Buenos Aires",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Chile",
+      "Bolivia",
+      "Paraguay",
+      "Brasil",
+      "Uruguay"
+    ],
+    "Paso4_Music_Label": "tango",
+    "Paso5_Landmark_Name": "Cataratas del Iguazú",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Iguazu_Falls_2018.jpg"
+    ],
+    "Paso6_Currency_Label": "peso argentino (ARS)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/1000_Pesos_Argentinos_2019_obverse.jpg"
+    ],
+    "Paso7_Food_Label": "asado",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Asado_Argentino.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Lionel Messi",
+    "Paso11_Famous_Profession_ES": "futbolista",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Lionel_Messi_WC2022.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "quechua / guaraní (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Argentina.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Argentina.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Buenos_Aires.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Bolivia",
+    "Capital": "Sucre",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Perú",
+      "Brasil",
+      "Paraguay",
+      "Argentina",
+      "Chile"
+    ],
+    "Paso4_Music_Label": "morenada",
+    "Paso5_Landmark_Name": "Salar de Uyuni",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Salar_de_Uyuni_from_space.jpg"
+    ],
+    "Paso6_Currency_Label": "boliviano (BOB)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Boliviano_Banco_Central_2018.jpg"
+    ],
+    "Paso7_Food_Label": "salteñas",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Salte%C3%B1a_Boliviana.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Edmundo Paz Soldán",
+    "Paso11_Famous_Profession_ES": "escritor",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Edmundo_Paz_Soldan_2016.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "quechua / aymara",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Bolivia.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Bolivia.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Sucre.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Chile",
+    "Capital": "Santiago",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Perú",
+      "Bolivia",
+      "Argentina"
+    ],
+    "Paso4_Music_Label": "cueca",
+    "Paso5_Landmark_Name": "Rapa Nui (Isla de Pascua)",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ahu_Tongariki,_Easter_Island,_Chile.jpg"
+    ],
+    "Paso6_Currency_Label": "peso chileno (CLP)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Chilean_Peso,_banknotes_2011.jpg"
+    ],
+    "Paso7_Food_Label": "empanada chilena",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Empanada_de_pino.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Pablo Neruda",
+    "Paso11_Famous_Profession_ES": "poeta (Premio Nobel)",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pablo_Neruda_1963.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "mapudungun (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Chile.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Chile.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Santiago,_Chile.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Colombia",
+    "Capital": "Bogotá",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Panamá",
+      "Venezuela",
+      "Brasil",
+      "Perú",
+      "Ecuador"
+    ],
+    "Paso4_Music_Label": "cumbia / vallenato",
+    "Paso5_Landmark_Name": "Ciudad Perdida",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ciudad_Perdida_Sierra_Nevada_2015.jpg"
+    ],
+    "Paso6_Currency_Label": "peso colombiano (COP)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Billetes_colombianos_2016.jpg"
+    ],
+    "Paso7_Food_Label": "arepa",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Arepa_de_queso.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol / ciclismo",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Shakira",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Shakira_Rock_in_Rio_2008.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "wayuunaiki (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Colombia.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Colombia.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Bogot%C3%A1,_Colombia.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Costa Rica",
+    "Capital": "San José",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "Nicaragua",
+      "Panamá"
+    ],
+    "Paso4_Music_Label": "calypso limonense",
+    "Paso5_Landmark_Name": "Parque Nacional Manuel Antonio",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Playa_Espadilla_Norte,_Manuel_Antonio.jpg"
+    ],
+    "Paso6_Currency_Label": "colón costarricense (CRC)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Colones_Costa_Rica_2012.jpg"
+    ],
+    "Paso7_Food_Label": "gallo pinto",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Gallo_pinto_Costa_Rica.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Keylor Navas",
+    "Paso11_Famous_Profession_ES": "futbolista",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Keylor_Navas_2015.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "bribri (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Costa_Rica.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Costa_Rica_(state).svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_San_Jos%C3%A9,_Costa_Rica.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Cuba",
+    "Capital": "La Habana",
+    "Paso9_Region": "Caribe",
+    "Paso8_Neighbor_Countries": [],
+    "Paso4_Music_Label": "son cubano / salsa",
+    "Paso5_Landmark_Name": "Malecón de La Habana",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Malecon_Havana_2016.jpg"
+    ],
+    "Paso6_Currency_Label": "peso cubano (CUP)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Cuban_peso_banknotes_2016.jpg"
+    ],
+    "Paso7_Food_Label": "ropa vieja",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ropa_Vieja,_Cuban_style.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "Celia Cruz",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Celia_Cruz_1997.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "—",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Cuba.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Cuba.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Havana.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Caribbean_general_location_map.png"
+    ]
+  },
+  {
+    "Country": "República Dominicana",
+    "Capital": "Santo Domingo",
+    "Paso9_Region": "Caribe",
+    "Paso8_Neighbor_Countries": [
+      "Haití"
+    ],
+    "Paso4_Music_Label": "merengue / bachata",
+    "Paso5_Landmark_Name": "Zona Colonial",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Zona_Colonial_Santo_Domingo_Street.jpg"
+    ],
+    "Paso6_Currency_Label": "peso dominicano (DOP)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Dominican_peso_banknotes_2014.jpg"
+    ],
+    "Paso7_Food_Label": "mangú",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Mangu_with_salami_eggs_cheese.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "Juan Luis Guerra",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Juan_Luis_Guerra_2012.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "taíno (hist.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_the_Dominican_Republic.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_Dominican_Republic.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Santo_Domingo.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Caribbean_general_location_map.png"
+    ]
+  },
+  {
+    "Country": "Ecuador",
+    "Capital": "Quito",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Colombia",
+      "Perú"
+    ],
+    "Paso4_Music_Label": "pasillo",
+    "Paso5_Landmark_Name": "Islas Galápagos",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Galapagos_tortuga.jpg"
+    ],
+    "Paso6_Currency_Label": "dólar estadounidense (USD)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/United_States_one_dollar_bill,_reverse,_Series_2009.jpg"
+    ],
+    "Paso7_Food_Label": "encebollado",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Encebollado_Ecuador.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Jefferson Pérez",
+    "Paso11_Famous_Profession_ES": "atleta (marcha)",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Jefferson_Perez_2008.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "quechua (kichwa)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Ecuador.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Ecuador.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Quito.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "El Salvador",
+    "Capital": "San Salvador",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "Guatemala",
+      "Honduras"
+    ],
+    "Paso4_Music_Label": "cumbia salvadoreña",
+    "Paso5_Landmark_Name": "Ruta de las Flores",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ruta_de_las_Flores_El_Salvador.jpg"
+    ],
+    "Paso6_Currency_Label": "dólar estadounidense (USD)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/United_States_one_dollar_bill,_reverse,_Series_2009.jpg"
+    ],
+    "Paso7_Food_Label": "pupusas",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pupusas_Salvadorenas.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Óscar Romero",
+    "Paso11_Famous_Profession_ES": "arzobispo / activista",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Oscar_Romero_1979.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "náhuat (pipil)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_El_Salvador.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_El_Salvador.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_San_Salvador.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Guinea Ecuatorial",
+    "Capital": "Malabo",
+    "Paso9_Region": "África",
+    "Paso8_Neighbor_Countries": [
+      "Camerún",
+      "Gabón"
+    ],
+    "Paso4_Music_Label": "fang-bikutsi (reg.)",
+    "Paso5_Landmark_Name": "Bioko",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pico_Basil%C3%A9,_Bioko.jpg"
+    ],
+    "Paso6_Currency_Label": "franco CFA (XAF)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/10000_CFA_billet.jpg"
+    ],
+    "Paso7_Food_Label": "sopa de cacahuete",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Groundnut_stew.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Anselmo Ralph",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Anselmo_Ralph_2014.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "fang (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Equatorial_Guinea.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Equatorial_Guinea.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Malabo.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Africa_blank_map_(region).svg"
+    ]
+  },
+  {
+    "Country": "Guatemala",
+    "Capital": "Ciudad de Guatemala",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "México",
+      "Belice",
+      "Honduras",
+      "El Salvador"
+    ],
+    "Paso4_Music_Label": "marimba",
+    "Paso5_Landmark_Name": "Tikal",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Tikal_Temple_I_2006.jpg"
+    ],
+    "Paso6_Currency_Label": "quetzal (GTQ)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Guatemalan_quetzal_2006.jpg"
+    ],
+    "Paso7_Food_Label": "pepian",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pepi%C3%A1n_Guatemala.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Rigoberta Menchú",
+    "Paso11_Famous_Profession_ES": "activista (Premio Nobel)",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rigoberta_Menchu_2010.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "k’iche’",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Guatemala.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Guatemala.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Guatemala_City.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Honduras",
+    "Capital": "Tegucigalpa",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "Guatemala",
+      "El Salvador",
+      "Nicaragua"
+    ],
+    "Paso4_Music_Label": "punta",
+    "Paso5_Landmark_Name": "Islas de la Bahía",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/West_Bay_Beach_Roatan.jpg"
+    ],
+    "Paso6_Currency_Label": "lempira (HNL)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Honduran_lempira_banknotes_2012.jpg"
+    ],
+    "Paso7_Food_Label": "baleadas",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baleadas_Honduras.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Carlos Pavón",
+    "Paso11_Famous_Profession_ES": "futbolista",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Carlos_Pavon_2010.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "garífuna (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Honduras.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Honduras.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Tegucigalpa.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "México",
+    "Capital": "Ciudad de México",
+    "Paso9_Region": "América del Norte",
+    "Paso8_Neighbor_Countries": [
+      "Estados Unidos",
+      "Guatemala",
+      "Belice"
+    ],
+    "Paso4_Music_Label": "mariachi",
+    "Paso5_Landmark_Name": "Chichén Itzá",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Chichen_Itza_3.jpg"
+    ],
+    "Paso6_Currency_Label": "peso mexicano (MXN)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Mexican_Peso_banknotes_2020.jpg"
+    ],
+    "Paso7_Food_Label": "tacos",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Tacos_de_carnitas.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Frida Kahlo",
+    "Paso11_Famous_Profession_ES": "pintora",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Frida_Kahlo,_by_Guillermo_Kahlo.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "náhuatl",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Mexico.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Mexico.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Seal_of_Mexico_City.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/North_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Nicaragua",
+    "Capital": "Managua",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "Honduras",
+      "Costa Rica"
+    ],
+    "Paso4_Music_Label": "palo de mayo",
+    "Paso5_Landmark_Name": "Islas del Maíz",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Corn_Islands_Nicaragua.jpg"
+    ],
+    "Paso6_Currency_Label": "córdoba (NIO)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Nicaraguan_c%C3%B3rdoba_banknotes_2015.jpg"
+    ],
+    "Paso7_Food_Label": "gallo pinto",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Gallo_pinto_Nicaragua.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol / fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "Rubén Darío",
+    "Paso11_Famous_Profession_ES": "poeta",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ruben_Dario_1915.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "miskito (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Nicaragua.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Nicaragua.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Managua.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Panamá",
+    "Capital": "Ciudad de Panamá",
+    "Paso9_Region": "América Central",
+    "Paso8_Neighbor_Countries": [
+      "Costa Rica",
+      "Colombia"
+    ],
+    "Paso4_Music_Label": "tamborito",
+    "Paso5_Landmark_Name": "Canal de Panamá",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Panama_Canal_Gatun_Locks.jpg"
+    ],
+    "Paso6_Currency_Label": "balboa (PAB) / USD",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Panama_balboa_coin.jpg"
+    ],
+    "Paso7_Food_Label": "sancocho",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Sancocho_de_gallina_paname%C3%B1o.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "Mariano Rivera",
+    "Paso11_Famous_Profession_ES": "beisbolista (MLB)",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Mariano_Rivera_2011.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "ngäbe (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Panama.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Panama.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Panama_City.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Central_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Paraguay",
+    "Capital": "Asunción",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Argentina",
+      "Brasil",
+      "Bolivia"
+    ],
+    "Paso4_Music_Label": "polca paraguaya / guarania",
+    "Paso5_Landmark_Name": "Saltos del Monday",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Saltos_del_Monday_2011.jpg"
+    ],
+    "Paso6_Currency_Label": "guaraní (PYG)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Guarani_banknotes_2012.jpg"
+    ],
+    "Paso7_Food_Label": "sopa paraguaya",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Sopa_paraguaya.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Roque Santa Cruz",
+    "Paso11_Famous_Profession_ES": "futbolista",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Roque_Santa_Cruz_2010.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "guaraní",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Paraguay.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Paraguay.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Asunci%C3%B3n.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Puerto Rico",
+    "Capital": "San Juan",
+    "Paso9_Region": "Caribe",
+    "Paso8_Neighbor_Countries": [],
+    "Paso4_Music_Label": "reguetón / salsa",
+    "Paso5_Landmark_Name": "Castillo San Felipe del Morro",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Castillo_San_Felipe_del_Morro_-_aerial_view.jpg"
+    ],
+    "Paso6_Currency_Label": "dólar estadounidense (USD)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/United_States_one_dollar_bill,_reverse,_Series_2009.jpg"
+    ],
+    "Paso7_Food_Label": "mofongo",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Mofongo_Puerto_Rico.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "Bad Bunny",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Bad_Bunny_2019.png"
+    ],
+    "Paso12_Indigenous_or_Variant": "taíno (hist.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Puerto_Rico.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Puerto_Rico.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_San_Juan,_Puerto_Rico.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Caribbean_general_location_map.png"
+    ]
+  },
+  {
+    "Country": "España",
+    "Capital": "Madrid",
+    "Paso9_Region": "Europa",
+    "Paso8_Neighbor_Countries": [
+      "Francia",
+      "Portugal",
+      "Andorra"
+    ],
+    "Paso4_Music_Label": "flamenco",
+    "Paso5_Landmark_Name": "La Alhambra",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Alhambra_courtyard_of_the_lions.jpg"
+    ],
+    "Paso6_Currency_Label": "euro (EUR)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Euro_coins_and_banknotes.jpg"
+    ],
+    "Paso7_Food_Label": "paella",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Paella_Valenciana.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Rosalía",
+    "Paso11_Famous_Profession_ES": "cantante",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rosal%C3%ADa_Primavera_Sound_2019.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "castellano (es-ES)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Spain.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Spain.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Madrid.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Europe_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Uruguay",
+    "Capital": "Montevideo",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Brasil",
+      "Argentina"
+    ],
+    "Paso4_Music_Label": "candombe",
+    "Paso5_Landmark_Name": "Ciudad Vieja (Montevideo)",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ciudad_Vieja_Montevideo.jpg"
+    ],
+    "Paso6_Currency_Label": "peso uruguayo (UYU)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Uruguayan_peso_banknotes_2014.jpg"
+    ],
+    "Paso7_Food_Label": "chivito",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Chivito_uruguayo.jpg"
+    ],
+    "Paso10_Sport_Label": "fútbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Soccerball.svg"
+    ],
+    "Paso11_Famous_Name": "Eduardo Galeano",
+    "Paso11_Famous_Profession_ES": "escritor",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Eduardo_Galeano_2012.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "—",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Uruguay.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Uruguay.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Montevideo.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  },
+  {
+    "Country": "Venezuela",
+    "Capital": "Caracas",
+    "Paso9_Region": "América del Sur",
+    "Paso8_Neighbor_Countries": [
+      "Colombia",
+      "Brasil",
+      "Guyana"
+    ],
+    "Paso4_Music_Label": "joropo",
+    "Paso5_Landmark_Name": "Salto Ángel",
+    "Paso5_Landmark_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Salto_Angel_from_Rio_Caron%C3%AD.jpg"
+    ],
+    "Paso6_Currency_Label": "bolívar (VES)",
+    "Paso6_Currency_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Venezuelan_bol%C3%ADvar_banknotes_2018.jpg"
+    ],
+    "Paso7_Food_Label": "arepa",
+    "Paso7_Food_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Arepa_Venezolana.jpg"
+    ],
+    "Paso10_Sport_Label": "béisbol",
+    "Paso10_Sport_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Baseball_(crop).svg"
+    ],
+    "Paso11_Famous_Name": "M%C3%ADranda (Guillermo D%C3%ADaz)",
+    "Paso11_Famous_Profession_ES": "actor / celebridad TV",
+    "Paso11_Famous_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Guillermo_Diaz_2014.jpg"
+    ],
+    "Paso12_Indigenous_or_Variant": "wayuu (reg.)",
+    "Paso1_Map_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Blank_map_of_Venezuela.svg"
+    ],
+    "Paso2_Flag_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Venezuela.svg"
+    ],
+    "Paso3_Capital_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Caracas.svg"
+    ],
+    "Paso9_Region_Image_URLs": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/South_America_blank_map.svg"
+    ]
+  }
+]
