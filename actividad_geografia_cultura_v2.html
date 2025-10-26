@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Actividad 1 — Geografía y Cultura (ProfeVT)</title>
+<style>
+  :root{
+    --bg:#fff8ec;
+    --card:#ffffff;
+    --ink:#1e1e1e;
+    --accent:#ff6f00; /* orange */
+    --accent2:#e53935; /* red */
+    --accent3:#ffd600; /* yellow */
+    --accent4:#2e7d32; /* green */
+    --accent5:#00acc1; /* teal-ish */
+    --chip:#fff3d6;
+    --muted:#6b7280;
+    --success:#2e7d32;
+    --warning:#ef6c00;
+    --danger:#c62828;
+    --shadow: 0 6px 18px rgba(0,0,0,.08);
+  }
+  html, body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";}
+  header{
+    position:sticky; top:0; z-index:5;
+    background:linear-gradient(90deg,var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    color:white;
+    padding: 12px 16px;
+    box-shadow: var(--shadow);
+  }
+  .header-inner{
+    max-width:1100px;margin:0 auto;display:grid;gap:10px;
+    grid-template-columns: 1fr 1fr 1fr 1.2fr;
+    align-items:end;
+  }
+  h1{margin:0;font-size:1.15rem;letter-spacing:.3px;display:flex;gap:8px;align-items:center}
+  h1 .badge{background:rgba(255,255,255,.2);border-radius:999px;padding:2px 10px;font-size:.8rem}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:.85rem; opacity:.95}
+  .field input,.field select{
+    height:38px;border:none;border-radius:12px;padding:0 12px;outline:none;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.8);
+    background: rgba(255,255,255,.9);
+  }
+  main{max-width:1100px;margin: 16px auto 120px; padding: 0 16px;}
+  .card{
+    background:var(--card); border-radius:18px; padding:16px; box-shadow: var(--shadow); margin:18px 0;
+  }
+  .title-row{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .title-row h2{margin:.2rem 0; font-size:1.1rem}
+  .objective{font-size:.9rem;color:var(--muted)}
+  .lang-toggle{font-size:.85rem; color:#0b7285; cursor:pointer; text-decoration:underline}
+  .instructions{font-size:.95rem; margin-top:8px}
+  .instructions .en{display:none; color:#374151}
+  .progress-wrap{margin:14px 0 10px; display:grid; gap:6px}
+  .level-text{font-size:.85rem; font-weight:600}
+  .bar{height:14px; background:#f1f5f9; border-radius:999px; overflow:hidden; position:relative}
+  .bar > span{display:block; height:100%; width:0%; background:var(--danger); transition:width .3s ease, background .3s ease}
+  .bar .pct{position:absolute; right:10px; top:50%; transform: translateY(-50%); font-size:.8rem; color:#111; mix-blend-mode: multiply;}
+  .grid{display:grid; gap:12px}
+  .grid.cols-2{grid-template-columns: 1fr 1fr}
+  .grid.cols-3{grid-template-columns: repeat(3, 1fr)}
+  .grid.cols-4{grid-template-columns: repeat(4, 1fr)}
+  .chip{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:var(--chip); border:2px solid transparent; border-radius:16px; padding:12px; cursor:pointer;
+    min-height:80px; text-align:center; font-weight:600; transition: transform .07s ease, box-shadow .15s ease, border .15s ease;
+  }
+  .chip:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+  .chip small{font-weight:500; font-size:.78rem}
+  .chip .investigar{font-size:.78rem; text-decoration:none; color:#0b7285}
+  .chip.correct{border-color: #198754; background:#e6ffed}
+  .chip.wrong{border-color: #d32f2f; background:#ffebee}
+  .shake{ animation: shake .25s linear }
+  @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(-2px)} 50%{transform:translateX(2px)} 75%{transform:translateX(-2px)} 100%{transform:translateX(0)} }
+  .mapbox{
+    width:100%; aspect-ratio: 16 / 9; background: #fff1e6; border:2px dashed #ffab40; border-radius:16px;
+    display:flex; align-items:center; justify-content:center; font-weight:700; color:#c2410c; overflow:hidden;
+  }
+  .mapbox svg{ width:100%; height:100%; display:block }
+  .footer{
+    position:fixed; bottom:0; left:0; right:0; background:linear-gradient(90deg,var(--accent3), var(--accent5));
+    display:flex; justify-content:center; padding:10px; box-shadow: 0 -4px 12px rgba(0,0,0,.08);
+  }
+  .footer-inner{max-width:1100px; width:100%; display:flex; gap:12px; justify-content:space-between; align-items:center; color:#06323a}
+  .btn{
+    background:#111827; color:white; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700;
+  }
+  .btn.secondary{background:#0b7285}
+  .hint{font-size:.85rem; color:#0b7285}
+  .legend{display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:.85rem; color:#334155}
+  .legend span{display:inline-flex; align-items:center; gap:6px}
+  .dot{width:12px; height:12px; border-radius:999px; display:inline-block}
+  #confetti{position:fixed; inset:0; pointer-events:none}
+  .pill{display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; font-size:.8rem; background:#fff; color:#0b7285; box-shadow: var(--shadow)}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<header>
+  <div class="header-inner">
+    <h1>🌎 Actividad 1 — Geografía y Cultura <span class="badge">ProfeVT</span></h1>
+    <div class="field">
+      <label>Apellido</label>
+      <input id="apellido" placeholder="Tu apellido" />
+    </div>
+    <div class="field">
+      <label>Nombre</label>
+      <input id="nombre" placeholder="Tu nombre" />
+    </div>
+    <div class="field">
+      <label>Voz (español)</label>
+      <select id="voiceSelect"></select>
+    </div>
+  </div>
+  <div class="header-inner" style="grid-template-columns: 1fr 1fr; margin-top:10px">
+    <div class="field">
+      <label>ACTFL Standard</label>
+      <select id="actflSelect"></select>
+    </div>
+    <div class="legend">
+      <span class="pill">Progreso por actividad</span>
+      <span><i class="dot" style="background:#d32f2f"></i> &lt;60% Starting</span>
+      <span><i class="dot" style="background:#ef6c00"></i> 60–72% Beginning</span>
+      <span><i class="dot" style="background:#ffd600"></i> 73–82% Approaching</span>
+      <span><i class="dot" style="background:#81c784"></i> 83–96% Meeting</span>
+      <span><i class="dot" style="background:#2e7d32"></i> 97–100% Exceeding</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card" id="actividad1">
+    <div class="title-row">
+      <div>
+        <h2>Actividad 1: Geografía y Cultura</h2>
+        <div class="objective">Objetivo: Explorar hechos culturales y geográficos de países hispanohablantes.</div>
+      </div>
+      <div class="lang-toggle" data-target="#a1-esp,#a1-eng">Instrucciones: español / English</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="level-text" id="a1-level">Starting</div>
+      <div class="bar"><span id="a1-bar"></span><div class="pct" id="a1-pct">0%</div></div>
+    </div>
+
+    <div class="instructions" id="a1-esp">
+      <strong>Instrucciones (ES):</strong> Completa los 12 pasos (Pasos 1–12). En cada paso, toca uno de los 4 azulejos. Puedes volver a intentar si fallas hasta seleccionar la opción correcta. Necesitas lograr al menos <em>12 correctas</em> y <em>80% de precisión</em> para completar esta actividad. ¡Pulsa 🔊 para escuchar las instrucciones!
+      <button class="btn secondary" id="speak-es">🔊</button>
+    </div>
+    <div class="instructions en" id="a1-eng">
+      <strong>Instructions (EN):</strong> Complete the 12 steps (Steps 1–12). In each step, tap one of the four tiles. If you choose incorrectly, you may guess again until you select the correct option. You must achieve at least <em>12 correct</em> and <em>80% accuracy</em> to fully complete this activity. Press 🔊 to hear the instructions in Spanish.
+    </div>
+
+    <div id="pasoWrap"></div>
+
+    <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+      <button class="btn" id="nextPaso">Siguiente paso ➜</button>
+      <span class="hint" id="hintStatus">Paso <span id="pasoNum">1</span> de 12</span>
+      <span class="pill" id="scorePill">Aciertos: 0 · Intentos: 0 · Precisión: 0%</span>
+    </div>
+  </section>
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div>
+      <div><strong>Entrega:</strong> Cuando termines, descarga tu reporte (CSV) y súbelo a Schoology bajo la tarea con el mismo título que esta actividad.</div>
+      <div class="hint">El archivo incluirá: Apellido, Nombre, actividad, intentos, aciertos, precisión, completado, fecha/hora.</div>
+    </div>
+    <div>
+      <button class="btn" id="downloadCSV">⬇️ Descargar reporte</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- Commons SVG sources (Special:FilePath) ----
+   These URLs are fetched at runtime and inlined into the .mapbox.
+   If offline or blocked by CORS, the code falls back to a styled placeholder.
+*/
+const COMMONS_SVG = {
+  "España": "https://commons.wikimedia.org/wiki/Special:FilePath/Spain%20location%20map.svg",
+  "México": "https://commons.wikimedia.org/wiki/Special:FilePath/Mexico%20location%20map.svg",
+  "Argentina": "https://commons.wikimedia.org/wiki/Special:FilePath/Argentina%20location%20map%20(1923).svg",
+  "Colombia": "https://commons.wikimedia.org/wiki/Special:FilePath/Colombia%20location%20map.svg",
+  "Perú": "https://commons.wikimedia.org/wiki/Special:FilePath/Peru%20location%20map.svg",
+  "Chile": "https://commons.wikimedia.org/wiki/Special:FilePath/Chile%20location%20map.svg",
+  "Cuba": "https://commons.wikimedia.org/wiki/Special:FilePath/Cuba%20location%20map.svg",
+  "República Dominicana": "https://commons.wikimedia.org/wiki/Special:FilePath/Dominican%20Republic%20location%20map.svg",
+  "Puerto Rico": "https://commons.wikimedia.org/wiki/Special:FilePath/Puerto%20Rico%20location%20map.svg",
+  "Guatemala": "https://commons.wikimedia.org/wiki/Special:FilePath/Guatemala%20location%20map.svg",
+  "Costa Rica": "https://commons.wikimedia.org/wiki/Special:FilePath/Costa%20Rica%20location%20map.svg",
+  "Ecuador": "https://commons.wikimedia.org/wiki/Special:FilePath/Ecuador%20location%20map.svg"
+};
+
+/* ------------ Data ------------- */
+const COUNTRIES = [
+  {
+    name:"España", flag:"🇪🇸", capital:"Madrid", music:"flamenco", attraction:"La Sagrada Familia", currency:"euro",
+    food:"paella", borders:["Francia","Portugal","Andorra","Marruecos (Ceuta/Melilla)"], region:"Europa",
+    sport:"fútbol", person:"Pablo Picasso", dialect:"castellano"
+  },
+  {
+    name:"México", flag:"🇲🇽", capital:"Ciudad de México", music:"mariachi", attraction:"Chichén Itzá", currency:"peso",
+    food:"tacos", borders:["Estados Unidos","Guatemala","Belice"], region:"América del Norte",
+    sport:"fútbol", person:"Frida Kahlo", dialect:"español mexicano"
+  },
+  {
+    name:"Argentina", flag:"🇦🇷", capital:"Buenos Aires", music:"tango", attraction:"Cataratas del Iguazú", currency:"peso",
+    food:"asado", borders:["Chile","Bolivia","Paraguay","Brasil","Uruguay"], region:"América del Sur",
+    sport:"fútbol", person:"Lionel Messi", dialect:"rioplatense"
+  },
+  {
+    name:"Colombia", flag:"🇨🇴", capital:"Bogotá", music:"cumbia", attraction:"Ciudad Perdida", currency:"peso",
+    food:"arepa", borders:["Panamá","Venezuela","Brasil","Perú","Ecuador"], region:"América del Sur",
+    sport:"fútbol", person:"Shakira", dialect:"español colombiano"
+  },
+  {
+    name:"Perú", flag:"🇵🇪", capital:"Lima", music:"huayno", attraction:"Machu Picchu", currency:"sol",
+    food:"ceviche", borders:["Ecuador","Colombia","Brasil","Bolivia","Chile"], region:"América del Sur",
+    sport:"fútbol", person:"Mario Vargas Llosa", dialect:"español peruano"
+  },
+  {
+    name:"Chile", flag:"🇨🇱", capital:"Santiago", music:"cueca", attraction:"Torres del Paine", currency:"peso",
+    food:"empanadas", borders:["Perú","Bolivia","Argentina"], region:"América del Sur",
+    sport:"fútbol", person:"Gabriela Mistral", dialect:"español chileno"
+  },
+  {
+    name:"Cuba", flag:"🇨🇺", capital:"La Habana", music:"son cubano", attraction:"Malecón de La Habana", currency:"peso",
+    food:"ropa vieja", borders:["Mar Caribe"], region:"Caribe",
+    sport:"béisbol", person:"Celia Cruz", dialect:"español caribeño"
+  },
+  {
+    name:"República Dominicana", flag:"🇩🇴", capital:"Santo Domingo", music:"merengue", attraction:"Zona Colonial", currency:"peso",
+    food:"mangú", borders:["Haití"], region:"Caribe",
+    sport:"béisbol", person:"Juan Luis Guerra", dialect:"español caribeño"
+  },
+  {
+    name:"Puerto Rico", flag:"🇵🇷", capital:"San Juan", music:"reguetón", attraction:"El Yunque", currency:"dólar",
+    food:"mofongo", borders:["Mar Caribe"], region:"Caribe",
+    sport:"béisbol", person:"Bad Bunny", dialect:"español puertorriqueño"
+  },
+  {
+    name:"Guatemala", flag:"🇬🇹", capital:"Ciudad de Guatemala", music:"marimba", attraction:"Tikal", currency:"quetzal",
+    food:"pepian", borders:["México","Belice","Honduras","El Salvador"], region:"América Central",
+    sport:"fútbol", person:"Rigoberta Menchú", dialect:"español guatemalteco"
+  },
+  {
+    name:"Costa Rica", flag:"🇨🇷", capital:"San José", music:"calypso limonense", attraction:"Parque Nacional Manuel Antonio", currency:"colón",
+    food:"gallo pinto", borders:["Nicaragua","Panamá"], region:"América Central",
+    sport:"fútbol", person:"Keylor Navas", dialect:"español costarricense"
+  },
+  {
+    name:"Ecuador", flag:"🇪🇨", capital:"Quito", music:"pasillo", attraction:"Islas Galápagos", currency:"dólar",
+    food:"encebollado", borders:["Colombia","Perú"], region:"América del Sur",
+    sport:"fútbol", person:"Jefferson Pérez", dialect:"español ecuatoriano"
+  }
+];
+
+const PASOS = [
+  { id:1,  prompt:"¿Cuál país es este?",          key:"name",        type:"map" },
+  { id:2,  prompt:"Elige la bandera correcta.",    key:"flag",        type:"flag" },
+  { id:3,  prompt:"¿Cuál es la capital?",          key:"capital" },
+  { id:4,  prompt:"Elige un estilo de música famoso.", key:"music" },
+  { id:5,  prompt:"Elige una atracción turística famosa.", key:"attraction" },
+  { id:6,  prompt:"¿Cuál es la moneda?",           key:"currency" },
+  { id:7,  prompt:"Elige una comida popular.",     key:"food" },
+  { id:8,  prompt:"¿Qué país tiene frontera con este país?", key:"borders", type:"border" },
+  { id:9,  prompt:"¿En qué región/continente se encuentra?", key:"region" },
+  { id:10, prompt:"Elige un deporte nacional o popular.", key:"sport" },
+  { id:11, prompt:"Elige una persona famosa de este país.", key:"person" },
+  { id:12, prompt:"Variante del idioma más común.", key:"dialect" },
+];
+
+const ACTFL_BY_ACTIVITY = {
+  "Actividad 1: Geografía y Cultura":[
+    "Interpretive Communication (Reading/Viewing)",
+    "Intercultural Communication (Products/Practices/Perspectives)",
+    "Comparisons (Cultures)"
+  ]
+};
+
+/* ------------ State ------------- */
+let currentCountry = null;
+let pasoIndex = 0;
+let attempts = 0;
+let correct = 0;
+let activityCompleted = false;
+let pasoSolved = false;
+
+/* ------------ Helpers ------------- */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a; }
+function pct(n,d){ return d===0?0:Math.round((n/d)*100); }
+function rangeColor(p){
+  if(p < 60) return "#d32f2f";
+  if(p < 73) return "#ef6c00";
+  if(p < 83) return "#ffd600";
+  if(p < 97) return "#81c784";
+  return "#2e7d32";
+}
+function updateBar(){
+  const p = pct(correct, attempts||1); // avoid NaN early
+  const bar = document.getElementById("a1-bar");
+  const pctLabel = document.getElementById("a1-pct");
+  const level = document.getElementById("a1-level");
+  bar.style.width = Math.min(p,100)+"%";
+  bar.style.background = rangeColor(p);
+  pctLabel.textContent = p+"%";
+  let levelText = "Starting";
+  if(p >= 60 && p < 73) levelText = "Beginning";
+  else if(p >= 73 && p < 83) levelText = "Approaching";
+  else if(p >= 83 && p < 97) levelText = "Meeting Proficiency";
+  else if(p >= 97) levelText = "Exceeding Proficiency";
+  level.textContent = levelText;
+
+  if(!activityCompleted && correct >= 12 && p >= 80){
+    activityCompleted = true;
+    fireConfetti();
+    setTimeout(()=> alert("🎉 ¡Excelente! Has completado la actividad con nivel 'Exceeding'."), 100);
+  }
+  document.getElementById("scorePill").textContent = `Aciertos: ${correct} · Intentos: ${attempts} · Precisión: ${p}%`;
+}
+
+function wikipediaLink(title){
+  const encoded = encodeURIComponent(title);
+  return `https://es.wikipedia.org/wiki/${encoded}`;
+}
+
+async function renderMap(container, countryName){
+  const url = COMMONS_SVG[countryName];
+  container.innerHTML = `<div class="mapbox"><div>Mapa: Cargando…</div></div>`;
+  if(!url){
+    container.querySelector(".mapbox").innerHTML = `<div>Mapa: ${countryName}</div>`;
+    return;
+  }
+  try{
+    const res = await fetch(url, {mode:"cors"});
+    if(!res.ok){ throw new Error("HTTP "+res.status); }
+    const svgText = await res.text();
+    container.querySelector(".mapbox").innerHTML = svgText;
+  }catch(e){
+    container.querySelector(".mapbox").innerHTML = `<div>Mapa: ${countryName}</div>`;
+  }
+}
+
+/* Build 4 options including correct + 3 distractors */
+function buildOptions(step, country){
+  const correctValue = step.type === "border" ? (country.borders[0]) : country[step.key];
+  let pool = [];
+  if(step.type === "border"){
+    pool = [...country.borders];
+    while(pool.length < 4){
+      const rand = COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)].name;
+      if(!pool.includes(rand) && rand !== country.name) pool.push(rand);
+    }
+  }else if(step.type === "map"){
+    pool = [country.name];
+    while(pool.length < 4){
+      const rand = COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)].name;
+      if(!pool.includes(rand)) pool.push(rand);
+    }
+  }else if(step.key === "flag"){
+    pool = [country.flag];
+    while(pool.length < 4){
+      const rand = COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)].flag;
+      if(!pool.includes(rand)) pool.push(rand);
+    }
+  }else{
+    pool = [correctValue];
+    while(pool.length < 4){
+      const randCountry = COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)];
+      let v = randCountry[step.key];
+      if(step.key === "borders") v = randCountry.borders[0];
+      if(!pool.includes(v)) pool.push(v);
+    }
+  }
+  return shuffle(pool.slice(0,4));
+}
+
+function renderPaso(){
+  const wrap = document.getElementById("pasoWrap");
+  const step = PASOS[pasoIndex];
+  wrap.innerHTML = "";
+  pasoSolved = false;
+  const prompt = document.createElement("div");
+  prompt.className = "card";
+  prompt.style.marginTop = "10px";
+  prompt.innerHTML = `<strong>Paso ${step.id}:</strong> ${step.prompt}`;
+  wrap.appendChild(prompt);
+
+  if(step.type === "map"){
+    const mapHolder = document.createElement("div");
+    renderMap(mapHolder, currentCountry.name);
+    wrap.appendChild(mapHolder);
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "grid cols-4";
+  const options = buildOptions(step, currentCountry);
+  options.forEach(opt => {
+    const chip = document.createElement("button");
+    chip.className = "chip";
+    if(step.key === "flag"){
+      chip.innerHTML = `<div style="font-size:2rem">${opt}</div>`;
+      chip.dataset.value = opt;
+    }else if(step.type === "map" || step.type === "border"){
+      chip.innerHTML = `
+        <div style="font-size:1rem"><strong>${opt}</strong></div>
+        <a class="investigar" href="${wikipediaLink(opt)}" target="_blank">🔎 investigar</a>`;
+      chip.dataset.value = opt;
+    }else{
+      chip.innerHTML = `
+        <div style="font-size:1rem"><strong>${opt}</strong></div>
+        <a class="investigar" href="${wikipediaLink(opt)}" target="_blank">🔎 investigar</a>`;
+      chip.dataset.value = opt;
+    }
+    chip.addEventListener("click", () => evaluate(opt, chip, step));
+    grid.appendChild(chip);
+  });
+  wrap.appendChild(grid);
+  document.getElementById("pasoNum").textContent = step.id;
+}
+
+/* Guess-again logic:
+   - Wrong: record attempt, mark chip wrong + shake, keep others enabled.
+   - Right: record attempt, mark correct, then disable all chips.
+*/
+function evaluate(opt, chip, step){
+  if(pasoSolved) return;
+  attempts++;
+  const correctVal = step.type === "border" ? currentCountry.borders[0]
+                   : (step.type === "map" ? currentCountry.name : currentCountry[step.key]);
+  const isCorrect = opt === correctVal;
+  if(isCorrect){
+    chip.classList.add("correct");
+    correct++;
+    pasoSolved = true;
+    // lock after correct
+    const chips = chip.parentElement.querySelectorAll(".chip");
+    chips.forEach(c => c.disabled = true);
+  }else{
+    chip.classList.add("wrong","shake");
+    setTimeout(()=> chip.classList.remove("shake"), 300);
+    // do NOT lock; allow guess again
+  }
+  updateBar();
+}
+
+function nextCountry(){
+  currentCountry = COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)];
+}
+function nextPaso(){
+  pasoIndex++;
+  if(pasoIndex >= PASOS.length){
+    alert("Has completado los 12 pasos. Puedes repetir para mejorar tu precisión o descargar tu reporte.");
+    pasoIndex = PASOS.length - 1;
+    return;
+  }
+  renderPaso();
+}
+
+/* ------------ ACTFL populate ------------- */
+function populateACTFL(){
+  const select = document.getElementById("actflSelect");
+  const items = ACTFL_BY_ACTIVITY["Actividad 1: Geografía y Cultura"];
+  select.innerHTML = "";
+  items.forEach(s => {
+    const o = document.createElement("option");
+    o.value = s; o.textContent = s;
+    select.appendChild(o);
+  });
+}
+
+/* ------------ TTS voices ------------- */
+let voices = [];
+function loadVoices(){
+  voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith("es"));
+  const sel = document.getElementById("voiceSelect");
+  sel.innerHTML = "";
+  const preferred = voices.find(v => v.name.includes("Chrome OS-español 5"));
+  const sorted = voices.sort((a,b)=>a.name.localeCompare(b.name, 'es'));
+  sorted.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v.name;
+    opt.textContent = `${v.name} (${v.lang})`;
+    sel.appendChild(opt);
+  });
+  if(preferred){
+    sel.value = preferred.name;
+  }
+}
+if (typeof speechSynthesis !== "undefined") {
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+function speakES(text){
+  if(typeof speechSynthesis === "undefined") return;
+  const u = new SpeechSynthesisUtterance(text);
+  const selName = document.getElementById("voiceSelect").value;
+  const voice = voices.find(v => v.name === selName) || voices.find(v => v.lang.startsWith("es"));
+  if(voice) u.voice = voice;
+  u.lang = (voice && voice.lang) || "es-ES";
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+/* ------------ Confetti ------------- */
+const confettiCanvas = document.getElementById("confetti");
+const ctx = confettiCanvas.getContext("2d");
+let confettiPieces = [];
+function resizeCanvas(){
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+function fireConfetti(){
+  const count = 180;
+  for(let i=0;i<count;i++){
+    confettiPieces.push({
+      x: Math.random()*confettiCanvas.width,
+      y: -10,
+      vx: (Math.random()-0.5)*2,
+      vy: Math.random()*3+2,
+      size: Math.random()*6+4,
+      rot: Math.random()*360,
+      vr: (Math.random()-0.5)*10,
+      color: ["#ff6f00","#e53935","#ffd600","#2e7d32","#00acc1"][Math.floor(Math.random()*5)]
+    });
+  }
+}
+function confettiLoop(){
+  ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+  confettiPieces.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot * Math.PI/180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+    ctx.restore();
+  });
+  confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 20);
+  requestAnimationFrame(confettiLoop);
+}
+confettiLoop();
+
+/* ------------ Events ------------- */
+document.querySelector(".lang-toggle").addEventListener("click", (e)=>{
+  const es = document.querySelector("#a1-esp");
+  const en = document.querySelector("#a1-eng");
+  es.style.display = (es.style.display === "none") ? "" : "none";
+  en.style.display = (en.style.display === "none") ? "" : "none";
+});
+document.getElementById("speak-es").addEventListener("click", ()=>{
+  speakES("Completa los doce pasos. Puedes volver a intentar si fallas hasta seleccionar la opción correcta. Necesitas al menos doce respuestas correctas y ochenta por ciento de precisión para completar esta actividad.");
+});
+document.getElementById("nextPaso").addEventListener("click", ()=>{
+  nextPaso();
+});
+document.getElementById("downloadCSV").addEventListener("click", ()=>{
+  const apellido = (document.getElementById("apellido").value || "").trim();
+  const nombre = (document.getElementById("nombre").value || "").trim();
+  const actfl = (document.getElementById("actflSelect").value || "").trim();
+  const p = pct(correct, attempts||1);
+  const completed = (activityCompleted ? "sí" : "no");
+  const rows = [
+    ["Apellido","Nombre","Actividad","ACTFL","Intentos","Aciertos","Precisión %","Completado","Fecha/Hora"],
+    [apellido, nombre, "Actividad 1: Geografía y Cultura", actfl, attempts, correct, p, completed, new Date().toLocaleString()]
+  ];
+  const csv = rows.map(r => r.map(x => `"${String(x).replaceAll('"','""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const base = "Actividad_1_Geografia_Cultura";
+  a.download = `${base}_${apellido || "sin-apellido"}_${nombre || "sin-nombre"}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+});
+
+/* Init */
+function init(){
+  populateACTFL();
+  nextCountry();
+  pasoIndex = 0;
+  attempts = 0;
+  correct = 0;
+  activityCompleted = false;
+  pasoSolved = false;
+  updateBar();
+  renderPaso();
+}
+init();
+</script>
+</body>
+</html>
